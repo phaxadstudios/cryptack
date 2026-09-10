@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,6 +56,7 @@
             >
 
             <button
+                type="submit"
                 class="px-6 py-3 rounded-xl bg-violet-600
                        hover:bg-violet-500">
                 Save Changes
@@ -66,42 +68,94 @@
 
 </main>
 
-<script src="assets/js/app.js"></script>
+<script type="module" src="assets/js/app.js"></script>
 
-<script>
+<script type="module">
 
-const user = requireAuth();
+async function loadProfile() {
 
-if (user) {
+    const user = await window.requireAuth();
 
-    document.getElementById("name").value = user.name;
-    document.getElementById("email").value = user.email;
+    if (!user) {
+        return;
+    }
 
-    document
-        .getElementById("profileForm")
-        .addEventListener("submit", function(e) {
+    const firebaseUser =
+        window.getFirebaseUser();
 
-            e.preventDefault();
+    if (!firebaseUser) {
+        return;
+    }
 
-            user.name =
-                document.getElementById("name").value.trim();
+    document.getElementById("name").value =
+        user.name || "";
 
-            const users = getUsers();
+    document.getElementById("email").value =
+        firebaseUser.email || user.email || "";
+}
 
-            const index = users.findIndex(
-                item => item.id === user.id
+
+document
+    .getElementById("profileForm")
+    .addEventListener("submit", async function(e) {
+
+        e.preventDefault();
+
+        const firebaseUser =
+            window.getFirebaseUser();
+
+        if (!firebaseUser) {
+            return;
+        }
+
+        const name =
+            document.getElementById("name")
+                .value
+                .trim();
+
+        if (!name) {
+            window.showToast("Please enter your name.");
+            return;
+        }
+
+        const button =
+            this.querySelector("button[type='submit']");
+
+        button.disabled = true;
+        button.textContent = "Saving...";
+
+        try {
+
+            await window.updateUserProfile({
+                name: name
+            });
+
+            await window.refreshCurrentUser();
+
+            window.showToast(
+                "Profile updated successfully."
             );
 
-            if (index !== -1) {
-                users[index] = user;
-            }
+        } catch (error) {
 
-            saveUsers(users);
-            setCurrentUser(user);
+            console.error(
+                "Profile update error:",
+                error
+            );
 
-            showToast("Profile updated successfully.");
-        });
-}
+            window.showToast(
+                "Unable to update profile."
+            );
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = "Save Changes";
+        }
+    });
+
+
+loadProfile();
 
 </script>
 
