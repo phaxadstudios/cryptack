@@ -1,32 +1,80 @@
 // assets/js/dashboard.js
 
-const user = requireAuth();
+async function loadDashboard() {
 
-if (user) {
+    const user = await requireAuth();
 
-    document.getElementById(
-        "userName"
-    ).textContent =
-        user.name.split(" ")[0];
+    if (!user) {
+        return;
+    }
+
+    // Make sure the latest Firestore profile is loaded
+    const currentUser = await refreshCurrentUser();
+
+    if (!currentUser) {
+        return;
+    }
+
+    // ------------------------------------------------------------
+    // USER NAME
+    // ------------------------------------------------------------
+
+    const userName = document.getElementById("userName");
+
+    if (userName) {
+
+        const name = currentUser.name || "User";
+
+        userName.textContent =
+            name.split(" ")[0];
+    }
 
 
-    document.getElementById(
-        "balance"
-    ).textContent =
-        money(user.balance);
+    // ------------------------------------------------------------
+    // BALANCE
+    // ------------------------------------------------------------
+
+    const balance =
+        document.getElementById("balance");
+
+    if (balance) {
+
+        balance.textContent =
+            money(currentUser.balance);
+    }
 
 
-    document.getElementById(
-        "invested"
-    ).textContent =
-        money(user.invested);
+    // ------------------------------------------------------------
+    // INVESTED
+    // ------------------------------------------------------------
+
+    const invested =
+        document.getElementById("invested");
+
+    if (invested) {
+
+        invested.textContent =
+            money(currentUser.invested);
+    }
 
 
-    document.getElementById(
-        "returns"
-    ).textContent =
-        money(user.returns);
+    // ------------------------------------------------------------
+    // RETURNS
+    // ------------------------------------------------------------
 
+    const returns =
+        document.getElementById("returns");
+
+    if (returns) {
+
+        returns.textContent =
+            money(currentUser.returns);
+    }
+
+
+    // ------------------------------------------------------------
+    // PORTFOLIO VALUE
+    // ------------------------------------------------------------
 
     const portfolioValue =
         document.getElementById(
@@ -36,6 +84,13 @@ if (user) {
     if (portfolioValue) {
 
         portfolioValue.textContent =
-            money(user.balance);
+            money(currentUser.balance);
     }
 }
+
+
+// ------------------------------------------------------------
+// LOAD DASHBOARD
+// ------------------------------------------------------------
+
+loadDashboard();
