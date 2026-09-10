@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account — Cryptacks</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="bg-dark text-white min-h-screen flex items-center justify-center px-5">
+
+<div class="w-full max-w-md">
+
+    <div class="text-center mb-8">
+
+        <a href="index.html" class="text-3xl font-black">
+            Crypto<span class="text-violet-500">cks</span>
+        </a>
+
+        <h1 class="text-3xl font-bold mt-8">
+            Create your account
+        </h1>
+
+        <p class="text-gray-400 mt-2">
+            Start your Cryptacks demo experience
+        </p>
+
+    </div>
+
+    <form id="signupForm"
+          action="https://formspree.io/f/YOUR_FORMSPREE_ID"
+          method="POST"
+          class="glass-card p-7">
+
+        <input
+            type="hidden"
+            name="_subject"
+            value="New Cryptacks Registration"
+        >
+
+        <label class="text-sm text-gray-300">
+            Full Name
+        </label>
+
+        <input
+            id="name"
+            name="name"
+            required
+            class="w-full mt-2 mb-5 px-4 py-3 rounded-xl bg-black/30
+                   border border-white/10"
+            placeholder="John Doe"
+        >
+
+        <label class="text-sm text-gray-300">
+            Email Address
+        </label>
+
+        <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            class="w-full mt-2 mb-5 px-4 py-3 rounded-xl bg-black/30
+                   border border-white/10"
+            placeholder="you@example.com"
+        >
+
+        <label class="text-sm text-gray-300">
+            Password
+        </label>
+
+        <input
+            id="password"
+            name="password"
+            type="password"
+            minlength="6"
+            required
+            class="w-full mt-2 mb-6 px-4 py-3 rounded-xl bg-black/30
+                   border border-white/10"
+            placeholder="••••••••"
+        >
+
+        <button
+            type="submit"
+            class="w-full py-3.5 rounded-xl bg-violet-600
+                   hover:bg-violet-500 font-semibold">
+            Create Account
+        </button>
+
+    </form>
+
+    <p class="text-center text-gray-400 mt-6">
+        Already have an account?
+
+        <a href="login.html" class="text-violet-400 hover:text-violet-300">
+            Login
+        </a>
+    </p>
+
+    <p class="text-center text-xs text-gray-600 mt-6">
+        Educational demo. No real investments or payments are processed.
+    </p>
+
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/signup.js"></script>
+
+</body>
+</html>
