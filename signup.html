@@ -1,29 +1,48 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Create Account — Cryptacks</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet"
+          href="assets/css/style.css">
+
 </head>
+
 
 <body class="bg-dark text-white min-h-screen flex items-center justify-center px-5">
 
+
 <div class="w-full max-w-md">
+
+
+    <!-- Logo / Header -->
 
     <div class="text-center mb-8">
 
-        <a href="index.html" class="text-3xl font-black">
-            <span class="text-violet-500">Cryptacks</span>
+        <a href="index.html"
+           class="text-3xl font-black">
+
+            <span class="text-violet-500">
+                Cryptacks
+            </span>
+
         </a>
+
 
         <h1 class="text-3xl font-bold mt-8">
             Create your account
         </h1>
+
 
         <p class="text-gray-400 mt-2">
             Start your Cryptacks investment experience
@@ -31,47 +50,60 @@
 
     </div>
 
+
+
+    <!-- Signup Form -->
+
     <form id="signupForm"
-          action="https://formspree.io/f/mvkoddzl"
-          method="POST"
           class="glass-card p-7">
 
-        <input
-            type="hidden"
-            name="_subject"
-            value="New Cryptacks Registration"
-        >
+
+        <!-- Full Name -->
 
         <label class="text-sm text-gray-300">
             Full Name
         </label>
 
+
         <input
             id="name"
             name="name"
+            type="text"
             required
+            autocomplete="name"
             class="w-full mt-2 mb-5 px-4 py-3 rounded-xl bg-black/30
                    border border-white/10"
             placeholder="John Doe"
         >
 
+
+
+        <!-- Email -->
+
         <label class="text-sm text-gray-300">
             Email Address
         </label>
+
 
         <input
             id="email"
             name="email"
             type="email"
             required
+            autocomplete="email"
             class="w-full mt-2 mb-5 px-4 py-3 rounded-xl bg-black/30
                    border border-white/10"
             placeholder="you@example.com"
         >
 
+
+
+        <!-- Password -->
+
         <label class="text-sm text-gray-300">
             Password
         </label>
+
 
         <input
             id="password"
@@ -79,36 +111,69 @@
             type="password"
             minlength="6"
             required
+            autocomplete="new-password"
             class="w-full mt-2 mb-6 px-4 py-3 rounded-xl bg-black/30
                    border border-white/10"
             placeholder="••••••••"
         >
 
+
+
+        <!-- Submit -->
+
         <button
             type="submit"
             class="w-full py-3.5 rounded-xl bg-violet-600
-                   hover:bg-violet-500 font-semibold">
+                   hover:bg-violet-500 font-semibold
+                   disabled:opacity-50 disabled:cursor-not-allowed">
+
             Create Account
+
         </button>
 
     </form>
 
+
+
+    <!-- Login -->
+
     <p class="text-center text-gray-400 mt-6">
+
         Already have an account?
 
-        <a href="login.html" class="text-violet-400 hover:text-violet-300">
+        <a href="login.html"
+           class="text-violet-400 hover:text-violet-300">
+
             Login
+
         </a>
+
     </p>
 
+
+
     <p class="text-center text-xs text-gray-600 mt-6">
-        All investment are legit and assured by crpytacks.
+
+        All investment are legit and assured by Cryptacks.
+
     </p>
+
 
 </div>
 
+
+
+<!-- Existing app functions such as showToast -->
+
 <script src="assets/js/app.js"></script>
-<script src="assets/js/signup.js"></script>
+
+
+<!-- Firebase signup -->
+
+<script type="module"
+        src="assets/js/signup.js"></script>
+
 
 </body>
+
 </html>
