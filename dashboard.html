@@ -3,142 +3,201 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Dashboard — Cryptacks</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>Dashboard — Cryptacks</title>
 
-<link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
 
 </head>
 
+
 <body class="dashboard-bg text-white min-h-screen">
+
 
 <div class="flex min-h-screen">
 
+
     <!-- SIDEBAR -->
 
-    <aside class="sidebar w-64 p-5 hidden md:flex flex-col">
+    <aside
+        class="sidebar w-64 border-r border-white/10 p-6 hidden md:block"
+    >
 
-        <a href="dashboard.html" class="text-2xl font-black px-3 py-4">
-            Crypto<span class="text-violet-500">cks</span>
-        </a>
+        <div
+            class="text-2xl font-bold mb-10"
+        >
+            Crypto<span class="text-violet-500">
+                cks
+            </span>
+        </div>
 
-        <nav class="mt-8 space-y-2">
 
-            <a href="dashboard.html"
-               class="block px-4 py-3 rounded-xl bg-violet-600/20 text-violet-300">
+        <nav class="space-y-2">
+
+            <a
+                href="dashboard.html"
+                class="block px-4 py-3 rounded-xl bg-violet-600/20 text-violet-400"
+            >
                 Dashboard
             </a>
 
-            <a href="investments.html"
-               class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white">
+            <a
+                href="investments.html"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"
+            >
                 Investments
             </a>
 
-            <a href="transactions.html"
-               class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white">
+            <a
+                href="transactions.html"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"
+            >
                 Transactions
             </a>
 
-            <a href="history.html"
-               class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white">
+            <a
+                href="history.html"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"
+            >
                 Activity
             </a>
 
-            <a href="profile.html"
-               class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white">
+            <a
+                href="profile.html"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"
+            >
                 Profile
             </a>
 
         </nav>
 
-        <div class="mt-auto">
 
-            <button
-                onclick="logout()"
-                class="w-full px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 text-left">
-                Logout
-            </button>
-
-        </div>
+        <button
+            onclick="logout()"
+            class="absolute bottom-6 text-gray-400 hover:text-red-400"
+        >
+            Logout
+        </button>
 
     </aside>
 
 
+
     <!-- MAIN -->
 
-    <main class="flex-1 p-5 md:p-10">
+    <main class="flex-1 p-6 md:p-10">
 
-        <div class="flex justify-between items-center mb-10">
+
+        <!-- HEADER -->
+
+        <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-10"
+        >
 
             <div>
+
                 <p class="text-gray-400 text-sm">
-                    Welcome back,
+                    Demo Account
                 </p>
 
-                <h1 id="userName" class="text-3xl font-bold mt-1">
-                    User
+                <h1
+                    class="text-3xl md:text-4xl font-bold mt-1"
+                >
+                    Welcome back,
+                    <span id="userName">
+                        User
+                    </span>
                 </h1>
+
             </div>
 
-            <div class="px-4 py-2 rounded-full bg-violet-500/10
-                        border border-violet-500/20 text-violet-300 text-sm">
-                Live Account
-            </div>
+
+            <a
+                href="investments.html"
+                class="bg-violet-600 hover:bg-violet-700 px-5 py-3 rounded-xl font-semibold text-center"
+            >
+                New Investment
+            </a>
 
         </div>
 
 
+
         <!-- STATS -->
 
-        <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div
+            class="grid sm:grid-cols-2 xl:grid-cols-4 gap-5"
+        >
 
-            <div class="stat-card p-6">
+
+            <div class="stat-card">
 
                 <p class="text-gray-400 text-sm">
                     Total Balance
                 </p>
 
-                <h2 id="balance" class="text-3xl font-bold mt-3">
-                    $0
+                <h2
+                    id="balance"
+                    class="text-2xl font-bold mt-2"
+                >
+                    $0.00
                 </h2>
 
             </div>
 
-            <div class="stat-card p-6">
+
+            <div class="stat-card">
 
                 <p class="text-gray-400 text-sm">
                     Total Invested
                 </p>
 
-                <h2 id="invested" class="text-3xl font-bold mt-3">
-                    $0
+                <h2
+                    id="invested"
+                    class="text-2xl font-bold mt-2"
+                >
+                    $0.00
                 </h2>
 
             </div>
 
-            <div class="stat-card p-6">
+
+            <div class="stat-card">
 
                 <p class="text-gray-400 text-sm">
                     Estimated Returns
                 </p>
 
-                <h2 id="returns" class="text-3xl font-bold mt-3 text-green-400">
-                    $0
+                <h2
+                    id="returns"
+                    class="text-2xl font-bold mt-2 text-green-400"
+                >
+                    $0.00
                 </h2>
 
             </div>
 
-            <div class="stat-card p-6">
+
+            <div class="stat-card">
 
                 <p class="text-gray-400 text-sm">
                     Portfolio Growth
                 </p>
 
-                <h2 class="text-3xl font-bold mt-3 text-green-400">
+                <h2
+                    class="text-2xl font-bold mt-2 text-green-400"
+                >
                     +12.8%
                 </h2>
 
@@ -147,63 +206,148 @@
         </div>
 
 
-        <!-- CHART -->
 
-        <div class="grid xl:grid-cols-3 gap-5 mt-7">
+        <!-- PENDING NOTICE -->
 
-            <div class="stat-card p-6 xl:col-span-2">
+        <div
+            id="pendingBox"
+            class="mt-6"
+        ></div>
 
-                <div class="flex justify-between">
+
+
+        <!-- PORTFOLIO -->
+
+        <div
+            class="grid lg:grid-cols-3 gap-6 mt-6"
+        >
+
+
+            <!-- CHART -->
+
+            <div
+                class="glass-card p-6 lg:col-span-2"
+            >
+
+                <div
+                    class="flex justify-between items-center mb-8"
+                >
 
                     <div>
-                        <p class="text-gray-400 text-sm">
+
+                        <h2 class="font-semibold text-lg">
                             Portfolio Performance
+                        </h2>
+
+                        <p
+                            class="text-gray-400 text-sm"
+                        >
+                            Simulated performance
                         </p>
 
-                        <h2 class="text-2xl font-bold mt-2">
-                            $0
-                        </h2>
                     </div>
 
-                    <span class="text-green-400">
+
+                    <div
+                        class="text-green-400 text-sm"
+                    >
                         +12.8%
-                    </span>
+                    </div>
 
                 </div>
 
-                <div class="h-64 mt-8 flex items-end gap-3">
 
-                    <div class="chart-bar h-[30%]"></div>
-                    <div class="chart-bar h-[45%]"></div>
-                    <div class="chart-bar h-[38%]"></div>
-                    <div class="chart-bar h-[60%]"></div>
-                    <div class="chart-bar h-[52%]"></div>
-                    <div class="chart-bar h-[75%]"></div>
-                    <div class="chart-bar h-[68%]"></div>
-                    <div class="chart-bar h-[88%]"></div>
-                    <div class="chart-bar h-[78%]"></div>
-                    <div class="chart-bar h-[95%]"></div>
+                <div
+                    class="flex items-end gap-3 h-56"
+                >
+
+                    <div
+                        class="bg-violet-500/40 rounded-t-lg w-full"
+                        style="height: 30%"
+                    ></div>
+
+                    <div
+                        class="bg-violet-500/40 rounded-t-lg w-full"
+                        style="height: 45%"
+                    ></div>
+
+                    <div
+                        class="bg-violet-500/40 rounded-t-lg w-full"
+                        style="height: 40%"
+                    ></div>
+
+                    <div
+                        class="bg-violet-500/40 rounded-t-lg w-full"
+                        style="height: 60%"
+                    ></div>
+
+                    <div
+                        class="bg-violet-500/40 rounded-t-lg w-full"
+                        style="height: 55%"
+                    ></div>
+
+                    <div
+                        class="bg-violet-500/40 rounded-t-lg w-full"
+                        style="height: 75%"
+                    ></div>
+
+                    <div
+                        class="bg-violet-500 rounded-t-lg w-full"
+                        style="height: 90%"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-5">
+
+                    <p class="text-gray-400 text-sm">
+                        Current simulated value
+                    </p>
+
+                    <p
+                        class="text-3xl font-bold"
+                        id="portfolioValue"
+                    >
+                        $0.00
+                    </p>
 
                 </div>
 
             </div>
 
 
+
             <!-- ASSETS -->
 
-            <div class="stat-card p-6">
+            <div class="glass-card p-6">
 
-                <p class="text-gray-400 text-sm">
+                <h2
+                    class="font-semibold text-lg mb-6"
+                >
                     Top Assets
-                </p>
+                </h2>
 
-                <div class="space-y-5 mt-6">
 
-                    <div class="flex justify-between">
+                <div class="space-y-6">
+
+
+                    <div
+                        class="flex justify-between items-center"
+                    >
 
                         <div>
-                            <p class="font-semibold">Bitcoin</p>
-                            <p class="text-xs text-gray-500">BTC</p>
+
+                            <p class="font-medium">
+                                Bitcoin
+                            </p>
+
+                            <p
+                                class="text-gray-500 text-sm"
+                            >
+                                BTC
+                            </p>
+
                         </div>
 
                         <span class="text-green-400">
@@ -212,11 +356,23 @@
 
                     </div>
 
-                    <div class="flex justify-between">
+
+                    <div
+                        class="flex justify-between items-center"
+                    >
 
                         <div>
-                            <p class="font-semibold">Ethereum</p>
-                            <p class="text-xs text-gray-500">ETH</p>
+
+                            <p class="font-medium">
+                                Ethereum
+                            </p>
+
+                            <p
+                                class="text-gray-500 text-sm"
+                            >
+                                ETH
+                            </p>
+
                         </div>
 
                         <span class="text-green-400">
@@ -225,16 +381,220 @@
 
                     </div>
 
-                    <div class="flex justify-between">
+
+                    <div
+                        class="flex justify-between items-center"
+                    >
 
                         <div>
-                            <p class="font-semibold">Solana</p>
-                            <p class="text-xs text-gray-500">SOL</p>
+
+                            <p class="font-medium">
+                                Solana
+                            </p>
+
+                            <p
+                                class="text-gray-500 text-sm"
+                            >
+                                SOL
+                            </p>
+
                         </div>
 
                         <span class="text-red-400">
                             -2.1%
                         </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="mt-6">
+
+            <h2 class="text-xl font-bold mb-5">
+                Quick Actions
+            </h2>
+
+
+            <div
+                class="grid sm:grid-cols-3 gap-5"
+            >
+
+                <a
+                    href="investments.html"
+                    class="glass-card p-6 hover:border-violet-500/40 transition"
+                >
+
+                    <p class="font-semibold">
+                        Start Investment
+                    </p>
+
+                    <p
+                        class="text-gray-400 text-sm mt-2"
+                    >
+                        Explore simulated investment plans.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="transactions.html"
+                    class="glass-card p-6 hover:border-violet-500/40 transition"
+                >
+
+                    <p class="font-semibold">
+                        Transactions
+                    </p>
+
+                    <p
+                        class="text-gray-400 text-sm mt-2"
+                    >
+                        View your investment transactions.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="profile.html"
+                    class="glass-card p-6 hover:border-violet-500/40 transition"
+                >
+
+                    <p class="font-semibold">
+                        Profile
+                    </p>
+
+                    <p
+                        class="text-gray-400 text-sm mt-2"
+                    >
+                        Manage your demo account.
+                    </p>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/dashboard.js"></script>
+
+
+<script>
+
+function displayPendingInvestments() {
+
+    const user =
+        getCurrentUser();
+
+    const box =
+        document.getElementById(
+            "pendingBox"
+        );
+
+    if (!user || !box) {
+        return;
+    }
+
+
+    const pending =
+        getPendingInvestments()
+            .filter(
+                investment =>
+                    investment.userId === user.id &&
+                    investment.status === "Pending"
+            );
+
+
+    if (pending.length === 0) {
+
+        box.innerHTML = "";
+
+        return;
+    }
+
+
+    box.innerHTML = `
+
+        <div
+            class="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-5"
+        >
+
+            <div class="flex items-start gap-4">
+
+                <div class="text-yellow-400 text-xl">
+                    ⏳
+                </div>
+
+                <div class="flex-1">
+
+                    <h3
+                        class="font-semibold text-yellow-300"
+                    >
+                        Investment pending
+                    </h3>
+
+                    <p
+                        class="text-sm text-gray-400 mt-1"
+                    >
+                        ${pending.length}
+                        investment${
+                            pending.length > 1
+                            ? "s are"
+                            : " is"
+                        }
+                        currently being processed.
+                    </p>
+
+
+                    <div class="mt-4 space-y-3">
+
+                        ${
+                            pending.map(
+                                investment => `
+
+                                    <div
+                                        class="flex justify-between items-center text-sm"
+                                    >
+
+                                        <span>
+                                            ${
+                                                investment.plan
+                                            }
+                                            —
+                                            ${
+                                                money(
+                                                    investment.amount
+                                                )
+                                            }
+                                        </span>
+
+                                        <span
+                                            class="text-yellow-400"
+                                        >
+                                            Pending
+                                        </span>
+
+                                    </div>
+
+                                `
+                            ).join("")
+                        }
 
                     </div>
 
@@ -244,85 +604,53 @@
 
         </div>
 
-
-        <!-- QUICK ACTIONS -->
-
-        <div class="mt-7">
-
-            <h2 class="text-xl font-bold">
-                Quick Actions
-            </h2>
-
-            <div class="grid sm:grid-cols-3 gap-4 mt-4">
-
-                <a href="investments.html"
-                   class="glass-card p-5 hover:bg-white/5">
-
-                    <div class="text-2xl">📈</div>
-
-                    <h3 class="font-semibold mt-4">
-                        Explore Investments
-                    </h3>
-
-                    <p class="text-gray-500 text-sm mt-1">
-                        View available demo plans.
-                    </p>
-
-                </a>
-
-                <a href="transactions.html"
-                   class="glass-card p-5 hover:bg-white/5">
-
-                    <div class="text-2xl">💳</div>
-
-                    <h3 class="font-semibold mt-4">
-                        Transactions
-                    </h3>
-
-                    <p class="text-gray-500 text-sm mt-1">
-                        View your simulated transactions.
-                    </p>
-
-                </a>
-
-                <a href="profile.html"
-                   class="glass-card p-5 hover:bg-white/5">
-
-                    <div class="text-2xl">👤</div>
-
-                    <h3 class="font-semibold mt-4">
-                        My Profile
-                    </h3>
-
-                    <p class="text-gray-500 text-sm mt-1">
-                        Manage your account.
-                    </p>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</div>
-
-<style>
-.chart-bar {
-    flex: 1;
-    background: linear-gradient(
-        to top,
-        #7c3aed,
-        #a78bfa
-    );
-    border-radius: 8px 8px 2px 2px;
-    opacity: .8;
+    `;
 }
-</style>
 
-<script src="assets/js/app.js"></script>
-<script src="assets/js/dashboard.js"></script>
+
+displayPendingInvestments();
+
+setInterval(
+    () => {
+
+        checkPendingInvestments();
+
+        displayPendingInvestments();
+
+        // Refresh dashboard values
+        const user =
+            getCurrentUser();
+
+        if (user) {
+
+            document.getElementById(
+                "balance"
+            ).textContent =
+                money(user.balance);
+
+            document.getElementById(
+                "invested"
+            ).textContent =
+                money(user.invested);
+
+            document.getElementById(
+                "returns"
+            ).textContent =
+                money(user.returns);
+
+            document.getElementById(
+                "portfolioValue"
+            ).textContent =
+                money(
+                    Number(user.balance || 0)
+                );
+        }
+
+    },
+    60 * 1000
+);
+
+</script>
 
 </body>
 </html>
