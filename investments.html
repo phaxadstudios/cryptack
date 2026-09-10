@@ -386,575 +386,799 @@
     </div>
 
 
-    <script src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
 
-    <script>
+    <script type="module">
 
-        // ========================================================
-        // PLAN DATA
-        // ========================================================
+// ============================================================
+// PLAN DATA
+// ============================================================
 
-        const investmentPlans = {
-            "Starter": {
-                min: 100,
-                max: 500,
-                multiplier: 7
-            },
+const investmentPlans = {
 
-            "Premium": {
-                min: 500,
-                max: 2000,
-                multiplier: 7
-            },
+    "Starter": {
+        min: 100,
+        max: 500,
+        multiplier: 7
+    },
 
-            "Premium Plus": {
-                min: 2000,
-                max: 10000,
-                multiplier: 7
-            }
-        };
+    "Premium": {
+        min: 500,
+        max: 2000,
+        multiplier: 7
+    },
+
+    "Premium Plus": {
+        min: 2000,
+        max: 10000,
+        multiplier: 7
+    }
+
+};
 
 
-        let selectedPlan = null;
+let selectedPlan = null;
 
 
-        // ========================================================
-        // AUTH
-        // ========================================================
+// ============================================================
+// AUTH
+// ============================================================
 
-        const currentUser = requireAuth();
+async function initializeInvestments() {
 
-        if (!currentUser) {
-            throw new Error("User not authenticated");
+    const user =
+        await window.requireAuth();
+
+    if (!user) {
+        return;
+    }
+
+    await window.checkInvestments();
+
+    await renderInvestments();
+}
+
+
+initializeInvestments();
+
+
+// ============================================================
+// OPEN MODAL
+// ============================================================
+
+window.openInvestmentModal =
+    function (plan, min, max) {
+
+        selectedPlan = plan;
+
+        document.getElementById(
+            "modalPlanName"
+        ).textContent = plan;
+
+        document.getElementById(
+            "amountRange"
+        ).textContent =
+            `Minimum: ${window.money(min)} • Maximum: ${window.money(max)}`;
+
+        document.getElementById(
+            "investmentAmount"
+        ).value = "";
+
+        document.getElementById(
+            "previewInvestment"
+        ).textContent =
+            window.money(0);
+
+        document.getElementById(
+            "previewReturn"
+        ).textContent =
+            window.money(0);
+
+        document
+            .getElementById("investmentModal")
+            .classList.remove("hidden");
+    };
+
+
+// ============================================================
+// CLOSE MODAL
+// ============================================================
+
+window.closeInvestmentModal =
+    function () {
+
+        document
+            .getElementById("investmentModal")
+            .classList.add("hidden");
+
+        selectedPlan = null;
+    };
+
+
+// ============================================================
+// PREVIEW
+// ============================================================
+
+window.updateInvestmentPreview =
+    function () {
+
+        if (!selectedPlan) {
+            return;
         }
 
+        const plan =
+            investmentPlans[selectedPlan];
 
-        // ========================================================
-        // OPEN MODAL
-        // ========================================================
-
-        function openInvestmentModal(plan, min, max) {
-
-            selectedPlan = plan;
-
-            document.getElementById("modalPlanName").textContent =
-                plan;
-
-            document.getElementById("amountRange").textContent =
-                `Minimum: ${money(min)} • Maximum: ${money(max)}`;
-
-            document.getElementById("investmentAmount").value = "";
-
-            document.getElementById("previewInvestment").textContent =
-                money(0);
-
-            document.getElementById("previewReturn").textContent =
-                money(0);
-
-            document
-                .getElementById("investmentModal")
-                .classList.remove("hidden");
-        }
-
-
-        // ========================================================
-        // CLOSE MODAL
-        // ========================================================
-
-        function closeInvestmentModal() {
-
-            document
-                .getElementById("investmentModal")
-                .classList.add("hidden");
-
-            selectedPlan = null;
-        }
-
-
-        // ========================================================
-        // PREVIEW
-        // ========================================================
-
-        function updateInvestmentPreview() {
-
-            if (!selectedPlan) return;
-
-            const plan = investmentPlans[selectedPlan];
-
-            const amount = Number(
-                document.getElementById("investmentAmount").value
+        const amount =
+            Number(
+                document.getElementById(
+                    "investmentAmount"
+                ).value
             ) || 0;
 
-            const generated =
-                amount * plan.multiplier;
+        const generated =
+            amount * plan.multiplier;
 
-            document.getElementById("previewInvestment").textContent =
-                money(amount);
+        document.getElementById(
+            "previewInvestment"
+        ).textContent =
+            window.money(amount);
 
-            document.getElementById("previewReturn").textContent =
-                money(generated);
+        document.getElementById(
+            "previewReturn"
+        ).textContent =
+            window.money(generated);
+    };
+
+
+// ============================================================
+// SUBMIT INVESTMENT
+// ============================================================
+
+window.submitInvestment =
+    async function () {
+
+        if (!selectedPlan) {
+            return;
+        }
+
+        const user =
+            await window.getFirebaseUser();
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
         }
 
 
-        // ========================================================
-        // SUBMIT INVESTMENT
-        // ========================================================
+        const plan =
+            investmentPlans[selectedPlan];
 
-        function submitInvestment() {
 
-            if (!selectedPlan) return;
-
-            const user = getCurrentUser();
-
-            if (!user) {
-                window.location.href = "login.html";
-                return;
-            }
-
-            const plan = investmentPlans[selectedPlan];
-
-            const amount = Number(
-                document.getElementById("investmentAmount").value
+        const amount =
+            Number(
+                document.getElementById(
+                    "investmentAmount"
+                ).value
             );
 
-            // Validate amount.
-            if (!amount || amount < plan.min || amount > plan.max) {
 
-                showToast(
-                    `Enter an amount between ${money(plan.min)} and ${money(plan.max)}.`
-                );
+        // ------------------------------------------------------
+        // VALIDATE
+        // ------------------------------------------------------
 
-                return;
-            }
+        if (
+            !amount ||
+            amount < plan.min ||
+            amount > plan.max
+        ) {
+
+            window.showToast(
+                `Enter an amount between ${window.money(plan.min)} and ${window.money(plan.max)}.`
+            );
+
+            return;
+        }
 
 
-            // ====================================================
-            // GENERATED AMOUNT
-            // ====================================================
+        // ------------------------------------------------------
+        // CALCULATE
+        // ------------------------------------------------------
 
-            const generatedAmount =
-                amount * plan.multiplier;
+        const generatedAmount =
+            amount * plan.multiplier;
+
+        const profit =
+            generatedAmount - amount;
 
 
-            // ====================================================
-            // 2-HOUR PROCESSING PERIOD
-            // ====================================================
+        const now =
+            new Date();
 
-            const now = new Date();
-
-            const completesAt = new Date(
+        const completesAt =
+            new Date(
                 now.getTime() +
                 (2 * 60 * 60 * 1000)
             );
 
 
-            // ====================================================
-            // CREATE INVESTMENT
-            // ====================================================
+        // ------------------------------------------------------
+        // INVESTMENT
+        // ------------------------------------------------------
 
-            const investment = {
+        const investment = {
 
-                id: Date.now(),
+            userId: user.uid,
 
-                userId: user.id,
+            plan: selectedPlan,
 
-                plan: selectedPlan,
+            amount: amount,
 
-                amount: amount,
+            generatedAmount:
+                generatedAmount,
 
-                generatedAmount: generatedAmount,
+            profit:
+                profit,
 
-                profit: generatedAmount - amount,
+            multiplier:
+                plan.multiplier,
 
-                multiplier: plan.multiplier,
+            status:
+                "Pending",
 
-                status: "Pending",
+            createdAt:
+                now.toISOString(),
 
-                createdAt: now.toISOString(),
+            completesAt:
+                completesAt.toISOString(),
 
-                completesAt: completesAt.toISOString(),
+            completedAt:
+                null,
 
-                completedAt: null,
+            withdrawableAt:
+                null,
 
-                withdrawableAt: null,
+            withdrawalStatus:
+                "Locked",
 
-                withdrawalStatus: "Locked",
+            withdrawable:
+                false
 
-                withdrawable: false
-            };
-
-
-            // ====================================================
-            // SAVE INVESTMENT
-            // ====================================================
-
-            const investments =
-                getPendingInvestments();
-
-            investments.unshift(investment);
-
-            savePendingInvestments(investments);
+        };
 
 
-            // ====================================================
+        try {
+
+            // --------------------------------------------------
+            // SAVE TO FIRESTORE
+            // --------------------------------------------------
+
+            await window.addInvestment(
+                investment
+            );
+
+
+            // --------------------------------------------------
             // TRANSACTION
-            // ====================================================
+            // --------------------------------------------------
 
-            addTransaction({
+            await window.addTransaction({
 
-                investmentId: investment.id,
+                type:
+                    "Investment",
 
-                type: "Investment",
+                plan:
+                    selectedPlan,
 
-                plan: selectedPlan,
+                amount:
+                    amount,
 
-                amount: amount,
+                generatedAmount:
+                    generatedAmount,
 
-                generatedAmount: generatedAmount,
+                profit:
+                    profit,
 
-                profit: generatedAmount - amount,
+                status:
+                    "Pending",
 
-                status: "Pending",
+                withdrawalStatus:
+                    "Locked",
 
-                withdrawalStatus: "Locked",
+                withdrawableAt:
+                    null
 
-                withdrawableAt: null
             });
 
 
-            closeInvestmentModal();
+            window.closeInvestmentModal();
 
-            renderInvestments();
 
-            showToast(
+            await renderInvestments();
+
+
+            window.showToast(
                 `${selectedPlan} investment submitted. Processing takes 2 hours.`
             );
+
+
+        } catch (error) {
+
+            console.error(
+                "Investment error:",
+                error
+            );
+
+            window.showToast(
+                "Unable to submit investment. Please try again."
+            );
+
         }
 
-
-        // ========================================================
-        // RENDER INVESTMENTS
-        // ========================================================
-
-        function renderInvestments() {
-
-            const user = getCurrentUser();
-
-            if (!user) return;
-
-            const container =
-                document.getElementById("investmentsList");
-
-            const investments =
-                getPendingInvestments()
-                    .filter(
-                        investment =>
-                            investment.userId === user.id
-                    );
+    };
 
 
-            if (!investments.length) {
+// ============================================================
+// RENDER INVESTMENTS
+// ============================================================
 
-                container.innerHTML = `
-                    <div class="rounded-2xl border border-gray-800 bg-gray-900 p-8 text-center">
-                        <p class="text-gray-400">
-                            You don't have any investments yet.
+async function renderInvestments() {
+
+    const container =
+        document.getElementById(
+            "investmentsList"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    const user =
+        await window.getFirebaseUser();
+
+    if (!user) {
+        return;
+    }
+
+
+    const investments =
+        await window.getInvestments();
+
+
+    if (!investments.length) {
+
+        container.innerHTML = `
+
+            <div
+                class="rounded-2xl
+                       border border-gray-800
+                       bg-gray-900
+                       p-8
+                       text-center"
+            >
+
+                <p class="text-gray-400">
+                    You don't have any investments yet.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        investments.map(
+            investment => {
+
+                const isPending =
+                    investment.status ===
+                    "Pending";
+
+
+                const isSuccessful =
+                    investment.status ===
+                    "Successful";
+
+
+                const isLocked =
+                    isSuccessful &&
+                    investment.withdrawalStatus ===
+                    "Locked";
+
+
+                const isAvailable =
+                    isSuccessful &&
+                    investment.withdrawalStatus ===
+                    "Available";
+
+
+                let statusHTML = "";
+
+
+                if (isPending) {
+
+                    statusHTML = `
+
+                        <span
+                            class="px-3 py-1
+                                   rounded-full
+                                   bg-yellow-500/10
+                                   text-yellow-400
+                                   text-xs
+                                   font-semibold"
+                        >
+                            Pending
+                        </span>
+
+                    `;
+
+                } else if (isLocked) {
+
+                    statusHTML = `
+
+                        <span
+                            class="px-3 py-1
+                                   rounded-full
+                                   bg-blue-500/10
+                                   text-blue-400
+                                   text-xs
+                                   font-semibold"
+                        >
+                            Successful • Locked
+                        </span>
+
+                    `;
+
+                } else if (isAvailable) {
+
+                    statusHTML = `
+
+                        <span
+                            class="px-3 py-1
+                                   rounded-full
+                                   bg-green-500/10
+                                   text-green-400
+                                   text-xs
+                                   font-semibold"
+                        >
+                            Withdrawable
+                        </span>
+
+                    `;
+
+                } else {
+
+                    statusHTML = `
+
+                        <span
+                            class="px-3 py-1
+                                   rounded-full
+                                   bg-gray-500/10
+                                   text-gray-400
+                                   text-xs
+                                   font-semibold"
+                        >
+                            ${investment.status || "Unknown"}
+                        </span>
+
+                    `;
+
+                }
+
+
+                let timingHTML = "";
+
+
+                if (isPending) {
+
+                    timingHTML = `
+
+                        <p
+                            class="text-xs
+                                   text-gray-500
+                                   mt-3"
+                        >
+                            Processing completes:
+                            ${window.formatDateTime(
+                                investment.completesAt
+                            )}
                         </p>
-                    </div>
-                `;
 
-                return;
-            }
+                    `;
 
+                } else if (isLocked) {
 
-            container.innerHTML =
-                investments.map(investment => {
+                    timingHTML = `
 
-                    const isPending =
-                        investment.status === "Pending";
+                        <p
+                            class="text-xs
+                                   text-gray-500
+                                   mt-3"
+                        >
+                            Withdrawal available:
+                            ${window.formatDateTime(
+                                investment.withdrawableAt
+                            )}
+                        </p>
 
-                    const isLocked =
-                        investment.status === "Completed" &&
-                        investment.withdrawalStatus === "Locked";
+                    `;
 
-                    const isAvailable =
-                        investment.status === "Completed" &&
-                        investment.withdrawalStatus === "Available";
+                } else if (isAvailable) {
 
+                    timingHTML = `
 
-                    let statusHTML = "";
+                        <p
+                            class="text-xs
+                                   text-green-400
+                                   mt-3"
+                        >
+                            Withdrawal is now available.
+                        </p>
 
-                    if (isPending) {
+                    `;
 
-                        statusHTML = `
-                            <span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs font-semibold">
-                                Pending
-                            </span>
-                        `;
-
-                    } else if (isLocked) {
-
-                        statusHTML = `
-                            <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold">
-                                Successful • Locked
-                            </span>
-                        `;
-
-                    } else if (isAvailable) {
-
-                        statusHTML = `
-                            <span class="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold">
-                                Withdrawable
-                            </span>
-                        `;
-                    }
+                }
 
 
-                    let timingHTML = "";
-
-                    if (isPending) {
-
-                        timingHTML = `
-                            <p class="text-xs text-gray-500 mt-3">
-                                Processing completes:
-                                ${formatDateTime(investment.completesAt)}
-                            </p>
-                        `;
-
-                    } else if (isLocked) {
-
-                        timingHTML = `
-                            <p class="text-xs text-gray-500 mt-3">
-                                Withdrawal available:
-                                ${formatDateTime(investment.withdrawableAt)}
-                            </p>
-                        `;
-
-                    } else if (isAvailable) {
-
-                        timingHTML = `
-                            <p class="text-xs text-green-400 mt-3">
-                                Withdrawal is now available.
-                            </p>
-                        `;
-                    }
+                let actionHTML = "";
 
 
-                    let actionHTML = "";
+                if (isPending) {
 
-                    if (isPending) {
+                    actionHTML = `
 
-                        actionHTML = `
-                            <button
-                                disabled
-                                class="px-4 py-2 rounded-xl bg-gray-800 text-gray-500 text-sm cursor-not-allowed"
-                            >
-                                Processing
-                            </button>
-                        `;
+                        <button
+                            disabled
+                            class="px-4 py-2
+                                   rounded-xl
+                                   bg-gray-800
+                                   text-gray-500
+                                   text-sm
+                                   cursor-not-allowed"
+                        >
+                            Processing
+                        </button>
 
-                    } else if (isLocked) {
+                    `;
 
-                        actionHTML = `
-                            <button
-                                disabled
-                                class="px-4 py-2 rounded-xl bg-gray-800 text-gray-500 text-sm cursor-not-allowed"
-                            >
-                                Locked for 24hrs
-                            </button>
-                        `;
+                } else if (isLocked) {
 
-                    } else if (isAvailable) {
+                    actionHTML = `
 
-                        actionHTML = `
-                            <button
-                                onclick="withdrawInvestment(${investment.id})"
-                                class="px-4 py-2 rounded-xl bg-green-500 text-white text-sm font-semibold hover:bg-green-400"
-                            >
-                                Withdraw
-                            </button>
-                        `;
-                    }
+                        <button
+                            disabled
+                            class="px-4 py-2
+                                   rounded-xl
+                                   bg-gray-800
+                                   text-gray-500
+                                   text-sm
+                                   cursor-not-allowed"
+                        >
+                            Locked for 24hrs
+                        </button>
+
+                    `;
+
+                } else if (isAvailable) {
+
+                    actionHTML = `
+
+                        <button
+                            onclick="handleInvestmentWithdrawal('${investment.id}')"
+                            class="px-4 py-2
+                                   rounded-xl
+                                   bg-green-500
+                                   text-white
+                                   text-sm
+                                   font-semibold
+                                   hover:bg-green-400"
+                        >
+                            Withdraw
+                        </button>
+
+                    `;
+
+                }
 
 
-                    return `
-                        <div class="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+                return `
 
-                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+                    <div
+                        class="rounded-2xl
+                               border border-gray-800
+                               bg-gray-900
+                               p-6"
+                    >
 
-                                <div>
+                        <div
+                            class="flex
+                                   flex-col
+                                   md:flex-row
+                                   md:items-center
+                                   md:justify-between
+                                   gap-5"
+                        >
 
-                                    <div class="flex items-center gap-3 mb-2">
+                            <div>
 
-                                        <h3 class="text-xl font-bold">
-                                            ${investment.plan}
-                                        </h3>
+                                <div
+                                    class="flex
+                                           items-center
+                                           gap-3
+                                           mb-2"
+                                >
 
-                                        ${statusHTML}
+                                    <h3
+                                        class="text-xl
+                                               font-bold"
+                                    >
+                                        ${investment.plan}
+                                    </h3>
 
-                                    </div>
-
-                                    <p class="text-gray-400 text-sm">
-                                        Invested ${money(investment.amount)}
-                                    </p>
-
-                                    <p class="text-green-400 text-sm mt-1">
-                                        Generated ${money(investment.generatedAmount)}
-                                    </p>
-
-                                    ${timingHTML}
+                                    ${statusHTML}
 
                                 </div>
 
 
-                                <div class="text-left md:text-right">
+                                <p
+                                    class="text-gray-400
+                                           text-sm"
+                                >
+                                    Invested
+                                    ${window.money(
+                                        investment.amount
+                                    )}
+                                </p>
 
-                                    <p class="text-gray-500 text-xs mb-1">
-                                        Investment amount
-                                    </p>
 
-                                    <p class="text-xl font-bold">
-                                        ${money(investment.amount)}
-                                    </p>
+                                <p
+                                    class="text-green-400
+                                           text-sm
+                                           mt-1"
+                                >
+                                    Generated
+                                    ${window.money(
+                                        investment.generatedAmount
+                                    )}
+                                </p>
 
-                                    <p class="text-gray-500 text-xs mt-2 mb-2">
-                                        Generated amount
-                                    </p>
 
-                                    <p class="text-lg font-semibold text-green-400">
-                                        ${money(investment.generatedAmount)}
-                                    </p>
+                                ${timingHTML}
 
+                            </div>
+
+
+                            <div
+                                class="text-left
+                                       md:text-right"
+                            >
+
+                                <p
+                                    class="text-gray-500
+                                           text-xs
+                                           mb-1"
+                                >
+                                    Investment amount
+                                </p>
+
+
+                                <p
+                                    class="text-xl
+                                           font-bold"
+                                >
+                                    ${window.money(
+                                        investment.amount
+                                    )}
+                                </p>
+
+
+                                <p
+                                    class="text-gray-500
+                                           text-xs
+                                           mt-2
+                                           mb-2"
+                                >
+                                    Generated amount
+                                </p>
+
+
+                                <p
+                                    class="text-lg
+                                           font-semibold
+                                           text-green-400"
+                                >
+                                    ${window.money(
+                                        investment.generatedAmount
+                                    )}
+                                </p>
+
+
+                                <div class="mt-3">
                                     ${actionHTML}
-
                                 </div>
 
                             </div>
 
                         </div>
-                    `;
 
-                }).join("");
-        }
+                    </div>
 
+                `;
 
-        // ========================================================
-        // WITHDRAW
-        // ========================================================
-
-        function withdrawInvestment(investmentId) {
-
-            const user = getCurrentUser();
-
-            if (!user) return;
-
-            const investments =
-                getPendingInvestments();
-
-            const investment =
-                investments.find(
-                    item =>
-                        item.id === investmentId &&
-                        item.userId === user.id
-                );
-
-
-            if (!investment) {
-
-                showToast("Investment not found.");
-
-                return;
             }
+        ).join("");
+}
 
 
-            if (
-                investment.status !== "Completed" ||
-                investment.withdrawalStatus !== "Available"
-            ) {
+// ============================================================
+// WITHDRAWAL
+// ============================================================
 
-                showToast(
-                    "This investment is not withdrawable yet."
-                );
+window.handleInvestmentWithdrawal =
+    async function (investmentId) {
 
-                return;
-            }
+        try {
 
-
-            // Prevent duplicate withdrawal.
-            if (investment.withdrawn) {
-
-                showToast(
-                    "This investment has already been withdrawn."
-                );
-
-                return;
-            }
-
-
-            // Mark investment as withdrawn.
-            investment.withdrawn = true;
-
-            investment.withdrawnAt =
-                new Date().toISOString();
-
-            investment.withdrawalStatus =
-                "Withdrawn";
-
-
-            savePendingInvestments(
-                investments
+            await window.withdrawInvestment(
+                investmentId
             );
 
+            await renderInvestments();
 
-            // Add withdrawal transaction.
-            addTransaction({
-
-                investmentId:
-                    investment.id,
-
-                type:
-                    "Withdrawal",
-
-                plan:
-                    investment.plan,
-
-                amount:
-                    investment.generatedAmount,
-
-                status:
-                    "Completed",
-
-                withdrawalStatus:
-                    "Completed",
-
-                date:
-                    new Date().toISOString()
-            });
-
-
-            renderInvestments();
-
-            showToast(
-                `${money(investment.generatedAmount)} withdrawal submitted.`
+            window.showToast(
+                "Withdrawal processed successfully."
             );
+
+        } catch (error) {
+
+            console.error(
+                "Withdrawal error:",
+                error
+            );
+
+            window.showToast(
+                "Unable to process withdrawal."
+            );
+
         }
 
+    };
 
-        // ========================================================
-        // REFRESH
-        // ========================================================
 
-        renderInvestments();
+// ============================================================
+// REFRESH
+// ============================================================
 
-        setInterval(() => {
+setInterval(
+    async () => {
 
-            checkInvestments();
+        try {
 
-            renderInvestments();
+            await window.checkInvestments();
 
-        }, 60 * 1000);
+            await renderInvestments();
 
-    </script>
+        } catch (error) {
+
+            console.error(
+                "Investment refresh error:",
+                error
+            );
+
+        }
+
+    },
+    60 * 1000
+);
+
+</script>
 
 </body>
 </html>
