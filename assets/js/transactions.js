@@ -1,9 +1,10 @@
 // assets/js/transactions.js
 
-const user = requireAuth();
+// ============================================================
+// LOAD TRANSACTIONS
+// ============================================================
 
-
-function renderTransactions() {
+async function renderTransactions() {
 
     const table =
         document.getElementById(
@@ -16,8 +17,12 @@ function renderTransactions() {
 
 
     const transactions =
-        getTransactions();
+        await getTransactions();
 
+
+    // ========================================================
+    // NO TRANSACTIONS
+    // ========================================================
 
     if (transactions.length === 0) {
 
@@ -40,115 +45,188 @@ function renderTransactions() {
     }
 
 
+    // ========================================================
+    // RENDER TRANSACTIONS
+    // ========================================================
+
     table.innerHTML =
-        transactions.map(
-            transaction => {
+        transactions
+            .map(
+                transaction => {
 
-                let statusClass =
-                    "text-yellow-400";
-
-
-                if (
-                    transaction.status ===
-                    "Completed"
-                ) {
-
-                    statusClass =
-                        "text-green-400";
-
-                }
+                    let statusClass =
+                        "text-yellow-400";
 
 
-                if (
-                    transaction.status ===
-                    "Failed"
-                ) {
+                    if (
+                        transaction.status ===
+                        "Successful"
+                    ) {
 
-                    statusClass =
-                        "text-red-400";
+                        statusClass =
+                            "text-green-400";
 
-                }
-
-
-                return `
-
-                    <tr
-                        class="border-b border-white/5 hover:bg-white/[0.02]"
-                    >
-
-                        <td class="p-5">
-
-                            ${
-                                transaction.type
-                            }
-
-                        </td>
+                    }
 
 
-                        <td class="p-5 text-gray-400">
+                    if (
+                        transaction.status ===
+                        "Completed"
+                    ) {
 
-                            ${
-                                transaction.plan ||
-                                "—"
-                            }
+                        statusClass =
+                            "text-green-400";
 
-                        </td>
-
-
-                        <td class="p-5 font-semibold">
-
-                            ${
-                                money(
-                                    transaction.amount
-                                )
-                            }
-
-                        </td>
+                    }
 
 
-                        <td
-                            class="p-5 ${statusClass}"
+                    if (
+                        transaction.status ===
+                        "Failed"
+                    ) {
+
+                        statusClass =
+                            "text-red-400";
+
+                    }
+
+
+                    // Firestore uses createdAt
+                    // rather than the old date field
+
+                    const transactionDate =
+                        transaction.createdAt ||
+                        transaction.date;
+
+
+                    return `
+
+                        <tr
+                            class="border-b
+                                   border-white/5
+                                   hover:bg-white/[0.02]"
                         >
 
-                            ${
-                                transaction.status
-                            }
+                            <td class="p-5">
 
-                        </td>
+                                ${
+                                    transaction.type ||
+                                    "—"
+                                }
+
+                            </td>
 
 
-                        <td class="p-5 text-gray-400">
+                            <td
+                                class="p-5 text-gray-400"
+                            >
 
-                            ${
-                                formatDateTime(
-                                    transaction.date
-                                )
-                            }
+                                ${
+                                    transaction.plan ||
+                                    "—"
+                                }
 
-                        </td>
+                            </td>
 
-                    </tr>
 
-                `;
+                            <td
+                                class="p-5 font-semibold"
+                            >
 
-            }
-        ).join("");
+                                ${
+                                    money(
+                                        transaction.amount
+                                    )
+                                }
+
+                            </td>
+
+
+                            <td
+                                class="p-5 ${statusClass}"
+                            >
+
+                                ${
+                                    transaction.status ||
+                                    "Pending"
+                                }
+
+                            </td>
+
+
+                            <td
+                                class="p-5 text-gray-400"
+                            >
+
+                                ${
+                                    formatDateTime(
+                                        transactionDate
+                                    )
+                                }
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            )
+            .join("");
 }
 
 
-checkPendingInvestments();
+// ============================================================
+// INITIAL LOAD
+// ============================================================
 
-renderTransactions();
+async function loadTransactions() {
+
+    const user =
+        await requireAuth();
+
+    if (!user) {
+        return;
+    }
 
 
-// Refresh status every minute
+    // Process investments first so
+    // completed investment transactions
+    // are reflected
+
+    await checkInvestments();
+
+    await renderTransactions();
+}
+
+
+// ============================================================
+// START
+// ============================================================
+
+loadTransactions();
+
+
+// ============================================================
+// REFRESH EVERY MINUTE
+// ============================================================
 
 setInterval(
-    () => {
+    async () => {
 
-        checkPendingInvestments();
+        try {
 
-        renderTransactions();
+            await checkInvestments();
+
+            await renderTransactions();
+
+        } catch (error) {
+
+            console.error(
+                "Transaction refresh error:",
+                error
+            );
+        }
 
     },
     60 * 1000
