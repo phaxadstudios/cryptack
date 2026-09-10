@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Investments — Cryptacks</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body class="dashboard-bg text-white min-h-screen">
+
+<main class="max-w-6xl mx-auto px-5 py-10">
+
+    <div class="flex justify-between items-center mb-10">
+
+        <div>
+
+            <a href="dashboard.html"
+               class="text-gray-400 hover:text-white text-sm">
+                ← Dashboard
+            </a>
+
+            <h1 class="text-4xl font-bold mt-4">
+                Investment Plans
+            </h1>
+
+            <p class="text-gray-400 mt-2">
+                Choose a simulated strategy for your portfolio.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+        <div class="glass-card p-7">
+
+            <p class="text-gray-400">
+                Starter
+            </p>
+
+            <h2 class="text-3xl font-bold mt-3">
+               $100 - $500
+            </h2>
+
+            <p class="text-green-400 mt-3">
+                Simulated return: $700 - $3,500 in 24hrs
+            </p>
+
+            <button
+                onclick="invest('Starter', 50000, 5)"
+                class="w-full mt-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500">
+                Select Plan
+            </button>
+
+        </div>
+
+
+        <div class="glass-card p-7 border-violet-500/40">
+
+            <span class="inline-block text-xs px-3 py-1 rounded-full
+                         bg-violet-500/20 text-violet-300">
+                Popular
+            </span>
+
+            <p class="text-gray-400 mt-4">
+                Prenium
+            </p>
+
+            <h2 class="text-3xl font-bold mt-3">
+                $500 - $2,000
+            </h2>
+
+            <p class="text-green-400 mt-3">
+                Simulated return: $3,500 - $14,000 in 24hrs
+            </p>
+
+            <button
+                onclick="invest('Growth', 250000, 10)"
+                class="w-full mt-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500">
+                Select Plan
+            </button>
+
+        </div>
+
+
+        <div class="glass-card p-7">
+
+            <p class="text-gray-400">
+                Premium Plus
+            </p>
+
+            <h2 class="text-3xl font-bold mt-3">
+                $2,000 -$10,000
+            </h2>
+
+            <p class="text-green-400 mt-3">
+                Simulated return: $14,00 - $70,000 in 24hrs
+            </p>
+
+            <button
+                onclick="invest('Premium', 1000000, 15)"
+                class="w-full mt-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500">
+                Select Plan
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="glass-card p-6 mt-8">
+
+        <p class="text-yellow-400 text-sm">
+             100% Real and Assured
+        </p>
+
+        <p class="text-gray-400 text-sm mt-2">
+            These plans are real and assured investment products.
+            
+        </p>
+
+    </div>
+
+</main>
+
+<script src="assets/js/app.js"></script>
+
+<script>
+
+const user = requireAuth();
+
+function invest(plan, amount, percentage) {
+
+    if (!user) return;
+
+    const profit = amount * (percentage / 100);
+
+    user.invested += amount;
+    user.returns += profit;
+    user.balance += amount + profit;
+
+    const users = getUsers();
+
+    const index = users.findIndex(
+        item => item.id === user.id
+    );
+
+    if (index !== -1) {
+        users[index] = user;
+        saveUsers(users);
+    }
+
+    setCurrentUser(user);
+
+    addTransaction({
+        type: "Investment",
+        plan,
+        amount,
+        status: "Completed"
+    });
+
+    showToast(`${plan} investment added to your  portfolio.`);
+
+    setTimeout(() => {
+        window.location.href = "dashboard.html";
+    }, 1200);
+}
+
+</script>
+
+</body>
+</html>
