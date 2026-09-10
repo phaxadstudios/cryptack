@@ -3,35 +3,86 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Activity — Cryptacks</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>Activity — Cryptacks</title>
 
-<link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
 
 </head>
 
-<body class="dashboard-bg text-white min-h-screen">
 
-<main class="max-w-5xl mx-auto px-5 py-10">
+<body class="bg-[#07070b] text-white min-h-screen">
 
-    <a href="dashboard.html"
-       class="text-gray-400 hover:text-white text-sm">
-        ← Dashboard
-    </a>
 
-    <h1 class="text-4xl font-bold mt-5">
-        Account Activity
-    </h1>
+<header class="border-b border-white/10">
 
-    <div id="history"
-         class="space-y-4 mt-8">
+    <div
+        class="max-w-7xl mx-auto px-6 py-5"
+    >
+
+        <div
+            class="flex items-center justify-between"
+        >
+
+            <a
+                href="dashboard.html"
+                class="text-2xl font-bold"
+            >
+                Crypto<span class="text-violet-500">
+                    cks
+                </span>
+            </a>
+
+
+            <a
+                href="dashboard.html"
+                class="text-gray-400 hover:text-white"
+            >
+                Dashboard
+            </a>
+
+        </div>
+
     </div>
 
+</header>
+
+
+
+<main class="max-w-4xl mx-auto px-6 py-12">
+
+
+    <p
+        class="text-violet-400 text-sm uppercase font-semibold"
+    >
+        Account
+    </p>
+
+
+    <h1 class="text-4xl font-bold mt-2 mb-10">
+        Activity
+    </h1>
+
+
+    <div
+        id="activity"
+        class="space-y-4"
+    ></div>
+
+
 </main>
+
 
 <script src="assets/js/app.js"></script>
 <script src="assets/js/history.js"></script>
