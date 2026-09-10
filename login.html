@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login — Cryptacks</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body class="bg-dark text-white min-h-screen flex items-center justify-center px-5">
+
+<div class="w-full max-w-md">
+
+    <div class="text-center mb-8">
+
+        <a href="index.html" class="text-3xl font-black">
+            <span class="text-violet-500">Cryptacks</span>
+        </a>
+
+        <h1 class="text-3xl font-bold mt-8">
+            Welcome back
+        </h1>
+
+        <p class="text-gray-400 mt-2">
+            Login to your Cryptacks dashboard
+        </p>
+
+    </div>
+
+    <form id="loginForm" class="glass-card p-7">
+
+        <label class="text-sm text-gray-300">
+            Email Address
+        </label>
+
+        <input
+            id="email"
+            type="email"
+            required
+            class="w-full mt-2 mb-5 px-4 py-3 rounded-xl bg-black/30
+                   border border-white/10"
+            placeholder="you@example.com"
+        >
+
+        <label class="text-sm text-gray-300">
+            Password
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            required
+            class="w-full mt-2 mb-6 px-4 py-3 rounded-xl bg-black/30
+                   border border-white/10"
+            placeholder="••••••••"
+        >
+
+        <button
+            type="submit"
+            class="w-full py-3.5 rounded-xl bg-violet-600
+                   hover:bg-violet-500 font-semibold">
+            Login
+        </button>
+
+    </form>
+
+    <p class="text-center text-gray-400 mt-6">
+        Don't have an account?
+
+        <a href="signup.html" class="text-violet-400">
+            Create one
+        </a>
+    </p>
+
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/login.js"></script>
+
+</body>
+</html>
