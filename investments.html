@@ -1,96 +1,111 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Investments - Cryptacks</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(16, 185, 129, 0.10),
+                    transparent 35%
+                ),
+                #030712;
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+        }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+        }
+    </style>
 </head>
 
-<body class="bg-gray-950 text-white min-h-screen">
+<body class="min-h-screen text-white">
 
     <!-- NAVIGATION -->
-    <nav class="border-b border-gray-800 bg-gray-950/95">
-        <div class="max-w-7xl mx-auto px-6 py-4">
+    <header class="border-b border-white/5 bg-gray-950/80">
+
+        <div class="max-w-7xl mx-auto px-6 py-5">
 
             <div class="flex items-center justify-between">
 
-                <a
-                    href="dashboard.html"
-                    class="text-2xl font-bold text-white"
-                >
-                    Cryptacks
+                <a href="dashboard.html"
+                    class="text-2xl font-bold">
+                    Crypt<span class="text-emerald-400">acks</span>
                 </a>
 
-                <div class="hidden md:flex items-center gap-6 text-sm">
+                <nav class="hidden md:flex items-center gap-7 text-sm">
 
-                    <a
-                        href="dashboard.html"
-                        class="text-gray-400 hover:text-white"
-                    >
+                    <a href="dashboard.html"
+                        class="text-gray-400 hover:text-white">
                         Dashboard
                     </a>
 
-                    <a
-                        href="investments.html"
-                        class="text-white font-semibold"
-                    >
+                    <a href="investments.html"
+                        class="text-emerald-400">
                         Investments
                     </a>
 
-                    <a
-                        href="transactions.html"
-                        class="text-gray-400 hover:text-white"
-                    >
+                    <a href="transactions.html"
+                        class="text-gray-400 hover:text-white">
                         Transactions
                     </a>
 
-                    <a
-                        href="history.html"
-                        class="text-gray-400 hover:text-white"
-                    >
+                    <a href="history.html"
+                        class="text-gray-400 hover:text-white">
                         History
                     </a>
 
-                    <a
-                        href="profile.html"
-                        class="text-gray-400 hover:text-white"
-                    >
+                    <a href="profile.html"
+                        class="text-gray-400 hover:text-white">
                         Profile
                     </a>
 
                     <button
-                        onclick="logout()"
-                        class="text-red-400 hover:text-red-300"
-                    >
+                        onclick="window.logout()"
+                        class="text-red-400 hover:text-red-300">
                         Logout
                     </button>
 
-                </div>
+                </nav>
 
             </div>
 
         </div>
-    </nav>
+
+    </header>
 
 
     <!-- PAGE -->
     <main class="max-w-7xl mx-auto px-6 py-12">
 
-        <div class="text-center mb-12">
+        <div class="mb-10">
 
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            <p class="text-emerald-400 text-sm font-semibold mb-2">
+                INVESTMENT CENTER
+            </p>
+
+            <h1 class="text-4xl font-bold">
                 Investment Plans
             </h1>
 
-            <p class="text-gray-400 max-w-2xl mx-auto">
-                Choose an investment plan and select the amount you want
-                to invest within the plan's available range.
+            <p class="text-gray-400 mt-3">
+                Choose an investment plan and enter your preferred amount.
             </p>
 
         </div>
@@ -101,155 +116,172 @@
 
 
             <!-- STARTER -->
-            <div class="rounded-2xl border border-gray-800 bg-gray-900 p-7">
+            <div class="glass-card rounded-3xl p-7">
 
-                <div class="mb-6">
+                <div class="flex items-center justify-between">
 
                     <h2 class="text-2xl font-bold">
                         Starter
                     </h2>
 
-                    <p class="text-gray-400 mt-2">
+                    <span class="text-xs px-3 py-1 rounded-full
+                        bg-emerald-500/10 text-emerald-400">
+                        7×
+                    </span>
+
+                </div>
+
+                <p class="text-gray-400 mt-3">
+                    A simple starting plan for smaller investments.
+                </p>
+
+                <div class="mt-7">
+
+                    <p class="text-sm text-gray-500">
+                        Investment range
+                    </p>
+
+                    <p class="text-xl font-semibold mt-1">
                         $100 - $500
                     </p>
 
                 </div>
 
-                <div class="mb-6">
+                <div class="mt-5">
 
-                    <p class="text-gray-400 text-sm">
-                        Generates
+                    <p class="text-sm text-gray-500">
+                        Projected result
                     </p>
 
-                    <p class="text-2xl font-bold">
+                    <p class="text-emerald-400 text-xl font-bold mt-1">
                         $700 - $3,500
                     </p>
-
-                    <p class="text-gray-500 text-sm">
-                        in 24hrs
-                    </p>
-
-                </div>
-
-                <div class="space-y-3 text-sm text-gray-300 mb-8">
-
-                    <p>✓ 24hrs duration</p>
-                    <p>✓ 100% assurance</p>
-                    <p>✓ Crypto trading</p>
 
                 </div>
 
                 <button
                     onclick="openInvestmentModal('Starter', 100, 500)"
-                    class="w-full rounded-xl bg-white text-black font-semibold py-3 hover:bg-gray-200 transition"
-                >
-                    Invest Now
+                    class="w-full mt-8 py-3 rounded-xl
+                    bg-emerald-500 hover:bg-emerald-400
+                    text-black font-semibold transition">
+
+                    Invest in Starter
+
                 </button>
 
             </div>
 
 
             <!-- PREMIUM -->
-            <div class="rounded-2xl border-2 border-indigo-500 bg-gray-900 p-7 relative">
+            <div class="glass-card rounded-3xl p-7
+                border-emerald-500/20">
 
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-
-                    <span class="px-4 py-1 rounded-full bg-indigo-500 text-white text-xs font-semibold">
-                        Popular
-                    </span>
-
-                </div>
-
-                <div class="mb-6">
+                <div class="flex items-center justify-between">
 
                     <h2 class="text-2xl font-bold">
                         Premium
                     </h2>
 
-                    <p class="text-gray-400 mt-2">
+                    <span class="text-xs px-3 py-1 rounded-full
+                        bg-emerald-500/10 text-emerald-400">
+                        7×
+                    </span>
+
+                </div>
+
+                <p class="text-gray-400 mt-3">
+                    A larger plan designed for higher-value investments.
+                </p>
+
+                <div class="mt-7">
+
+                    <p class="text-sm text-gray-500">
+                        Investment range
+                    </p>
+
+                    <p class="text-xl font-semibold mt-1">
                         $500 - $2,000
                     </p>
 
                 </div>
 
-                <div class="mb-6">
+                <div class="mt-5">
 
-                    <p class="text-gray-400 text-sm">
-                        Generates
+                    <p class="text-sm text-gray-500">
+                        Projected result
                     </p>
 
-                    <p class="text-2xl font-bold">
+                    <p class="text-emerald-400 text-xl font-bold mt-1">
                         $3,500 - $14,000
                     </p>
-
-                    <p class="text-gray-500 text-sm">
-                        in 24hrs
-                    </p>
-
-                </div>
-
-                <div class="space-y-3 text-sm text-gray-300 mb-8">
-
-                    <p>✓ 24hrs duration</p>
-                    <p>✓ 100% assurance</p>
-                    <p>✓ Crypto trading</p>
 
                 </div>
 
                 <button
                     onclick="openInvestmentModal('Premium', 500, 2000)"
-                    class="w-full rounded-xl bg-indigo-500 text-white font-semibold py-3 hover:bg-indigo-400 transition"
-                >
-                    Invest Now
+                    class="w-full mt-8 py-3 rounded-xl
+                    bg-emerald-500 hover:bg-emerald-400
+                    text-black font-semibold transition">
+
+                    Invest in Premium
+
                 </button>
 
             </div>
 
 
             <!-- PREMIUM PLUS -->
-            <div class="rounded-2xl border border-gray-800 bg-gray-900 p-7">
+            <div class="glass-card rounded-3xl p-7">
 
-                <div class="mb-6">
+                <div class="flex items-center justify-between">
 
                     <h2 class="text-2xl font-bold">
                         Premium Plus
                     </h2>
 
-                    <p class="text-gray-400 mt-2">
+                    <span class="text-xs px-3 py-1 rounded-full
+                        bg-emerald-500/10 text-emerald-400">
+                        7×
+                    </span>
+
+                </div>
+
+                <p class="text-gray-400 mt-3">
+                    The highest available plan for larger amounts.
+                </p>
+
+                <div class="mt-7">
+
+                    <p class="text-sm text-gray-500">
+                        Investment range
+                    </p>
+
+                    <p class="text-xl font-semibold mt-1">
                         $2,000 - $10,000
                     </p>
 
                 </div>
 
-                <div class="mb-6">
+                <div class="mt-5">
 
-                    <p class="text-gray-400 text-sm">
-                        Generates
+                    <p class="text-sm text-gray-500">
+                        Projected result
                     </p>
 
-                    <p class="text-2xl font-bold">
+                    <p class="text-emerald-400 text-xl font-bold mt-1">
                         $14,000 - $70,000
                     </p>
-
-                    <p class="text-gray-500 text-sm">
-                        in 24hrs
-                    </p>
-
-                </div>
-
-                <div class="space-y-3 text-sm text-gray-300 mb-8">
-
-                    <p>✓ 24hrs duration</p>
-                    <p>✓ 100% assurance</p>
-                    <p>✓ Crypto trading</p>
 
                 </div>
 
                 <button
                     onclick="openInvestmentModal('Premium Plus', 2000, 10000)"
-                    class="w-full rounded-xl bg-white text-black font-semibold py-3 hover:bg-gray-200 transition"
-                >
-                    Invest Now
+                    class="w-full mt-8 py-3 rounded-xl
+                    bg-emerald-500 hover:bg-emerald-400
+                    text-black font-semibold transition">
+
+                    Invest in Premium Plus
+
                 </button>
 
             </div>
@@ -257,8 +289,8 @@
         </div>
 
 
-        <!-- ACTIVE INVESTMENTS -->
-        <section class="mt-16">
+        <!-- CURRENT INVESTMENTS -->
+        <section class="mt-14">
 
             <div class="mb-6">
 
@@ -266,16 +298,17 @@
                     My Investments
                 </h2>
 
-                <p class="text-gray-400 text-sm mt-1">
-                    Track your investments, completion times and withdrawal availability.
+                <p class="text-gray-400 mt-1">
+                    Track your investment status and progress.
                 </p>
 
             </div>
 
             <div
                 id="investmentsList"
-                class="space-y-4"
-            ></div>
+                class="space-y-4">
+
+            </div>
 
         </section>
 
@@ -285,900 +318,1307 @@
     <!-- INVESTMENT MODAL -->
     <div
         id="investmentModal"
-        class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-6"
-    >
+        class="hidden fixed inset-0 z-50
+        flex items-center justify-center
+        p-5 modal-backdrop">
 
-        <div class="w-full max-w-md rounded-2xl bg-gray-900 border border-gray-800 p-7">
+        <div
+            class="w-full max-w-lg
+            glass-card rounded-3xl
+            p-7 shadow-2xl">
 
-            <div class="flex items-center justify-between mb-6">
+            <!-- HEADER -->
+            <div class="flex items-center justify-between">
 
-                <h2
-                    id="modalPlanName"
-                    class="text-2xl font-bold"
-                >
-                    Investment
-                </h2>
+                <div>
+
+                    <p class="text-sm text-gray-500">
+                        Investment Plan
+                    </p>
+
+                    <h2
+                        id="modalPlanName"
+                        class="text-2xl font-bold mt-1">
+                        Starter
+                    </h2>
+
+                </div>
 
                 <button
                     onclick="closeInvestmentModal()"
-                    class="text-gray-400 hover:text-white text-2xl"
-                >
+                    class="w-9 h-9 rounded-full
+                    bg-white/5 hover:bg-white/10
+                    text-gray-400 hover:text-white">
+
                     ×
+
                 </button>
 
             </div>
 
 
-            <div class="mb-5">
+            <!-- AMOUNT -->
+            <div class="mt-7">
 
-                <label class="block text-sm text-gray-400 mb-2">
-                    Investment Amount
+                <label
+                    class="block text-sm text-gray-400 mb-2">
+                    Investment amount
                 </label>
 
-                <div class="relative">
-
-                    <span class="absolute left-4 top-3 text-gray-400">
-                        $
-                    </span>
-
-                    <input
-                        id="investmentAmount"
-                        type="number"
-                        class="w-full rounded-xl bg-gray-950 border border-gray-700 px-8 py-3 text-white outline-none focus:border-indigo-500"
-                        placeholder="Enter amount"
-                        oninput="updateInvestmentPreview()"
-                    >
-
-                </div>
+                <input
+                    id="investmentAmount"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    oninput="updateInvestmentPreview()"
+                    placeholder="Enter amount"
+                    class="w-full px-4 py-3 rounded-xl
+                    bg-gray-950 border border-white/10
+                    focus:border-emerald-500
+                    outline-none">
 
                 <p
                     id="amountRange"
-                    class="text-xs text-gray-500 mt-2"
-                ></p>
+                    class="text-xs text-gray-500 mt-2">
+                    Minimum: $100 • Maximum: $500
+                </p>
 
             </div>
 
 
-            <div class="rounded-xl bg-gray-950 border border-gray-800 p-5 mb-6">
+            <!-- PAYMENT METHOD -->
+            <div class="mt-6">
 
-                <div class="flex justify-between mb-3">
+                <label
+                    class="block text-sm text-gray-400 mb-2">
+                    Payment method
+                </label>
 
-                    <span class="text-gray-400">
-                        Investment
-                    </span>
+                <select
+                    id="paymentMethod"
+                    onchange="updatePaymentAddress()"
+                    class="w-full px-4 py-3 rounded-xl
+                    bg-gray-950 border border-white/10
+                    outline-none focus:border-emerald-500">
+
+                    <option value="BTC">
+                        Bitcoin (BTC)
+                    </option>
+
+                    <option value="ETH">
+                        Ethereum (ETH)
+                    </option>
+
+                    <option value="USDT">
+                        Tether (USDT TRC20)
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SIMULATION PAYMENT AREA -->
+            <div
+                class="mt-5 p-5 rounded-2xl
+                bg-gray-950 border border-white/10">
+
+                <div class="flex items-center justify-between">
+
+                    <p class="font-semibold">
+                        Payment Address
+                    </p>
 
                     <span
+                        class="text-xs px-2.5 py-1 rounded-full
+                        bg-yellow-500/10 text-yellow-400">
+
+                        Simulation
+
+                    </span>
+
+                </div>
+
+
+                <p class="text-xs text-gray-500 mt-2">
+
+                    This wallet address is for the Cryptacks
+                    school-project simulation only. No real
+                    cryptocurrency payment is processed.
+
+                </p>
+
+
+                <div
+                    class="flex gap-2 mt-4">
+
+                    <input
+                        id="paymentAddress"
+                        readonly
+                        class="flex-1 min-w-0 px-3 py-3
+                        rounded-xl bg-gray-900
+                        border border-white/10
+                        text-sm text-gray-300">
+
+                    <button
+                        onclick="copyPaymentAddress()"
+                        class="px-4 rounded-xl
+                        bg-white/10
+                        hover:bg-white/15
+                        text-sm font-semibold">
+
+                        Copy
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREVIEW -->
+            <div
+                class="grid grid-cols-2 gap-4 mt-6">
+
+                <div
+                    class="p-4 rounded-2xl
+                    bg-white/[0.03]">
+
+                    <p class="text-xs text-gray-500">
+                        Amount
+                    </p>
+
+                    <p
                         id="previewInvestment"
-                        class="font-semibold"
-                    >
+                        class="font-bold text-lg mt-1">
                         $0.00
-                    </span>
+                    </p>
 
                 </div>
 
-                <div class="flex justify-between">
 
-                    <span class="text-gray-400">
-                        Generated amount
-                    </span>
+                <div
+                    class="p-4 rounded-2xl
+                    bg-emerald-500/5">
 
-                    <span
+                    <p class="text-xs text-gray-500">
+                        Projected result
+                    </p>
+
+                    <p
                         id="previewReturn"
-                        class="font-semibold text-green-400"
-                    >
+                        class="font-bold text-lg
+                        text-emerald-400 mt-1">
                         $0.00
-                    </span>
+                    </p>
 
                 </div>
 
             </div>
 
 
+            <!-- DONE -->
             <button
+                id="doneInvestmentButton"
                 onclick="submitInvestment()"
-                class="w-full rounded-xl bg-indigo-500 py-3 font-semibold hover:bg-indigo-400 transition"
-            >
-                Confirm Investment
+                class="w-full mt-7 py-3.5 rounded-xl
+                bg-emerald-500 hover:bg-emerald-400
+                text-black font-bold transition">
+
+                Done
+
             </button>
+
+
+            <p class="text-xs text-center
+                text-gray-600 mt-4">
+
+                Your investment will remain pending until
+                it is approved in the project database.
+
+            </p>
 
         </div>
 
     </div>
 
 
-    <script type="module" src="assets/js/app.js"></script>
+    <!-- FIREBASE APP -->
+    <script
+        type="module"
+        src="assets/js/app.js">
+    </script>
 
+
+    <!-- PAGE LOGIC -->
     <script type="module">
 
-// ============================================================
-// PLAN DATA
-// ============================================================
-
-const investmentPlans = {
-
-    "Starter": {
-        min: 100,
-        max: 500,
-        multiplier: 7
-    },
-
-    "Premium": {
-        min: 500,
-        max: 2000,
-        multiplier: 7
-    },
-
-    "Premium Plus": {
-        min: 2000,
-        max: 10000,
-        multiplier: 7
-    }
-
-};
-
-
-let selectedPlan = null;
-
-
-// ============================================================
-// AUTH
-// ============================================================
-
-async function initializeInvestments() {
-
-    const user =
-        await window.requireAuth();
-
-    if (!user) {
-        return;
-    }
-
-    await window.checkInvestments();
-
-    await renderInvestments();
-}
-
-
-initializeInvestments();
-
-
-// ============================================================
-// OPEN MODAL
-// ============================================================
-
-window.openInvestmentModal =
-    function (plan, min, max) {
-
-        selectedPlan = plan;
-
-        document.getElementById(
-            "modalPlanName"
-        ).textContent = plan;
-
-        document.getElementById(
-            "amountRange"
-        ).textContent =
-            `Minimum: ${window.money(min)} • Maximum: ${window.money(max)}`;
-
-        document.getElementById(
-            "investmentAmount"
-        ).value = "";
-
-        document.getElementById(
-            "previewInvestment"
-        ).textContent =
-            window.money(0);
-
-        document.getElementById(
-            "previewReturn"
-        ).textContent =
-            window.money(0);
-
-        document
-            .getElementById("investmentModal")
-            .classList.remove("hidden");
-    };
-
-
-// ============================================================
-// CLOSE MODAL
-// ============================================================
-
-window.closeInvestmentModal =
-    function () {
-
-        document
-            .getElementById("investmentModal")
-            .classList.add("hidden");
-
-        selectedPlan = null;
-    };
-
-
-// ============================================================
-// PREVIEW
-// ============================================================
-
-window.updateInvestmentPreview =
-    function () {
-
-        if (!selectedPlan) {
-            return;
-        }
-
-        const plan =
-            investmentPlans[selectedPlan];
-
-        const amount =
-            Number(
-                document.getElementById(
-                    "investmentAmount"
-                ).value
-            ) || 0;
-
-        const generated =
-            amount * plan.multiplier;
-
-        document.getElementById(
-            "previewInvestment"
-        ).textContent =
-            window.money(amount);
-
-        document.getElementById(
-            "previewReturn"
-        ).textContent =
-            window.money(generated);
-    };
-
-
-// ============================================================
-// SUBMIT INVESTMENT
-// ============================================================
-
-window.submitInvestment =
-    async function () {
-
-        if (!selectedPlan) {
-            return;
-        }
-
-        const user =
-            await window.getFirebaseUser();
-
-        if (!user) {
-
-            window.location.href =
-                "login.html";
-
-            return;
-        }
-
-
-        const plan =
-            investmentPlans[selectedPlan];
-
-
-        const amount =
-            Number(
-                document.getElementById(
-                    "investmentAmount"
-                ).value
-            );
-
-
-        // ------------------------------------------------------
-        // VALIDATE
-        // ------------------------------------------------------
-
-        if (
-            !amount ||
-            amount < plan.min ||
-            amount > plan.max
-        ) {
-
-            window.showToast(
-                `Enter an amount between ${window.money(plan.min)} and ${window.money(plan.max)}.`
-            );
-
-            return;
-        }
-
-
-        // ------------------------------------------------------
-        // CALCULATE
-        // ------------------------------------------------------
-
-        const generatedAmount =
-            amount * plan.multiplier;
-
-        const profit =
-            generatedAmount - amount;
-
-
-        const now =
-            new Date();
-
-        const completesAt =
-            new Date(
-                now.getTime() +
-                (2 * 60 * 60 * 1000)
-            );
-
-
-        // ------------------------------------------------------
-        // INVESTMENT
-        // ------------------------------------------------------
-
-        const investment = {
-
-            userId: user.uid,
-
-            plan: selectedPlan,
-
-            amount: amount,
-
-            generatedAmount:
-                generatedAmount,
-
-            profit:
-                profit,
-
-            multiplier:
-                plan.multiplier,
-
-            status:
-                "Pending",
-
-            createdAt:
-                now.toISOString(),
-
-            completesAt:
-                completesAt.toISOString(),
-
-            completedAt:
-                null,
-
-            withdrawableAt:
-                null,
-
-            withdrawalStatus:
-                "Locked",
-
-            withdrawable:
-                false
+        const investmentPlans = {
+
+            "Starter": {
+                min: 100,
+                max: 500,
+                multiplier: 7
+            },
+
+            "Premium": {
+                min: 500,
+                max: 2000,
+                multiplier: 7
+            },
+
+            "Premium Plus": {
+                min: 2000,
+                max: 10000,
+                multiplier: 7
+            }
 
         };
 
 
-        try {
+        /*
+         * These are intentionally fictional simulation
+         * addresses for the school project.
+         */
+        const simulationAddresses = {
 
-            // --------------------------------------------------
-            // SAVE TO FIRESTORE
-            // --------------------------------------------------
+            BTC:
+                "CRYPTACKS-BTC-SIMULATION-ADDRESS",
 
-            await window.addInvestment(
-                investment
-            );
+            ETH:
+                "CRYPTACKS-ETH-SIMULATION-ADDRESS",
 
+            USDT:
+                "CRYPTACKS-USDT-TRC20-SIMULATION-ADDRESS"
 
-            // --------------------------------------------------
-            // TRANSACTION
-            // --------------------------------------------------
-
-            await window.addTransaction({
-
-                type:
-                    "Investment",
-
-                plan:
-                    selectedPlan,
-
-                amount:
-                    amount,
-
-                generatedAmount:
-                    generatedAmount,
-
-                profit:
-                    profit,
-
-                status:
-                    "Pending",
-
-                withdrawalStatus:
-                    "Locked",
-
-                withdrawableAt:
-                    null
-
-            });
+        };
 
 
-            window.closeInvestmentModal();
+        let selectedPlan = null;
 
+
+        // ------------------------------------------------
+        // INITIALIZE
+        // ------------------------------------------------
+
+        async function initializeInvestments() {
+
+            const user =
+                await window.requireAuth();
+
+            if (!user) {
+                return;
+            }
+
+            await checkApprovedInvestments();
 
             await renderInvestments();
 
-
-            window.showToast(
-                `${selectedPlan} investment submitted. Processing takes 2 hours.`
-            );
+        }
 
 
-        } catch (error) {
+        // ------------------------------------------------
+        // OPEN MODAL
+        // ------------------------------------------------
 
-            console.error(
-                "Investment error:",
-                error
-            );
+        window.openInvestmentModal =
+            function(plan, min, max) {
 
-            window.showToast(
-                "Unable to submit investment. Please try again."
-            );
+                selectedPlan = plan;
+
+                document
+                    .getElementById("modalPlanName")
+                    .textContent = plan;
+
+                document
+                    .getElementById("amountRange")
+                    .textContent =
+                    `Minimum: ${window.money(min)} • Maximum: ${window.money(max)}`;
+
+                document
+                    .getElementById("investmentAmount")
+                    .value = "";
+
+                document
+                    .getElementById("previewInvestment")
+                    .textContent =
+                    window.money(0);
+
+                document
+                    .getElementById("previewReturn")
+                    .textContent =
+                    window.money(0);
+
+                document
+                    .getElementById("paymentMethod")
+                    .value = "BTC";
+
+                updatePaymentAddress();
+
+                document
+                    .getElementById("investmentModal")
+                    .classList.remove("hidden");
+
+            };
+
+
+        // ------------------------------------------------
+        // CLOSE MODAL
+        // ------------------------------------------------
+
+        window.closeInvestmentModal =
+            function() {
+
+                document
+                    .getElementById("investmentModal")
+                    .classList.add("hidden");
+
+                selectedPlan = null;
+
+            };
+
+
+        // ------------------------------------------------
+        // UPDATE PAYMENT ADDRESS
+        // ------------------------------------------------
+
+        window.updatePaymentAddress =
+            function() {
+
+                const method =
+                    document
+                        .getElementById("paymentMethod")
+                        .value;
+
+                document
+                    .getElementById("paymentAddress")
+                    .value =
+                    simulationAddresses[method];
+
+            };
+
+
+        // ------------------------------------------------
+        // COPY ADDRESS
+        // ------------------------------------------------
+
+        window.copyPaymentAddress =
+            async function() {
+
+                const address =
+                    document
+                        .getElementById("paymentAddress")
+                        .value;
+
+                try {
+
+                    await navigator.clipboard
+                        .writeText(address);
+
+                    window.showToast(
+                        "Simulation address copied."
+                    );
+
+                } catch (error) {
+
+                    const input =
+                        document
+                            .getElementById("paymentAddress");
+
+                    input.select();
+
+                    document.execCommand("copy");
+
+                    window.showToast(
+                        "Simulation address copied."
+                    );
+
+                }
+
+            };
+
+
+        // ------------------------------------------------
+        // PREVIEW
+        // ------------------------------------------------
+
+        window.updateInvestmentPreview =
+            function() {
+
+                if (!selectedPlan) {
+                    return;
+                }
+
+                const plan =
+                    investmentPlans[selectedPlan];
+
+                const amount =
+                    Number(
+                        document
+                            .getElementById("investmentAmount")
+                            .value
+                    ) || 0;
+
+                const generated =
+                    amount * plan.multiplier;
+
+                document
+                    .getElementById("previewInvestment")
+                    .textContent =
+                    window.money(amount);
+
+                document
+                    .getElementById("previewReturn")
+                    .textContent =
+                    window.money(generated);
+
+            };
+
+
+        // ------------------------------------------------
+        // SUBMIT INVESTMENT
+        // ------------------------------------------------
+
+        window.submitInvestment =
+            async function() {
+
+                if (!selectedPlan) {
+                    return;
+                }
+
+                const user =
+                    window.getFirebaseUser();
+
+                if (!user) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                const plan =
+                    investmentPlans[selectedPlan];
+
+
+                const amount =
+                    Number(
+                        document
+                            .getElementById("investmentAmount")
+                            .value
+                    );
+
+
+                if (
+                    !amount ||
+                    amount < plan.min ||
+                    amount > plan.max
+                ) {
+
+                    window.showToast(
+                        `Enter an amount between ${window.money(plan.min)} and ${window.money(plan.max)}.`
+                    );
+
+                    return;
+
+                }
+
+
+                const paymentMethod =
+                    document
+                        .getElementById("paymentMethod")
+                        .value;
+
+
+                const generatedAmount =
+                    amount * plan.multiplier;
+
+
+                const profit =
+                    generatedAmount - amount;
+
+
+                const now =
+                    new Date();
+
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * There is NO completion timer yet.
+                 *
+                 * The timer begins only after you manually
+                 * change status from Pending to Successful
+                 * in Firestore.
+                 */
+
+                const investment = {
+
+                    userId: user.uid,
+
+                    plan: selectedPlan,
+
+                    amount: amount,
+
+                    generatedAmount:
+                        generatedAmount,
+
+                    profit:
+                        profit,
+
+                    multiplier:
+                        plan.multiplier,
+
+                    paymentMethod:
+                        paymentMethod,
+
+                    paymentStatus:
+                        "Pending",
+
+                    status:
+                        "Pending",
+
+                    investmentStarted:
+                        false,
+
+                    createdAt:
+                        now.toISOString(),
+
+                    startedAt:
+                        null,
+
+                    completesAt:
+                        null,
+
+                    completedAt:
+                        null,
+
+                    withdrawableAt:
+                        null,
+
+                    withdrawalStatus:
+                        "Locked",
+
+                    withdrawable:
+                        false
+
+                };
+
+
+                const button =
+                    document
+                        .getElementById(
+                            "doneInvestmentButton"
+                        );
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Saving...";
+
+
+                try {
+
+                    await window.addInvestment(
+                        investment
+                    );
+
+
+                    await window.addTransaction({
+
+                        type:
+                            "Investment",
+
+                        plan:
+                            selectedPlan,
+
+                        amount:
+                            amount,
+
+                        generatedAmount:
+                            generatedAmount,
+
+                        profit:
+                            profit,
+
+                        status:
+                            "Pending",
+
+                        paymentMethod:
+                            paymentMethod,
+
+                        paymentStatus:
+                            "Pending",
+
+                        withdrawalStatus:
+                            "Locked",
+
+                        withdrawableAt:
+                            null
+
+                    });
+
+
+                    window.closeInvestmentModal();
+
+
+                    await renderInvestments();
+
+
+                    window.showToast(
+                        `${selectedPlan} investment submitted and is pending approval.`
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Investment error:",
+                        error
+                    );
+
+                    window.showToast(
+                        "Unable to submit investment. Please try again."
+                    );
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Done";
+
+                }
+
+            };
+
+
+        // ------------------------------------------------
+        // CHECK FOR MANUAL APPROVAL
+        // ------------------------------------------------
+
+        async function checkApprovedInvestments() {
+
+            const user =
+                window.getFirebaseUser();
+
+            if (!user) {
+                return;
+            }
+
+
+            const investments =
+                await window.getInvestments();
+
+
+            for (
+                const investment of investments
+            ) {
+
+                /*
+                 * You manually change the Firebase
+                 * document status to Successful.
+                 *
+                 * When the page sees that change, it
+                 * starts the 2-hour timer automatically.
+                 */
+
+                if (
+                    investment.status === "Successful" &&
+                    investment.investmentStarted !== true
+                ) {
+
+                    const startedAt =
+                        new Date();
+
+
+                    const completesAt =
+                        new Date(
+                            startedAt.getTime() +
+                            (2 * 60 * 60 * 1000)
+                        );
+
+
+                    await window.updateInvestment(
+                        investment.id,
+                        {
+
+                            status:
+                                "Successful",
+
+                            paymentStatus:
+                                "Successful",
+
+                            investmentStarted:
+                                true,
+
+                            startedAt:
+                                startedAt.toISOString(),
+
+                            completesAt:
+                                completesAt.toISOString(),
+
+                            completedAt:
+                                null,
+
+                            withdrawableAt:
+                                null,
+
+                            withdrawalStatus:
+                                "Locked",
+
+                            withdrawable:
+                                false
+
+                        }
+                    );
+
+                }
+
+            }
 
         }
 
-    };
 
+        // ------------------------------------------------
+        // RENDER INVESTMENTS
+        // ------------------------------------------------
 
-// ============================================================
-// RENDER INVESTMENTS
-// ============================================================
+        async function renderInvestments() {
 
-async function renderInvestments() {
+            const container =
+                document.getElementById(
+                    "investmentsList"
+                );
 
-    const container =
-        document.getElementById(
-            "investmentsList"
-        );
 
-    if (!container) {
-        return;
-    }
+            if (!container) {
+                return;
+            }
 
 
-    const user =
-        await window.getFirebaseUser();
+            const user =
+                window.getFirebaseUser();
 
-    if (!user) {
-        return;
-    }
 
+            if (!user) {
+                return;
+            }
 
-    const investments =
-        await window.getInvestments();
 
+            const investments =
+                await window.getInvestments();
 
-    if (!investments.length) {
 
-        container.innerHTML = `
+            if (!investments.length) {
 
-            <div
-                class="rounded-2xl
-                       border border-gray-800
-                       bg-gray-900
-                       p-8
-                       text-center"
-            >
-
-                <p class="text-gray-400">
-                    You don't have any investments yet.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    container.innerHTML =
-        investments.map(
-            investment => {
-
-                const isPending =
-                    investment.status ===
-                    "Pending";
-
-
-                const isSuccessful =
-                    investment.status ===
-                    "Successful";
-
-
-                const isLocked =
-                    isSuccessful &&
-                    investment.withdrawalStatus ===
-                    "Locked";
-
-
-                const isAvailable =
-                    isSuccessful &&
-                    investment.withdrawalStatus ===
-                    "Available";
-
-
-                let statusHTML = "";
-
-
-                if (isPending) {
-
-                    statusHTML = `
-
-                        <span
-                            class="px-3 py-1
-                                   rounded-full
-                                   bg-yellow-500/10
-                                   text-yellow-400
-                                   text-xs
-                                   font-semibold"
-                        >
-                            Pending
-                        </span>
-
-                    `;
-
-                } else if (isLocked) {
-
-                    statusHTML = `
-
-                        <span
-                            class="px-3 py-1
-                                   rounded-full
-                                   bg-blue-500/10
-                                   text-blue-400
-                                   text-xs
-                                   font-semibold"
-                        >
-                            Successful • Locked
-                        </span>
-
-                    `;
-
-                } else if (isAvailable) {
-
-                    statusHTML = `
-
-                        <span
-                            class="px-3 py-1
-                                   rounded-full
-                                   bg-green-500/10
-                                   text-green-400
-                                   text-xs
-                                   font-semibold"
-                        >
-                            Withdrawable
-                        </span>
-
-                    `;
-
-                } else {
-
-                    statusHTML = `
-
-                        <span
-                            class="px-3 py-1
-                                   rounded-full
-                                   bg-gray-500/10
-                                   text-gray-400
-                                   text-xs
-                                   font-semibold"
-                        >
-                            ${investment.status || "Unknown"}
-                        </span>
-
-                    `;
-
-                }
-
-
-                let timingHTML = "";
-
-
-                if (isPending) {
-
-                    timingHTML = `
-
-                        <p
-                            class="text-xs
-                                   text-gray-500
-                                   mt-3"
-                        >
-                            Processing completes:
-                            ${window.formatDateTime(
-                                investment.completesAt
-                            )}
-                        </p>
-
-                    `;
-
-                } else if (isLocked) {
-
-                    timingHTML = `
-
-                        <p
-                            class="text-xs
-                                   text-gray-500
-                                   mt-3"
-                        >
-                            Withdrawal available:
-                            ${window.formatDateTime(
-                                investment.withdrawableAt
-                            )}
-                        </p>
-
-                    `;
-
-                } else if (isAvailable) {
-
-                    timingHTML = `
-
-                        <p
-                            class="text-xs
-                                   text-green-400
-                                   mt-3"
-                        >
-                            Withdrawal is now available.
-                        </p>
-
-                    `;
-
-                }
-
-
-                let actionHTML = "";
-
-
-                if (isPending) {
-
-                    actionHTML = `
-
-                        <button
-                            disabled
-                            class="px-4 py-2
-                                   rounded-xl
-                                   bg-gray-800
-                                   text-gray-500
-                                   text-sm
-                                   cursor-not-allowed"
-                        >
-                            Processing
-                        </button>
-
-                    `;
-
-                } else if (isLocked) {
-
-                    actionHTML = `
-
-                        <button
-                            disabled
-                            class="px-4 py-2
-                                   rounded-xl
-                                   bg-gray-800
-                                   text-gray-500
-                                   text-sm
-                                   cursor-not-allowed"
-                        >
-                            Locked for 24hrs
-                        </button>
-
-                    `;
-
-                } else if (isAvailable) {
-
-                    actionHTML = `
-
-                        <button
-                            onclick="handleInvestmentWithdrawal('${investment.id}')"
-                            class="px-4 py-2
-                                   rounded-xl
-                                   bg-green-500
-                                   text-white
-                                   text-sm
-                                   font-semibold
-                                   hover:bg-green-400"
-                        >
-                            Withdraw
-                        </button>
-
-                    `;
-
-                }
-
-
-                return `
+                container.innerHTML = `
 
                     <div
-                        class="rounded-2xl
-                               border border-gray-800
-                               bg-gray-900
-                               p-6"
-                    >
+                        class="glass-card rounded-2xl
+                        p-8 text-center">
 
-                        <div
-                            class="flex
-                                   flex-col
-                                   md:flex-row
-                                   md:items-center
-                                   md:justify-between
-                                   gap-5"
-                        >
+                        <p class="text-gray-400">
+                            You don't have any investments yet.
+                        </p>
 
-                            <div>
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                investments.map(
+                    investment => {
+
+                        const status =
+                            investment.status ||
+                            "Pending";
+
+
+                        let statusClass =
+                            "text-yellow-400";
+
+                        let statusBackground =
+                            "bg-yellow-500/10";
+
+
+                        if (
+                            status ===
+                            "Successful"
+                        ) {
+
+                            statusClass =
+                                "text-emerald-400";
+
+                            statusBackground =
+                                "bg-emerald-500/10";
+
+                        }
+
+
+                        if (
+                            status ===
+                            "Failed"
+                        ) {
+
+                            statusClass =
+                                "text-red-400";
+
+                            statusBackground =
+                                "bg-red-500/10";
+
+                        }
+
+
+                        const started =
+                            investment.investmentStarted === true;
+
+
+                        let timingHTML = "";
+
+
+                        if (
+                            status === "Pending"
+                        ) {
+
+                            timingHTML = `
+
+                                <div class="mt-5
+                                    p-4 rounded-xl
+                                    bg-yellow-500/5">
+
+                                    <p class="text-yellow-400
+                                        text-sm font-semibold">
+
+                                        Awaiting approval
+
+                                    </p>
+
+                                    <p class="text-gray-500
+                                        text-xs mt-1">
+
+                                        Your investment is
+                                        currently pending.
+
+                                    </p>
+
+                                </div>
+
+                            `;
+
+                        } else if (
+                            status === "Successful" &&
+                            started &&
+                            investment.completesAt
+                        ) {
+
+                            const remaining =
+                                getRemainingTime(
+                                    investment.completesAt
+                                );
+
+
+                            timingHTML = `
+
+                                <div class="mt-5
+                                    p-4 rounded-xl
+                                    bg-emerald-500/5">
+
+                                    <p class="text-emerald-400
+                                        text-sm font-semibold">
+
+                                        Investment in progress
+
+                                    </p>
+
+                                    <p
+                                        class="countdown
+                                        text-lg font-bold
+                                        mt-1"
+                                        data-completes-at="${investment.completesAt}">
+
+                                        ${remaining}
+
+                                    </p>
+
+                                    <p class="text-gray-500
+                                        text-xs mt-1">
+
+                                        Remaining until completion
+
+                                    </p>
+
+                                </div>
+
+                            `;
+
+                        }
+
+
+                        return `
+
+                            <div
+                                class="glass-card rounded-2xl
+                                p-6">
 
                                 <div
-                                    class="flex
-                                           items-center
-                                           gap-3
-                                           mb-2"
-                                >
+                                    class="flex flex-col
+                                    md:flex-row
+                                    md:items-center
+                                    md:justify-between
+                                    gap-5">
 
-                                    <h3
-                                        class="text-xl
-                                               font-bold"
-                                    >
-                                        ${investment.plan}
-                                    </h3>
+                                    <div>
 
-                                    ${statusHTML}
+                                        <div
+                                            class="flex items-center
+                                            gap-3">
+
+                                            <h3
+                                                class="text-xl
+                                                font-bold">
+
+                                                ${escapeHTML(
+                                                    investment.plan ||
+                                                    "Investment"
+                                                )}
+
+                                            </h3>
+
+                                            <span
+                                                class="${statusBackground}
+                                                ${statusClass}
+                                                text-xs
+                                                font-semibold
+                                                px-3 py-1
+                                                rounded-full">
+
+                                                ${escapeHTML(status)}
+
+                                            </span>
+
+                                        </div>
+
+
+                                        <p
+                                            class="text-gray-500
+                                            text-sm mt-2">
+
+                                            ${investment.paymentMethod || "Payment"}
+                                            •
+                                            ${formatInvestmentDate(
+                                                investment.createdAt
+                                            )}
+
+                                        </p>
+
+                                    </div>
+
+
+                                    <div
+                                        class="text-left
+                                        md:text-right">
+
+                                        <p
+                                            class="text-gray-500
+                                            text-sm">
+
+                                            Investment
+
+                                        </p>
+
+                                        <p
+                                            class="text-xl
+                                            font-bold">
+
+                                            ${window.money(
+                                                investment.amount
+                                            )}
+
+                                        </p>
+
+                                    </div>
 
                                 </div>
 
 
-                                <p
-                                    class="text-gray-400
-                                           text-sm"
-                                >
-                                    Invested
-                                    ${window.money(
-                                        investment.amount
-                                    )}
-                                </p>
+                                <div
+                                    class="grid md:grid-cols-3
+                                    gap-4 mt-6">
+
+                                    <div
+                                        class="p-4 rounded-xl
+                                        bg-white/[0.03]">
+
+                                        <p
+                                            class="text-xs
+                                            text-gray-500">
+
+                                            Projected result
+
+                                        </p>
+
+                                        <p
+                                            class="font-semibold
+                                            mt-1
+                                            text-emerald-400">
+
+                                            ${window.money(
+                                                investment.generatedAmount
+                                            )}
+
+                                        </p>
+
+                                    </div>
 
 
-                                <p
-                                    class="text-green-400
-                                           text-sm
-                                           mt-1"
-                                >
-                                    Generated
-                                    ${window.money(
-                                        investment.generatedAmount
-                                    )}
-                                </p>
+                                    <div
+                                        class="p-4 rounded-xl
+                                        bg-white/[0.03]">
+
+                                        <p
+                                            class="text-xs
+                                            text-gray-500">
+
+                                            Projected profit
+
+                                        </p>
+
+                                        <p
+                                            class="font-semibold
+                                            mt-1">
+
+                                            ${window.money(
+                                                investment.profit
+                                            )}
+
+                                        </p>
+
+                                    </div>
+
+
+                                    <div
+                                        class="p-4 rounded-xl
+                                        bg-white/[0.03]">
+
+                                        <p
+                                            class="text-xs
+                                            text-gray-500">
+
+                                            Payment
+
+                                        </p>
+
+                                        <p
+                                            class="font-semibold
+                                            mt-1">
+
+                                            ${escapeHTML(
+                                                investment.paymentMethod ||
+                                                "—"
+                                            )}
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
 
 
                                 ${timingHTML}
 
                             </div>
 
+                        `;
 
-                            <div
-                                class="text-left
-                                       md:text-right"
-                            >
-
-                                <p
-                                    class="text-gray-500
-                                           text-xs
-                                           mb-1"
-                                >
-                                    Investment amount
-                                </p>
+                    }
+                ).join("");
 
 
-                                <p
-                                    class="text-xl
-                                           font-bold"
-                                >
-                                    ${window.money(
-                                        investment.amount
-                                    )}
-                                </p>
+            updateCountdowns();
+
+        }
 
 
-                                <p
-                                    class="text-gray-500
-                                           text-xs
-                                           mt-2
-                                           mb-2"
-                                >
-                                    Generated amount
-                                </p>
+        // ------------------------------------------------
+        // COUNTDOWN
+        // ------------------------------------------------
+
+        function getRemainingTime(
+            completesAt
+        ) {
+
+            const target =
+                new Date(
+                    completesAt
+                ).getTime();
 
 
-                                <p
-                                    class="text-lg
-                                           font-semibold
-                                           text-green-400"
-                                >
-                                    ${window.money(
-                                        investment.generatedAmount
-                                    )}
-                                </p>
+            const now =
+                Date.now();
 
 
-                                <div class="mt-3">
-                                    ${actionHTML}
-                                </div>
+            const difference =
+                target - now;
 
-                            </div>
 
-                        </div>
+            if (difference <= 0) {
 
-                    </div>
-
-                `;
+                return "Completing...";
 
             }
-        ).join("");
-}
 
 
-// ============================================================
-// WITHDRAWAL
-// ============================================================
+            const hours =
+                Math.floor(
+                    difference /
+                    (1000 * 60 * 60)
+                );
 
-window.handleInvestmentWithdrawal =
-    async function (investmentId) {
 
-        try {
+            const minutes =
+                Math.floor(
+                    (difference %
+                        (1000 * 60 * 60)) /
+                    (1000 * 60)
+                );
 
-            await window.withdrawInvestment(
-                investmentId
-            );
 
-            await renderInvestments();
+            const seconds =
+                Math.floor(
+                    (difference %
+                        (1000 * 60)) /
+                    1000
+                );
 
-            window.showToast(
-                "Withdrawal processed successfully."
-            );
 
-        } catch (error) {
-
-            console.error(
-                "Withdrawal error:",
-                error
-            );
-
-            window.showToast(
-                "Unable to process withdrawal."
-            );
+            return `${hours}h ${minutes}m ${seconds}s`;
 
         }
 
-    };
+
+        function updateCountdowns() {
+
+            document
+                .querySelectorAll(
+                    ".countdown"
+                )
+                .forEach(
+                    element => {
+
+                        const completesAt =
+                            element
+                                .dataset
+                                .completesAt;
 
 
-// ============================================================
-// REFRESH
-// ============================================================
+                        if (!completesAt) {
+                            return;
+                        }
 
-setInterval(
-    async () => {
 
-        try {
+                        element.textContent =
+                            getRemainingTime(
+                                completesAt
+                            );
 
-            await window.checkInvestments();
-
-            await renderInvestments();
-
-        } catch (error) {
-
-            console.error(
-                "Investment refresh error:",
-                error
-            );
+                    }
+                );
 
         }
 
-    },
-    60 * 1000
-);
 
-</script>
+        // ------------------------------------------------
+        // HELPERS
+        // ------------------------------------------------
+
+        function escapeHTML(value) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.textContent =
+                value ?? "";
+
+            return div.innerHTML;
+
+        }
+
+
+        function formatInvestmentDate(
+            value
+        ) {
+
+            if (!value) {
+                return "—";
+            }
+
+
+            try {
+
+                return new Date(value)
+                    .toLocaleString();
+
+            } catch {
+
+                return "—";
+
+            }
+
+        }
+
+
+        // ------------------------------------------------
+        // START
+        // ------------------------------------------------
+
+        initializeInvestments();
+
+
+        // Refresh Firebase state every minute.
+        setInterval(
+            async () => {
+
+                try {
+
+                    await window.checkInvestments();
+
+                    await checkApprovedInvestments();
+
+                    await renderInvestments();
+
+                } catch (error) {
+
+                    console.error(
+                        "Investment refresh error:",
+                        error
+                    );
+
+                }
+
+            },
+            60 * 1000
+        );
+
+
+        // Update countdown every second.
+        setInterval(
+            updateCountdowns,
+            1000
+        );
+
+    </script>
 
 </body>
+
 </html>
