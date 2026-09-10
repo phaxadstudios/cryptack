@@ -1,46 +1,33 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Investments — Cryptacks</title>
+    <title>Investments - Cryptacks</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link
-        rel="stylesheet"
-        href="assets/css/style.css"
-    >
-
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-
-<body class="bg-[#07070b] text-white min-h-screen">
+<body class="bg-gray-950 text-white min-h-screen">
 
     <!-- NAVIGATION -->
-
-    <header class="border-b border-white/10">
-
-        <div class="max-w-7xl mx-auto px-6 py-5">
+    <nav class="border-b border-gray-800 bg-gray-950/95">
+        <div class="max-w-7xl mx-auto px-6 py-4">
 
             <div class="flex items-center justify-between">
 
                 <a
                     href="dashboard.html"
-                    class="text-2xl font-bold"
+                    class="text-2xl font-bold text-white"
                 >
-                    Crypta<span class="text-violet-500">cks</span>
+                    Cryptacks
                 </a>
 
-
-                <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-6 text-sm">
 
                     <a
                         href="dashboard.html"
@@ -49,9 +36,37 @@
                         Dashboard
                     </a>
 
+                    <a
+                        href="investments.html"
+                        class="text-white font-semibold"
+                    >
+                        Investments
+                    </a>
+
+                    <a
+                        href="transactions.html"
+                        class="text-gray-400 hover:text-white"
+                    >
+                        Transactions
+                    </a>
+
+                    <a
+                        href="history.html"
+                        class="text-gray-400 hover:text-white"
+                    >
+                        History
+                    </a>
+
+                    <a
+                        href="profile.html"
+                        class="text-gray-400 hover:text-white"
+                    >
+                        Profile
+                    </a>
+
                     <button
                         onclick="logout()"
-                        class="text-gray-400 hover:text-red-400"
+                        class="text-red-400 hover:text-red-300"
                     >
                         Logout
                     </button>
@@ -61,292 +76,180 @@
             </div>
 
         </div>
-
-    </header>
-
+    </nav>
 
 
-    <!-- MAIN -->
-
+    <!-- PAGE -->
     <main class="max-w-7xl mx-auto px-6 py-12">
 
-        <div class="mb-10">
+        <div class="text-center mb-12">
 
-            <p
-                class="text-violet-400 text-sm font-semibold uppercase tracking-wider"
-            >
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
                 Investment Plans
-            </p>
-
-            <h1
-                class="text-4xl font-bold mt-2"
-            >
-                Choose a plan
             </h1>
 
-            <p class="text-gray-400 mt-3 max-w-2xl">
-                Select an investment plan.
+            <p class="text-gray-400 max-w-2xl mx-auto">
+                Choose an investment plan and select the amount you want
+                to invest within the plan's available range.
             </p>
 
         </div>
 
 
+        <!-- PLANS -->
+        <div class="grid md:grid-cols-3 gap-6">
 
-        <!-- IMPORTANT NOTICE -->
 
-        <!-- <div
-            class="mb-10 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-5"
-        >
+            <!-- STARTER -->
+            <div class="rounded-2xl border border-gray-800 bg-gray-900 p-7">
 
-            <div class="flex gap-4">
+                <div class="mb-6">
 
-                <div class="text-yellow-400 text-xl">
-                    ⏳
-                </div>
+                    <h2 class="text-2xl font-bold">
+                        Starter
+                    </h2>
 
-                <div>
-
-                    <h3 class="font-semibold text-yellow-300">
-                        2-hour processing period
-                    </h3>
-
-                    <p class="text-sm text-gray-400 mt-1">
-                        Investments remain pending for at least
-                        2 hours before they are simulated as
-                        completed. Your dashboard will only
-                        reflect the investment after completion.
+                    <p class="text-gray-400 mt-2">
+                        $100 - $500
                     </p>
 
                 </div>
 
-            </div>
-
-        </div> -->
-
-
-
-        <!-- PLANS -->
-
-        <div
-            class="grid md:grid-cols-3 gap-6"
-        >
-
-
-            <!-- STARTER -->
-
-            <div class="glass-card p-7">
-
                 <div class="mb-6">
 
-                    <span
-                        class="text-sm text-violet-400 font-semibold"
-                    >
-                        STARTER
-                    </span>
+                    <p class="text-gray-400 text-sm">
+                        Generates
+                    </p>
 
-                    <h2 class="text-3xl font-bold mt-3">
-                       $100 - $500
-                    </h2>
+                    <p class="text-2xl font-bold">
+                        $700 - $3,500
+                    </p>
 
-                </div>
-
-
-                <div class="space-y-4 text-sm">
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Simulated Return
-                        </span>
-
-                        <span class="text-green-400">
-                            700%
-                        </span>
-
-                    </div>
-
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Simulated Profit
-                        </span>
-
-                        <span>
-                            Generates $700 - $3,500 in 24hrs
-                        </span>
-
-                    </div>
-
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Withdrawable
-                        </span>
-
-                        <span>
-                            24 hours
-                        </span>
-
-                    </div>
+                    <p class="text-gray-500 text-sm">
+                        in 24hrs
+                    </p>
 
                 </div>
 
+                <div class="space-y-3 text-sm text-gray-300 mb-8">
+
+                    <p>✓ 24hrs duration</p>
+                    <p>✓ 100% assurance</p>
+                    <p>✓ Crypto trading</p>
+
+                </div>
 
                 <button
-                    onclick="invest('Starter', 500, 5)"
-                    class="w-full mt-8 bg-violet-600 hover:bg-violet-700 py-3 rounded-xl font-semibold transition"
+                    onclick="openInvestmentModal('Starter', 100, 500)"
+                    class="w-full rounded-xl bg-white text-black font-semibold py-3 hover:bg-gray-200 transition"
                 >
-                    Invest
+                    Invest Now
                 </button>
 
             </div>
-
-
-
-            <!-- GROWTH -->
-
-            <div
-                class="glass-card p-7 border-violet-500/30"
-            >
-
-                <div class="mb-6">
-
-                    <span
-                        class="text-sm text-violet-400 font-semibold"
-                    >
-                        Prenium
-                    </span>
-
-                    <h2 class="text-3xl font-bold mt-3">
-                        $500 - $2,000
-                    </h2>
-
-                </div>
-
-
-                <div class="space-y-4 text-sm">
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Simulated Return
-                        </span>
-
-                        <span class="text-green-400">
-                            700%
-                        </span>
-
-                    </div>
-
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Simulated Profit
-                        </span>
-
-                        <span>
-                            Generates $3,500 - $14,000 in 24hrs
-                        </span>
-
-                    </div>
-
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Withdrawable
-                        </span>
-
-                        <span>
-                            24 hours
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    onclick="invest('Growth', 2500, 10)"
-                    class="w-full mt-8 bg-violet-600 hover:bg-violet-700 py-3 rounded-xl font-semibold transition"
-                >
-                    Invest
-                </button>
-
-            </div>
-
 
 
             <!-- PREMIUM -->
+            <div class="rounded-2xl border-2 border-indigo-500 bg-gray-900 p-7 relative">
 
-            <div class="glass-card p-7">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+
+                    <span class="px-4 py-1 rounded-full bg-indigo-500 text-white text-xs font-semibold">
+                        Popular
+                    </span>
+
+                </div>
 
                 <div class="mb-6">
 
-                    <span
-                        class="text-sm text-violet-400 font-semibold"
-                    >
-                        Prenium Plus
-                    </span>
-
-                    <h2 class="text-3xl font-bold mt-3">
-                        $2,000 -$10,000
+                    <h2 class="text-2xl font-bold">
+                        Premium
                     </h2>
 
-                </div>
-
-
-                <div class="space-y-4 text-sm">
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Simulated Return
-                        </span>
-
-                        <span class="text-green-400">
-                           700%
-                        </span>
-
-                    </div>
-
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Simulated Profit
-                        </span>
-
-                        <span>
-                            Generates $14,000 - $70,000 in 24hrs
-                        </span>
-
-                    </div>
-
-
-                    <div class="flex justify-between">
-
-                        <span class="text-gray-400">
-                            Withdrawable
-                        </span>
-
-                        <span>
-                            24 hours
-                        </span>
-
-                    </div>
+                    <p class="text-gray-400 mt-2">
+                        $500 - $2,000
+                    </p>
 
                 </div>
 
+                <div class="mb-6">
+
+                    <p class="text-gray-400 text-sm">
+                        Generates
+                    </p>
+
+                    <p class="text-2xl font-bold">
+                        $3,500 - $14,000
+                    </p>
+
+                    <p class="text-gray-500 text-sm">
+                        in 24hrs
+                    </p>
+
+                </div>
+
+                <div class="space-y-3 text-sm text-gray-300 mb-8">
+
+                    <p>✓ 24hrs duration</p>
+                    <p>✓ 100% assurance</p>
+                    <p>✓ Crypto trading</p>
+
+                </div>
 
                 <button
-                    onclick="invest('Premium', 10000, 15)"
-                    class="w-full mt-8 bg-violet-600 hover:bg-violet-700 py-3 rounded-xl font-semibold transition"
+                    onclick="openInvestmentModal('Premium', 500, 2000)"
+                    class="w-full rounded-xl bg-indigo-500 text-white font-semibold py-3 hover:bg-indigo-400 transition"
                 >
-                    Invest
+                    Invest Now
+                </button>
+
+            </div>
+
+
+            <!-- PREMIUM PLUS -->
+            <div class="rounded-2xl border border-gray-800 bg-gray-900 p-7">
+
+                <div class="mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        Premium Plus
+                    </h2>
+
+                    <p class="text-gray-400 mt-2">
+                        $2,000 - $10,000
+                    </p>
+
+                </div>
+
+                <div class="mb-6">
+
+                    <p class="text-gray-400 text-sm">
+                        Generates
+                    </p>
+
+                    <p class="text-2xl font-bold">
+                        $14,000 - $70,000
+                    </p>
+
+                    <p class="text-gray-500 text-sm">
+                        in 24hrs
+                    </p>
+
+                </div>
+
+                <div class="space-y-3 text-sm text-gray-300 mb-8">
+
+                    <p>✓ 24hrs duration</p>
+                    <p>✓ 100% assurance</p>
+                    <p>✓ Crypto trading</p>
+
+                </div>
+
+                <button
+                    onclick="openInvestmentModal('Premium Plus', 2000, 10000)"
+                    class="w-full rounded-xl bg-white text-black font-semibold py-3 hover:bg-gray-200 transition"
+                >
+                    Invest Now
                 </button>
 
             </div>
@@ -354,314 +257,704 @@
         </div>
 
 
+        <!-- ACTIVE INVESTMENTS -->
+        <section class="mt-16">
 
-        <!-- PENDING INVESTMENTS -->
+            <div class="mb-6">
 
-        <section class="mt-14">
+                <h2 class="text-2xl font-bold">
+                    My Investments
+                </h2>
 
-            <h2 class="text-2xl font-bold mb-6">
-                Your Pending Investments
-            </h2>
+                <p class="text-gray-400 text-sm mt-1">
+                    Track your investments, completion times and withdrawal availability.
+                </p>
 
-            <div id="pendingInvestments"></div>
+            </div>
+
+            <div
+                id="investmentsList"
+                class="space-y-4"
+            ></div>
 
         </section>
-
 
     </main>
 
 
+    <!-- INVESTMENT MODAL -->
+    <div
+        id="investmentModal"
+        class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-6"
+    >
+
+        <div class="w-full max-w-md rounded-2xl bg-gray-900 border border-gray-800 p-7">
+
+            <div class="flex items-center justify-between mb-6">
+
+                <h2
+                    id="modalPlanName"
+                    class="text-2xl font-bold"
+                >
+                    Investment
+                </h2>
+
+                <button
+                    onclick="closeInvestmentModal()"
+                    class="text-gray-400 hover:text-white text-2xl"
+                >
+                    ×
+                </button>
 
-<script src="assets/js/app.js"></script>
-
-
-<script>
-
-
-// ===============================
-// CREATE INVESTMENT
-// ===============================
-
-function invest(plan, amount, percentage) {
-
-    const user = getCurrentUser();
-
-    if (!user) {
-
-        window.location.href =
-            "login.html";
-
-        return;
-    }
-
-
-    const profit =
-        amount * (percentage / 100);
-
-
-    const now =
-        new Date();
-
-
-    // Exactly 2 hours from now
-    const completesAt =
-        new Date(
-            now.getTime() +
-            (2 * 60 * 60 * 1000)
-        );
-
-
-    const investment = {
-
-        id: Date.now(),
-
-        userId: user.id,
-
-        plan: plan,
-
-        amount: amount,
-
-        percentage: percentage,
-
-        profit: profit,
-
-        status: "Pending",
-
-        createdAt:
-            now.toISOString(),
-
-        completesAt:
-            completesAt.toISOString()
-
-    };
-
-
-    // Save pending investment
-
-    const pending =
-        getPendingInvestments();
-
-
-    pending.unshift(
-        investment
-    );
-
-
-    savePendingInvestments(
-        pending
-    );
-
-
-    // Create transaction
-
-    addTransaction({
-
-        investmentId:
-            investment.id,
-
-        type:
-            "Investment",
-
-        plan:
-            plan,
-
-        amount:
-            amount,
-
-        status:
-            "Pending"
-
-    });
-
-
-    showToast(
-        `${plan} investment submitted. It will complete in 2 hours.`
-    );
-
-
-    renderPendingInvestments();
-
-
-    // Automatically process after 2 hours
-
-    setTimeout(
-        () => {
-
-            processInvestment(
-                investment.id
-            );
-
-            renderPendingInvestments();
-
-        },
-        2 * 60 * 60 * 1000
-    );
-
-}
-
-
-// ===============================
-// DISPLAY PENDING INVESTMENTS
-// ===============================
-
-function renderPendingInvestments() {
-
-    const user =
-        getCurrentUser();
-
-    const container =
-        document.getElementById(
-            "pendingInvestments"
-        );
-
-
-    if (!user || !container) {
-        return;
-    }
-
-
-    const investments =
-        getPendingInvestments()
-            .filter(
-                investment =>
-                    investment.userId === user.id
-            );
-
-
-    if (investments.length === 0) {
-
-        container.innerHTML = `
-            <div class="glass-card p-8 text-center">
-                <p class="text-gray-400">
-                    You don't have any investments yet.
-                </p>
             </div>
-        `;
-
-        return;
-    }
 
 
-    container.innerHTML =
-        investments.map(
-            investment => {
+            <div class="mb-5">
 
-                const completed =
-                    investment.status ===
-                    "Completed";
+                <label class="block text-sm text-gray-400 mb-2">
+                    Investment Amount
+                </label>
 
+                <div class="relative">
 
-                return `
+                    <span class="absolute left-4 top-3 text-gray-400">
+                        $
+                    </span>
 
-                    <div
-                        class="glass-card p-6 mb-4"
+                    <input
+                        id="investmentAmount"
+                        type="number"
+                        class="w-full rounded-xl bg-gray-950 border border-gray-700 px-8 py-3 text-white outline-none focus:border-indigo-500"
+                        placeholder="Enter amount"
+                        oninput="updateInvestmentPreview()"
                     >
 
-                        <div
-                            class="flex flex-col md:flex-row md:items-center md:justify-between gap-5"
-                        >
+                </div>
 
-                            <div>
+                <p
+                    id="amountRange"
+                    class="text-xs text-gray-500 mt-2"
+                ></p>
 
-                                <div
-                                    class="flex items-center gap-3"
-                                >
+            </div>
 
-                                    <h3
-                                        class="font-semibold text-lg"
-                                    >
-                                        ${investment.plan}
-                                    </h3>
 
-                                    <span
-                                        class="${
-                                            completed
-                                            ? "text-green-400 bg-green-500/10"
-                                            : "text-yellow-400 bg-yellow-500/10"
-                                        } px-3 py-1 rounded-full text-xs"
-                                    >
-                                        ${
-                                            investment.status
-                                        }
-                                    </span>
+            <div class="rounded-xl bg-gray-950 border border-gray-800 p-5 mb-6">
+
+                <div class="flex justify-between mb-3">
+
+                    <span class="text-gray-400">
+                        Investment
+                    </span>
+
+                    <span
+                        id="previewInvestment"
+                        class="font-semibold"
+                    >
+                        $0.00
+                    </span>
+
+                </div>
+
+                <div class="flex justify-between">
+
+                    <span class="text-gray-400">
+                        Generated amount
+                    </span>
+
+                    <span
+                        id="previewReturn"
+                        class="font-semibold text-green-400"
+                    >
+                        $0.00
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                onclick="submitInvestment()"
+                class="w-full rounded-xl bg-indigo-500 py-3 font-semibold hover:bg-indigo-400 transition"
+            >
+                Confirm Investment
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="assets/js/app.js"></script>
+
+    <script>
+
+        // ========================================================
+        // PLAN DATA
+        // ========================================================
+
+        const investmentPlans = {
+            "Starter": {
+                min: 100,
+                max: 500,
+                multiplier: 7
+            },
+
+            "Premium": {
+                min: 500,
+                max: 2000,
+                multiplier: 7
+            },
+
+            "Premium Plus": {
+                min: 2000,
+                max: 10000,
+                multiplier: 7
+            }
+        };
+
+
+        let selectedPlan = null;
+
+
+        // ========================================================
+        // AUTH
+        // ========================================================
+
+        const currentUser = requireAuth();
+
+        if (!currentUser) {
+            throw new Error("User not authenticated");
+        }
+
+
+        // ========================================================
+        // OPEN MODAL
+        // ========================================================
+
+        function openInvestmentModal(plan, min, max) {
+
+            selectedPlan = plan;
+
+            document.getElementById("modalPlanName").textContent =
+                plan;
+
+            document.getElementById("amountRange").textContent =
+                `Minimum: ${money(min)} • Maximum: ${money(max)}`;
+
+            document.getElementById("investmentAmount").value = "";
+
+            document.getElementById("previewInvestment").textContent =
+                money(0);
+
+            document.getElementById("previewReturn").textContent =
+                money(0);
+
+            document
+                .getElementById("investmentModal")
+                .classList.remove("hidden");
+        }
+
+
+        // ========================================================
+        // CLOSE MODAL
+        // ========================================================
+
+        function closeInvestmentModal() {
+
+            document
+                .getElementById("investmentModal")
+                .classList.add("hidden");
+
+            selectedPlan = null;
+        }
+
+
+        // ========================================================
+        // PREVIEW
+        // ========================================================
+
+        function updateInvestmentPreview() {
+
+            if (!selectedPlan) return;
+
+            const plan = investmentPlans[selectedPlan];
+
+            const amount = Number(
+                document.getElementById("investmentAmount").value
+            ) || 0;
+
+            const generated =
+                amount * plan.multiplier;
+
+            document.getElementById("previewInvestment").textContent =
+                money(amount);
+
+            document.getElementById("previewReturn").textContent =
+                money(generated);
+        }
+
+
+        // ========================================================
+        // SUBMIT INVESTMENT
+        // ========================================================
+
+        function submitInvestment() {
+
+            if (!selectedPlan) return;
+
+            const user = getCurrentUser();
+
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const plan = investmentPlans[selectedPlan];
+
+            const amount = Number(
+                document.getElementById("investmentAmount").value
+            );
+
+            // Validate amount.
+            if (!amount || amount < plan.min || amount > plan.max) {
+
+                showToast(
+                    `Enter an amount between ${money(plan.min)} and ${money(plan.max)}.`
+                );
+
+                return;
+            }
+
+
+            // ====================================================
+            // GENERATED AMOUNT
+            // ====================================================
+
+            const generatedAmount =
+                amount * plan.multiplier;
+
+
+            // ====================================================
+            // 2-HOUR PROCESSING PERIOD
+            // ====================================================
+
+            const now = new Date();
+
+            const completesAt = new Date(
+                now.getTime() +
+                (2 * 60 * 60 * 1000)
+            );
+
+
+            // ====================================================
+            // CREATE INVESTMENT
+            // ====================================================
+
+            const investment = {
+
+                id: Date.now(),
+
+                userId: user.id,
+
+                plan: selectedPlan,
+
+                amount: amount,
+
+                generatedAmount: generatedAmount,
+
+                profit: generatedAmount - amount,
+
+                multiplier: plan.multiplier,
+
+                status: "Pending",
+
+                createdAt: now.toISOString(),
+
+                completesAt: completesAt.toISOString(),
+
+                completedAt: null,
+
+                withdrawableAt: null,
+
+                withdrawalStatus: "Locked",
+
+                withdrawable: false
+            };
+
+
+            // ====================================================
+            // SAVE INVESTMENT
+            // ====================================================
+
+            const investments =
+                getPendingInvestments();
+
+            investments.unshift(investment);
+
+            savePendingInvestments(investments);
+
+
+            // ====================================================
+            // TRANSACTION
+            // ====================================================
+
+            addTransaction({
+
+                investmentId: investment.id,
+
+                type: "Investment",
+
+                plan: selectedPlan,
+
+                amount: amount,
+
+                generatedAmount: generatedAmount,
+
+                profit: generatedAmount - amount,
+
+                status: "Pending",
+
+                withdrawalStatus: "Locked",
+
+                withdrawableAt: null
+            });
+
+
+            closeInvestmentModal();
+
+            renderInvestments();
+
+            showToast(
+                `${selectedPlan} investment submitted. Processing takes 2 hours.`
+            );
+        }
+
+
+        // ========================================================
+        // RENDER INVESTMENTS
+        // ========================================================
+
+        function renderInvestments() {
+
+            const user = getCurrentUser();
+
+            if (!user) return;
+
+            const container =
+                document.getElementById("investmentsList");
+
+            const investments =
+                getPendingInvestments()
+                    .filter(
+                        investment =>
+                            investment.userId === user.id
+                    );
+
+
+            if (!investments.length) {
+
+                container.innerHTML = `
+                    <div class="rounded-2xl border border-gray-800 bg-gray-900 p-8 text-center">
+                        <p class="text-gray-400">
+                            You don't have any investments yet.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            container.innerHTML =
+                investments.map(investment => {
+
+                    const isPending =
+                        investment.status === "Pending";
+
+                    const isLocked =
+                        investment.status === "Completed" &&
+                        investment.withdrawalStatus === "Locked";
+
+                    const isAvailable =
+                        investment.status === "Completed" &&
+                        investment.withdrawalStatus === "Available";
+
+
+                    let statusHTML = "";
+
+                    if (isPending) {
+
+                        statusHTML = `
+                            <span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs font-semibold">
+                                Pending
+                            </span>
+                        `;
+
+                    } else if (isLocked) {
+
+                        statusHTML = `
+                            <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold">
+                                Successful • Locked
+                            </span>
+                        `;
+
+                    } else if (isAvailable) {
+
+                        statusHTML = `
+                            <span class="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold">
+                                Withdrawable
+                            </span>
+                        `;
+                    }
+
+
+                    let timingHTML = "";
+
+                    if (isPending) {
+
+                        timingHTML = `
+                            <p class="text-xs text-gray-500 mt-3">
+                                Processing completes:
+                                ${formatDateTime(investment.completesAt)}
+                            </p>
+                        `;
+
+                    } else if (isLocked) {
+
+                        timingHTML = `
+                            <p class="text-xs text-gray-500 mt-3">
+                                Withdrawal available:
+                                ${formatDateTime(investment.withdrawableAt)}
+                            </p>
+                        `;
+
+                    } else if (isAvailable) {
+
+                        timingHTML = `
+                            <p class="text-xs text-green-400 mt-3">
+                                Withdrawal is now available.
+                            </p>
+                        `;
+                    }
+
+
+                    let actionHTML = "";
+
+                    if (isPending) {
+
+                        actionHTML = `
+                            <button
+                                disabled
+                                class="px-4 py-2 rounded-xl bg-gray-800 text-gray-500 text-sm cursor-not-allowed"
+                            >
+                                Processing
+                            </button>
+                        `;
+
+                    } else if (isLocked) {
+
+                        actionHTML = `
+                            <button
+                                disabled
+                                class="px-4 py-2 rounded-xl bg-gray-800 text-gray-500 text-sm cursor-not-allowed"
+                            >
+                                Locked for 24hrs
+                            </button>
+                        `;
+
+                    } else if (isAvailable) {
+
+                        actionHTML = `
+                            <button
+                                onclick="withdrawInvestment(${investment.id})"
+                                class="px-4 py-2 rounded-xl bg-green-500 text-white text-sm font-semibold hover:bg-green-400"
+                            >
+                                Withdraw
+                            </button>
+                        `;
+                    }
+
+
+                    return `
+                        <div class="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+
+                                <div>
+
+                                    <div class="flex items-center gap-3 mb-2">
+
+                                        <h3 class="text-xl font-bold">
+                                            ${investment.plan}
+                                        </h3>
+
+                                        ${statusHTML}
+
+                                    </div>
+
+                                    <p class="text-gray-400 text-sm">
+                                        Invested ${money(investment.amount)}
+                                    </p>
+
+                                    <p class="text-green-400 text-sm mt-1">
+                                        Generated ${money(investment.generatedAmount)}
+                                    </p>
+
+                                    ${timingHTML}
 
                                 </div>
 
 
-                                <p
-                                    class="text-gray-400 text-sm mt-2"
-                                >
-                                    ${money(investment.amount)}
-                                    investment
-                                </p>
+                                <div class="text-left md:text-right">
 
-                            </div>
+                                    <p class="text-gray-500 text-xs mb-1">
+                                        Investment amount
+                                    </p>
 
+                                    <p class="text-xl font-bold">
+                                        ${money(investment.amount)}
+                                    </p>
 
-                            <div class="text-right">
+                                    <p class="text-gray-500 text-xs mt-2 mb-2">
+                                        Generated amount
+                                    </p>
 
-                                <p
-                                    class="text-sm text-gray-400"
-                                >
-                                    ${
-                                        completed
-                                        ? "Completed"
-                                        : "Completes"
-                                    }
-                                </p>
+                                    <p class="text-lg font-semibold text-green-400">
+                                        ${money(investment.generatedAmount)}
+                                    </p>
 
-                                <p
-                                    class="font-semibold mt-1"
-                                >
-                                    ${
-                                        completed
-                                        ? formatDateTime(
-                                            investment.completedAt
-                                        )
-                                        : formatDateTime(
-                                            investment.completesAt
-                                        )
-                                    }
-                                </p>
+                                    ${actionHTML}
+
+                                </div>
 
                             </div>
 
                         </div>
+                    `;
 
-                    </div>
+                }).join("");
+        }
 
-                `;
 
+        // ========================================================
+        // WITHDRAW
+        // ========================================================
+
+        function withdrawInvestment(investmentId) {
+
+            const user = getCurrentUser();
+
+            if (!user) return;
+
+            const investments =
+                getPendingInvestments();
+
+            const investment =
+                investments.find(
+                    item =>
+                        item.id === investmentId &&
+                        item.userId === user.id
+                );
+
+
+            if (!investment) {
+
+                showToast("Investment not found.");
+
+                return;
             }
-        ).join("");
-}
 
 
-// ===============================
-// CHECK ON PAGE LOAD
-// ===============================
+            if (
+                investment.status !== "Completed" ||
+                investment.withdrawalStatus !== "Available"
+            ) {
 
-checkPendingInvestments();
+                showToast(
+                    "This investment is not withdrawable yet."
+                );
 
-renderPendingInvestments();
+                return;
+            }
 
 
-// ===============================
-// REFRESH EVERY MINUTE
-// ===============================
+            // Prevent duplicate withdrawal.
+            if (investment.withdrawn) {
 
-setInterval(
-    () => {
+                showToast(
+                    "This investment has already been withdrawn."
+                );
 
-        checkPendingInvestments();
+                return;
+            }
 
-        renderPendingInvestments();
 
-    },
-    60 * 1000
-);
+            // Mark investment as withdrawn.
+            investment.withdrawn = true;
 
-</script>
+            investment.withdrawnAt =
+                new Date().toISOString();
+
+            investment.withdrawalStatus =
+                "Withdrawn";
+
+
+            savePendingInvestments(
+                investments
+            );
+
+
+            // Add withdrawal transaction.
+            addTransaction({
+
+                investmentId:
+                    investment.id,
+
+                type:
+                    "Withdrawal",
+
+                plan:
+                    investment.plan,
+
+                amount:
+                    investment.generatedAmount,
+
+                status:
+                    "Completed",
+
+                withdrawalStatus:
+                    "Completed",
+
+                date:
+                    new Date().toISOString()
+            });
+
+
+            renderInvestments();
+
+            showToast(
+                `${money(investment.generatedAmount)} withdrawal submitted.`
+            );
+        }
+
+
+        // ========================================================
+        // REFRESH
+        // ========================================================
+
+        renderInvestments();
+
+        setInterval(() => {
+
+            checkInvestments();
+
+            renderInvestments();
+
+        }, 60 * 1000);
+
+    </script>
 
 </body>
 </html>
