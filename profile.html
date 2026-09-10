@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profile — Cryptacks</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body class="dashboard-bg text-white min-h-screen">
+
+<main class="max-w-3xl mx-auto px-5 py-10">
+
+    <a href="dashboard.html"
+       class="text-gray-400 hover:text-white text-sm">
+        ← Dashboard
+    </a>
+
+    <h1 class="text-4xl font-bold mt-5">
+        My Profile
+    </h1>
+
+    <div class="glass-card p-7 mt-8">
+
+        <form id="profileForm">
+
+            <label class="text-sm text-gray-400">
+                Full Name
+            </label>
+
+            <input
+                id="name"
+                required
+                class="w-full mt-2 mb-6 px-4 py-3 rounded-xl
+                       bg-black/30 border border-white/10"
+            >
+
+            <label class="text-sm text-gray-400">
+                Email
+            </label>
+
+            <input
+                id="email"
+                disabled
+                class="w-full mt-2 mb-6 px-4 py-3 rounded-xl
+                       bg-black/20 border border-white/10
+                       text-gray-500"
+            >
+
+            <button
+                class="px-6 py-3 rounded-xl bg-violet-600
+                       hover:bg-violet-500">
+                Save Changes
+            </button>
+
+        </form>
+
+    </div>
+
+</main>
+
+<script src="assets/js/app.js"></script>
+
+<script>
+
+const user = requireAuth();
+
+if (user) {
+
+    document.getElementById("name").value = user.name;
+    document.getElementById("email").value = user.email;
+
+    document
+        .getElementById("profileForm")
+        .addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+            user.name =
+                document.getElementById("name").value.trim();
+
+            const users = getUsers();
+
+            const index = users.findIndex(
+                item => item.id === user.id
+            );
+
+            if (index !== -1) {
+                users[index] = user;
+            }
+
+            saveUsers(users);
+            setCurrentUser(user);
+
+            showToast("Profile updated successfully.");
+        });
+}
+
+</script>
+
+</body>
+</html>
