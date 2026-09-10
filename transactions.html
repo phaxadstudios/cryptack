@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Transactions — Cryptacks</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body class="dashboard-bg text-white min-h-screen">
+
+<main class="max-w-6xl mx-auto px-5 py-10">
+
+    <a href="dashboard.html"
+       class="text-gray-400 hover:text-white text-sm">
+        ← Dashboard
+    </a>
+
+    <h1 class="text-4xl font-bold mt-5">
+        Transactions
+    </h1>
+
+    <p class="text-gray-400 mt-2">
+        Your simulated transaction history.
+    </p>
+
+
+    <div class="glass-card mt-8 overflow-hidden">
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left">
+
+                <thead class="bg-white/5">
+
+                    <tr>
+                        <th class="p-5">Type</th>
+                        <th class="p-5">Plan</th>
+                        <th class="p-5">Amount</th>
+                        <th class="p-5">Status</th>
+                        <th class="p-5">Date</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="transactionTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/transactions.js"></script>
+
+</body>
+</html>
