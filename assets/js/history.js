@@ -1,61 +1,168 @@
+// assets/js/history.js
+
 const user = requireAuth();
 
-if (user) {
 
-    const container = document.getElementById("history");
+function renderHistory() {
 
-    const transactions = getTransactions();
+    const container =
+        document.getElementById(
+            "activity"
+        );
 
-    if (!transactions.length) {
+    if (!container) {
+        return;
+    }
+
+
+    const transactions =
+        getTransactions();
+
+
+    if (transactions.length === 0) {
 
         container.innerHTML = `
-            <div class="glass-card p-10 text-center text-gray-500">
-                No activity yet.
+
+            <div class="glass-card p-8 text-center">
+
+                <p class="text-gray-400">
+                    No activity yet.
+                </p>
+
             </div>
+
         `;
 
-    } else {
-
-        container.innerHTML = transactions.map(item => `
-
-            <div class="glass-card p-5 flex items-center justify-between">
-
-                <div class="flex items-center gap-4">
-
-                    <div class="w-11 h-11 rounded-xl
-                                bg-violet-500/10
-                                flex items-center justify-center">
-                        📈
-                    </div>
-
-                    <div>
-
-                        <p class="font-semibold">
-                            ${item.type}
-                        </p>
-
-                        <p class="text-sm text-gray-500">
-                            ${item.plan || "Portfolio activity"}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="text-right">
-
-                    <p class="font-semibold">
-                        ${money(item.amount)}
-                    </p>
-
-                    <p class="text-xs text-gray-500">
-                        ${formatDate(item.date)}
-                    </p>
-
-                </div>
-
-            </div>
-
-        `).join("");
+        return;
     }
+
+
+    container.innerHTML =
+        transactions.map(
+            transaction => {
+
+                const pending =
+                    transaction.status ===
+                    "Pending";
+
+
+                return `
+
+                    <div
+                        class="glass-card p-5"
+                    >
+
+                        <div
+                            class="flex items-center justify-between gap-5"
+                        >
+
+                            <div
+                                class="flex items-center gap-4"
+                            >
+
+                                <div
+                                    class="${
+                                        pending
+                                        ? "bg-yellow-500/10 text-yellow-400"
+                                        : "bg-green-500/10 text-green-400"
+                                    } w-11 h-11 rounded-full flex items-center justify-center"
+                                >
+
+                                    ${
+                                        pending
+                                        ? "⏳"
+                                        : "✓"
+                                    }
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="font-semibold">
+
+                                        ${
+                                            transaction.type
+                                        }
+
+                                        ${
+                                            transaction.plan
+                                            ? ` — ${transaction.plan}`
+                                            : ""
+                                        }
+
+                                    </p>
+
+
+                                    <p
+                                        class="text-sm text-gray-500 mt-1"
+                                    >
+
+                                        ${
+                                            formatDateTime(
+                                                transaction.date
+                                            )
+                                        }
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="text-right">
+
+                                <p class="font-semibold">
+
+                                    ${
+                                        money(
+                                            transaction.amount
+                                        )
+                                    }
+
+                                </p>
+
+
+                                <p
+                                    class="text-sm ${
+                                        pending
+                                        ? "text-yellow-400"
+                                        : "text-green-400"
+                                    }"
+                                >
+
+                                    ${
+                                        transaction.status
+                                    }
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
 }
+
+
+checkPendingInvestments();
+
+renderHistory();
+
+
+setInterval(
+    () => {
+
+        checkPendingInvestments();
+
+        renderHistory();
+
+    },
+    60 * 1000
+);
