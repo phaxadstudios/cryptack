@@ -1,9 +1,10 @@
 // assets/js/history.js
 
-const user = requireAuth();
+// ============================================================
+// RENDER ACTIVITY
+// ============================================================
 
-
-function renderHistory() {
+async function renderHistory() {
 
     const container =
         document.getElementById(
@@ -16,8 +17,12 @@ function renderHistory() {
 
 
     const transactions =
-        getTransactions();
+        await getTransactions();
 
+
+    // ========================================================
+    // NO ACTIVITY
+    // ========================================================
 
     if (transactions.length === 0) {
 
@@ -37,71 +42,152 @@ function renderHistory() {
     }
 
 
+    // ========================================================
+    // RENDER ACTIVITY
+    // ========================================================
+
     container.innerHTML =
-        transactions.map(
-            transaction => {
+        transactions
+            .map(
+                transaction => {
 
-                const pending =
-                    transaction.status ===
-                    "Pending";
+                    const pending =
+                        transaction.status ===
+                        "Pending";
 
 
-                return `
+                    const successful =
+                        transaction.status ===
+                        "Successful" ||
+                        transaction.status ===
+                        "Completed";
 
-                    <div
-                        class="glass-card p-5"
-                    >
+
+                    const statusColor =
+                        pending
+                            ? "text-yellow-400"
+                            : successful
+                                ? "text-green-400"
+                                : "text-red-400";
+
+
+                    const icon =
+                        pending
+                            ? "⏳"
+                            : successful
+                                ? "✓"
+                                : "✕";
+
+
+                    const iconBackground =
+                        pending
+                            ? "bg-yellow-500/10 text-yellow-400"
+                            : successful
+                                ? "bg-green-500/10 text-green-400"
+                                : "bg-red-500/10 text-red-400";
+
+
+                    // Firebase uses createdAt.
+                    // Keep date as a fallback for older records.
+
+                    const transactionDate =
+                        transaction.createdAt ||
+                        transaction.date;
+
+
+                    return `
 
                         <div
-                            class="flex items-center justify-between gap-5"
+                            class="glass-card p-5"
                         >
 
                             <div
-                                class="flex items-center gap-4"
+                                class="flex items-center
+                                       justify-between
+                                       gap-5"
                             >
 
                                 <div
-                                    class="${
-                                        pending
-                                        ? "bg-yellow-500/10 text-yellow-400"
-                                        : "bg-green-500/10 text-green-400"
-                                    } w-11 h-11 rounded-full flex items-center justify-center"
+                                    class="flex items-center
+                                           gap-4"
                                 >
 
-                                    ${
-                                        pending
-                                        ? "⏳"
-                                        : "✓"
-                                    }
+                                    <div
+                                        class="${iconBackground}
+                                               w-11 h-11
+                                               rounded-full
+                                               flex items-center
+                                               justify-center"
+                                    >
+
+                                        ${icon}
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <p
+                                            class="font-semibold"
+                                        >
+
+                                            ${
+                                                transaction.type ||
+                                                "Transaction"
+                                            }
+
+                                            ${
+                                                transaction.plan
+                                                    ? ` — ${transaction.plan}`
+                                                    : ""
+                                            }
+
+                                        </p>
+
+
+                                        <p
+                                            class="text-sm
+                                                   text-gray-500
+                                                   mt-1"
+                                        >
+
+                                            ${
+                                                formatDateTime(
+                                                    transactionDate
+                                                )
+                                            }
+
+                                        </p>
+
+                                    </div>
 
                                 </div>
 
 
-                                <div>
+                                <div
+                                    class="text-right"
+                                >
 
-                                    <p class="font-semibold">
+                                    <p
+                                        class="font-semibold"
+                                    >
 
                                         ${
-                                            transaction.type
-                                        }
-
-                                        ${
-                                            transaction.plan
-                                            ? ` — ${transaction.plan}`
-                                            : ""
+                                            money(
+                                                transaction.amount
+                                            )
                                         }
 
                                     </p>
 
 
                                     <p
-                                        class="text-sm text-gray-500 mt-1"
+                                        class="text-sm ${statusColor}"
                                     >
 
                                         ${
-                                            formatDateTime(
-                                                transaction.date
-                                            )
+                                            transaction.status ||
+                                            "Pending"
                                         }
 
                                     </p>
@@ -110,58 +196,64 @@ function renderHistory() {
 
                             </div>
 
-
-                            <div class="text-right">
-
-                                <p class="font-semibold">
-
-                                    ${
-                                        money(
-                                            transaction.amount
-                                        )
-                                    }
-
-                                </p>
-
-
-                                <p
-                                    class="text-sm ${
-                                        pending
-                                        ? "text-yellow-400"
-                                        : "text-green-400"
-                                    }"
-                                >
-
-                                    ${
-                                        transaction.status
-                                    }
-
-                                </p>
-
-                            </div>
-
                         </div>
 
-                    </div>
+                    `;
 
-                `;
-
-            }
-        ).join("");
+                }
+            )
+            .join("");
 }
 
 
-checkPendingInvestments();
+// ============================================================
+// INITIAL LOAD
+// ============================================================
 
-renderHistory();
+async function loadHistory() {
 
+    const user =
+        await requireAuth();
+
+    if (!user) {
+        return;
+    }
+
+
+    await checkInvestments();
+
+    await renderHistory();
+}
+
+
+// ============================================================
+// START
+// ============================================================
+
+loadHistory();
+
+
+// ============================================================
+// REFRESH EVERY MINUTE
+// ============================================================
 
 setInterval(
-    () => {
+    async () => {
 
-        checkPendingInvestments();
+        try {
 
-        renderHistory();
+            await checkInvestments();
+
+            await renderHistory();
+
+        } catch (error) {
+
+            console.error(
+                "History refresh error:",
+                error
+            );
+
+        }
 
     },
     60 * 1000
