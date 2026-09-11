@@ -21,7 +21,6 @@ import {
     updateDoc,
     query,
     where,
-    orderBy,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
@@ -62,7 +61,6 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
-
     try {
 
         const userRef = doc(
@@ -72,7 +70,6 @@ onAuthStateChanged(auth, async (user) => {
         );
 
         const snapshot = await getDoc(userRef);
-
 
         if (snapshot.exists()) {
 
@@ -91,7 +88,6 @@ onAuthStateChanged(auth, async (user) => {
             };
         }
 
-
     } catch (error) {
 
         console.error(
@@ -105,7 +101,6 @@ onAuthStateChanged(auth, async (user) => {
             email: user.email
         };
     }
-
 
     if (!authReady) {
 
@@ -153,6 +148,7 @@ function getCurrentUser() {
 function setCurrentUser(user) {
 
     currentUserProfile = user;
+
 }
 
 
@@ -164,14 +160,12 @@ async function refreshCurrentUser() {
 
     const user = auth.currentUser;
 
-
     if (!user) {
 
         currentUserProfile = null;
 
         return null;
     }
-
 
     try {
 
@@ -183,14 +177,12 @@ async function refreshCurrentUser() {
 
         const snapshot = await getDoc(userRef);
 
-
         if (!snapshot.exists()) {
 
             currentUserProfile = null;
 
             return null;
         }
-
 
         currentUserProfile = {
 
@@ -201,9 +193,7 @@ async function refreshCurrentUser() {
             ...snapshot.data()
         };
 
-
         return currentUserProfile;
-
 
     } catch (error) {
 
@@ -225,14 +215,12 @@ async function requireAuth() {
 
     const user = await waitForAuth();
 
-
     if (!user) {
 
         window.location.href = "login.html";
 
         return null;
     }
-
 
     return user;
 }
@@ -253,7 +241,6 @@ async function logout() {
         currentUserProfile = null;
 
         window.location.href = "login.html";
-
 
     } catch (error) {
 
@@ -276,7 +263,6 @@ async function logout() {
 function money(amount) {
 
     const value = Number(amount) || 0;
-
 
     return "$" + value.toLocaleString(
         "en-US",
@@ -310,7 +296,6 @@ function showToast(message) {
         document.getElementById(
             "cryptacksToast"
         );
-
 
     if (!toast) {
 
@@ -352,14 +337,11 @@ function showToast(message) {
         document.body.appendChild(toast);
     }
 
-
     toast.textContent = message;
 
     toast.style.opacity = "1";
 
-
     clearTimeout(toast._timeout);
-
 
     toast._timeout = setTimeout(() => {
 
@@ -379,7 +361,6 @@ function convertDate(value) {
         return null;
     }
 
-
     if (
         typeof value === "object" &&
         typeof value.toDate === "function"
@@ -388,15 +369,12 @@ function convertDate(value) {
         return value.toDate();
     }
 
-
     const date = new Date(value);
-
 
     if (isNaN(date.getTime())) {
 
         return null;
     }
-
 
     return date;
 }
@@ -406,12 +384,10 @@ function formatDate(date) {
 
     const parsed = convertDate(date);
 
-
     if (!parsed) {
 
         return "—";
     }
-
 
     return parsed.toLocaleDateString(
         "en-US",
@@ -424,20 +400,14 @@ function formatDate(date) {
 }
 
 
-// ============================================================
-// DATE + TIME FORMAT
-// ============================================================
-
 function formatDateTime(date) {
 
     const parsed = convertDate(date);
-
 
     if (!parsed) {
 
         return "—";
     }
-
 
     return parsed.toLocaleString(
         "en-US",
@@ -460,12 +430,10 @@ async function getInvestments() {
 
     const user = auth.currentUser;
 
-
     if (!user) {
 
         return [];
     }
-
 
     try {
 
@@ -475,6 +443,16 @@ async function getInvestments() {
                 "investments"
             );
 
+        /*
+         * Only filter by userId here.
+         *
+         * We intentionally do NOT use:
+         *
+         * orderBy("createdAt", "desc")
+         *
+         * because Firestore may require a composite
+         * index for where + orderBy.
+         */
 
         const q = query(
             investmentsRef,
@@ -483,29 +461,43 @@ async function getInvestments() {
                 "userId",
                 "==",
                 user.uid
-            ),
-
-            orderBy(
-                "createdAt",
-                "desc"
             )
         );
-
 
         const snapshot =
             await getDocs(q);
 
+        const investments =
+            snapshot.docs.map(
+                (item) => ({
 
-        return snapshot.docs.map(
-            (item) => ({
+                    id: item.id,
 
-                id: item.id,
+                    ...item.data()
 
-                ...item.data()
+                })
+            );
 
-            })
+
+        // Sort locally instead of using Firestore orderBy.
+        investments.sort(
+            (a, b) => {
+
+                const dateA =
+                    convertDate(a.createdAt);
+
+                const dateB =
+                    convertDate(b.createdAt);
+
+                return (
+                    (dateB?.getTime() || 0) -
+                    (dateA?.getTime() || 0)
+                );
+            }
         );
 
+
+        return investments;
 
     } catch (error) {
 
@@ -513,15 +505,6 @@ async function getInvestments() {
             "Error loading investments:",
             error
         );
-
-        /*
-         * Firestore can require a composite index
-         * for where + orderBy queries.
-         *
-         * If the query fails because of an index,
-         * the Firebase console error will provide
-         * a link to create the required index.
-         */
 
         return [];
     }
@@ -536,7 +519,6 @@ async function addInvestment(investment) {
 
     const user = auth.currentUser;
 
-
     if (!user) {
 
         showToast(
@@ -545,7 +527,6 @@ async function addInvestment(investment) {
 
         return null;
     }
-
 
     try {
 
@@ -560,7 +541,6 @@ async function addInvestment(investment) {
                 serverTimestamp()
         };
 
-
         const reference =
             await addDoc(
                 collection(
@@ -570,14 +550,12 @@ async function addInvestment(investment) {
                 data
             );
 
-
         return {
 
             id: reference.id,
 
             ...data
         };
-
 
     } catch (error) {
 
@@ -605,12 +583,10 @@ async function getInvestment(
 
     const user = auth.currentUser;
 
-
     if (!user || !investmentId) {
 
         return null;
     }
-
 
     try {
 
@@ -621,16 +597,13 @@ async function getInvestment(
                 investmentId
             );
 
-
         const snapshot =
             await getDoc(reference);
-
 
         if (!snapshot.exists()) {
 
             return null;
         }
-
 
         const investment = {
 
@@ -638,7 +611,6 @@ async function getInvestment(
 
             ...snapshot.data()
         };
-
 
         if (
             investment.userId !==
@@ -648,9 +620,7 @@ async function getInvestment(
             return null;
         }
 
-
         return investment;
-
 
     } catch (error) {
 
@@ -675,12 +645,10 @@ async function updateInvestment(
 
     const user = auth.currentUser;
 
-
     if (!user || !investmentId) {
 
         return false;
     }
-
 
     try {
 
@@ -689,12 +657,10 @@ async function updateInvestment(
                 investmentId
             );
 
-
         if (!investment) {
 
             return false;
         }
-
 
         await updateDoc(
             doc(
@@ -705,9 +671,7 @@ async function updateInvestment(
             data
         );
 
-
         return true;
-
 
     } catch (error) {
 
@@ -729,12 +693,10 @@ async function getTransactions() {
 
     const user = auth.currentUser;
 
-
     if (!user) {
 
         return [];
     }
-
 
     try {
 
@@ -744,6 +706,21 @@ async function getTransactions() {
                 "transactions"
             );
 
+        /*
+         * IMPORTANT:
+         *
+         * We only use where(userId) here.
+         *
+         * The old version used:
+         *
+         * where("userId", "==", user.uid)
+         * orderBy("createdAt", "desc")
+         *
+         * That can fail when the Firestore composite
+         * index has not been created.
+         *
+         * We now sort locally.
+         */
 
         const q = query(
             transactionsRef,
@@ -752,29 +729,56 @@ async function getTransactions() {
                 "userId",
                 "==",
                 user.uid
-            ),
-
-            orderBy(
-                "createdAt",
-                "desc"
             )
         );
-
 
         const snapshot =
             await getDocs(q);
 
+        const transactions =
+            snapshot.docs.map(
+                (item) => ({
 
-        return snapshot.docs.map(
-            (item) => ({
+                    id: item.id,
 
-                id: item.id,
+                    ...item.data()
 
-                ...item.data()
+                })
+            );
 
-            })
+
+        // ====================================================
+        // SORT NEWEST FIRST
+        // ====================================================
+
+        transactions.sort(
+            (a, b) => {
+
+                const dateA =
+                    convertDate(
+                        a.createdAt
+                    );
+
+                const dateB =
+                    convertDate(
+                        b.createdAt
+                    );
+
+                return (
+                    (dateB?.getTime() || 0) -
+                    (dateA?.getTime() || 0)
+                );
+            }
         );
 
+
+        console.log(
+            "Transactions loaded:",
+            transactions
+        );
+
+
+        return transactions;
 
     } catch (error) {
 
@@ -782,6 +786,13 @@ async function getTransactions() {
             "Error loading transactions:",
             error
         );
+
+        /*
+         * IMPORTANT:
+         *
+         * This error is now visible in the browser
+         * console instead of silently failing.
+         */
 
         return [];
     }
@@ -798,7 +809,6 @@ async function addTransaction(
 
     const user = auth.currentUser;
 
-
     if (!user) {
 
         showToast(
@@ -807,7 +817,6 @@ async function addTransaction(
 
         return null;
     }
-
 
     try {
 
@@ -822,6 +831,11 @@ async function addTransaction(
                 serverTimestamp()
         };
 
+        console.log(
+            "Creating transaction:",
+            data
+        );
+
 
         const reference =
             await addDoc(
@@ -833,13 +847,18 @@ async function addTransaction(
             );
 
 
+        console.log(
+            "Transaction created:",
+            reference.id
+        );
+
+
         return {
 
             id: reference.id,
 
             ...data
         };
-
 
     } catch (error) {
 
@@ -868,12 +887,10 @@ async function updateTransaction(
 
     const user = auth.currentUser;
 
-
     if (!user || !transactionId) {
 
         return false;
     }
-
 
     try {
 
@@ -884,16 +901,13 @@ async function updateTransaction(
                 transactionId
             );
 
-
         const snapshot =
             await getDoc(reference);
-
 
         if (!snapshot.exists()) {
 
             return false;
         }
-
 
         if (
             snapshot.data().userId !==
@@ -903,15 +917,12 @@ async function updateTransaction(
             return false;
         }
 
-
         await updateDoc(
             reference,
             data
         );
 
-
         return true;
-
 
     } catch (error) {
 
@@ -935,12 +946,10 @@ async function updateUserProfile(
 
     const user = auth.currentUser;
 
-
     if (!user) {
 
         return false;
     }
-
 
     try {
 
@@ -953,12 +962,9 @@ async function updateUserProfile(
             data
         );
 
-
         await refreshCurrentUser();
 
-
         return true;
-
 
     } catch (error) {
 
@@ -985,21 +991,17 @@ async function processInvestment(
         return investment;
     }
 
-
     const now = Date.now();
-
 
     const completionDate =
         convertDate(
             investment.completesAt
         );
 
-
     if (!completionDate) {
 
         return investment;
     }
-
 
     const completesAt =
         completionDate.getTime();
@@ -1017,25 +1019,21 @@ async function processInvestment(
         const completedAt =
             new Date();
 
-
         const withdrawableAt =
             new Date(
                 completedAt.getTime() +
                 (24 * 60 * 60 * 1000)
             );
 
-
         const generatedAmount =
             Number(
                 investment.generatedAmount
             ) || 0;
 
-
         const amount =
             Number(
                 investment.amount
             ) || 0;
-
 
         const profit =
             Number(
@@ -1049,7 +1047,8 @@ async function processInvestment(
 
         const updated = {
 
-            status: "Successful",
+            status:
+                "Successful",
 
             completedAt:
                 completedAt.toISOString(),
@@ -1076,30 +1075,42 @@ async function processInvestment(
 
             await updateUserProfile({
 
-                invested: amount,
+                invested:
+                    amount,
 
-                returns: profit,
+                returns:
+                    profit,
 
                 balance:
                     generatedAmount
             });
 
 
+            /*
+             * Create the completion transaction.
+             *
+             * We retain the existing behavior here for now.
+             */
+
             await addTransaction({
 
-                type: "Investment",
+                type:
+                    "Investment",
 
                 plan:
                     investment.plan || "",
 
-                amount: amount,
+                amount:
+                    amount,
 
                 generatedAmount:
                     generatedAmount,
 
-                profit: profit,
+                profit:
+                    profit,
 
-                status: "Successful",
+                status:
+                    "Successful",
 
                 investmentId:
                     investment.id,
@@ -1180,12 +1191,10 @@ async function checkInvestments() {
     const investments =
         await getInvestments();
 
-
     if (!investments.length) {
 
         return [];
     }
-
 
     const processed = [];
 
@@ -1198,7 +1207,6 @@ async function checkInvestments() {
             await processInvestment(
                 investment
             );
-
 
         processed.push(result);
     }
@@ -1235,7 +1243,6 @@ async function withdrawInvestment(
 ) {
 
     const user = auth.currentUser;
-
 
     if (!user) {
 
@@ -1304,7 +1311,6 @@ async function withdrawInvestment(
 
     try {
 
-        // Mark the investment as withdrawn
         await updateInvestment(
             investment.id,
             {
@@ -1324,34 +1330,38 @@ async function withdrawInvestment(
         );
 
 
-        // Record transaction
         await addTransaction({
 
-            type: "Withdrawal",
+            type:
+                "Withdrawal",
 
             plan:
                 investment.plan || "",
 
-            amount: amount,
+            amount:
+                amount,
 
             investmentId:
                 investment.id,
 
-            status: "Successful",
+            status:
+                "Successful",
 
             description:
                 "Investment withdrawal completed"
         });
 
 
-        // Reset the displayed account values
         await updateUserProfile({
 
-            balance: 0,
+            balance:
+                0,
 
-            invested: 0,
+            invested:
+                0,
 
-            returns: 0
+            returns:
+                0
         });
 
 
@@ -1361,7 +1371,6 @@ async function withdrawInvestment(
 
 
         return true;
-
 
     } catch (error) {
 
@@ -1380,21 +1389,8 @@ async function withdrawInvestment(
 
 
 // ============================================================
-// MAKE FUNCTIONS AVAILABLE TO EXISTING JS FILES
+// GLOBAL FUNCTIONS
 // ============================================================
-//
-// Because app.js is now a JavaScript module, normal functions
-// are not automatically global.
-//
-// These window assignments allow existing files such as:
-//
-// dashboard.js
-// transactions.js
-// history.js
-// investments.js
-//
-// to continue using the old function names.
-//
 
 window.getFirebaseUser =
     getFirebaseUser;
@@ -1483,7 +1479,6 @@ async function autoProcessInvestments() {
         return;
     }
 
-
     try {
 
         await checkInvestments();
@@ -1498,7 +1493,10 @@ async function autoProcessInvestments() {
 }
 
 
-// Wait until Firebase authentication is ready
+// ============================================================
+// START AUTO PROCESSING
+// ============================================================
+
 waitForAuth().then(() => {
 
     if (auth.currentUser) {
@@ -1510,7 +1508,10 @@ waitForAuth().then(() => {
 });
 
 
-// Check periodically
+// ============================================================
+// CHECK EVERY 60 SECONDS
+// ============================================================
+
 setInterval(
     autoProcessInvestments,
     60 * 1000
