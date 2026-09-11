@@ -22,16 +22,14 @@ function escapeHTML(value) {
 
 
 // ============================================================
-// GET ELEMENTS
+// GET TABLE
 // ============================================================
 
 function getTransactionTable() {
-    return document.getElementById(
-        "transactionsTable"
-    ) || document.getElementById(
-        "transactionTable"
-    ) || document.querySelector(
-        "tbody"
+    return (
+        document.getElementById("transactionsTable") ||
+        document.getElementById("transactionTable") ||
+        document.querySelector("tbody")
     );
 }
 
@@ -42,22 +40,16 @@ function getTransactionTable() {
 
 async function loadTransactions() {
 
-    const table =
-        getTransactionTable();
+    const table = getTransactionTable();
 
     if (!table) {
-        console.error(
-            "Transactions table was not found."
-        );
+        console.error("Transactions table was not found.");
         return;
     }
 
     table.innerHTML = `
         <tr>
-            <td
-                colspan="5"
-                class="p-10 text-center text-gray-500"
-            >
+            <td colspan="5" class="p-10 text-center text-gray-500">
                 Loading transactions...
             </td>
         </tr>
@@ -66,20 +58,20 @@ async function loadTransactions() {
     try {
 
         // ----------------------------------------------------
-        // WAIT FOR FIREBASE AUTH
+        // AUTH
         // ----------------------------------------------------
 
-        if (
-            typeof window.waitForAuth !==
-            "function"
-        ) {
+        if (typeof window.waitForAuth === "function") {
+            await window.waitForAuth();
+        }
+
+        if (typeof window.requireAuth !== "function") {
             throw new Error(
-                "Firebase application is still loading. Please refresh the page."
+                "Authentication system is unavailable. Make sure app.js is loaded."
             );
         }
 
-        const user =
-            await window.requireAuth();
+        const user = await window.requireAuth();
 
         if (!user) {
             return;
@@ -87,32 +79,98 @@ async function loadTransactions() {
 
 
         // ----------------------------------------------------
-        // MAKE SURE TRANSACTION FUNCTION EXISTS
+        // LOAD INVESTMENTS
         // ----------------------------------------------------
 
-        if (
-            typeof window.getTransactions !==
-            "function"
-        ) {
+        if (typeof window.getInvestments !== "function") {
+            throw new Error(
+                "getInvestments() is unavailable. Make sure app.js is loaded."
+            );
+        }
+
+        const investments =
+            await window.getInvestments();
+
+        const existingInvestments =
+            Array.isArray(investments)
+                ? investments
+                : [];
+
+
+        // ----------------------------------------------------
+        // CREATE SET OF EXISTING INVESTMENT IDS
+        // ----------------------------------------------------
+
+        const existingInvestmentIds =
+            new Set(
+                existingInvestments.map(
+                    investment =>
+                        String(
+                            investment.id ||
+                            investment.investmentId ||
+                            ""
+                        )
+                )
+            );
+
+
+        // ----------------------------------------------------
+        // LOAD TRANSACTIONS
+        // ----------------------------------------------------
+
+        if (typeof window.getTransactions !== "function") {
             throw new Error(
                 "getTransactions() is unavailable. Make sure app.js is loaded before transactions.js."
             );
         }
 
-
-        // ----------------------------------------------------
-        // LOAD FIRESTORE TRANSACTIONS
-        // ----------------------------------------------------
-
         const transactions =
             await window.getTransactions();
 
-        allTransactions =
-            Array.isArray(
-                transactions
-            )
+        const rawTransactions =
+            Array.isArray(transactions)
                 ? transactions
                 : [];
+
+
+        // ----------------------------------------------------
+        // ONLY KEEP TRANSACTIONS BELONGING TO
+        // EXISTING INVESTMENTS
+        // ----------------------------------------------------
+
+        allTransactions =
+            rawTransactions.filter(
+                transaction => {
+
+                    const investmentId =
+                        String(
+                            transaction.investmentId ||
+                            transaction.investmentID ||
+                            transaction.referenceId ||
+                            ""
+                        );
+
+                    // If the transaction has an investment ID,
+                    // make sure that investment still exists.
+                    if (investmentId) {
+                        return existingInvestmentIds.has(
+                            investmentId
+                        );
+                    }
+
+                    // Keep transactions that do not have an
+                    // investment ID only if they are not investment
+                    // transactions.
+                    const type =
+                        String(
+                            transaction.type ||
+                            ""
+                        ).toLowerCase();
+
+                    return type !== "investment";
+                }
+            );
+
 
         window.__transactions =
             allTransactions;
@@ -147,27 +205,15 @@ async function loadTransactions() {
             error?.message
         );
 
-
         table.innerHTML = `
             <tr>
-                <td
-                    colspan="5"
-                    class="p-10 text-center"
-                >
+                <td colspan="5" class="p-10 text-center">
 
-                    <div
-                        class="text-red-400
-                               font-medium
-                               mb-2"
-                    >
+                    <div class="text-red-400 font-medium mb-2">
                         Unable to load transactions
                     </div>
 
-                    <div
-                        class="text-sm
-                               text-gray-500
-                               break-words"
-                    >
+                    <div class="text-sm text-gray-500 break-words">
                         ${escapeHTML(
                             error?.message ||
                             "Unknown error occurred."
@@ -187,9 +233,7 @@ async function loadTransactions() {
 // RENDER TRANSACTIONS
 // ============================================================
 
-function renderTransactions(
-    transactions
-) {
+function renderTransactions(transactions) {
 
     const table =
         getTransactionTable();
@@ -224,146 +268,160 @@ function renderTransactions(
 
 
     // --------------------------------------------------------
+    // SORT NEWEST FIRST
+    // --------------------------------------------------------
+
+    const sortedTransactions =
+        [...transactions].sort(
+            (a, b) => {
+
+                const dateA =
+                    a.createdAt?.seconds
+                        ? a.createdAt.seconds
+                        : new Date(
+                            a.createdAt || 0
+                        ).getTime();
+
+                const dateB =
+                    b.createdAt?.seconds
+                        ? b.createdAt.seconds
+                        : new Date(
+                            b.createdAt || 0
+                        ).getTime();
+
+                return dateB - dateA;
+            }
+        );
+
+
+    // --------------------------------------------------------
     // TRANSACTION ROWS
     // --------------------------------------------------------
 
     table.innerHTML =
-        transactions
-            .map(
-                transaction => {
+        sortedTransactions
+            .map(transaction => {
 
-                    const type =
-                        transaction.type ||
-                        "Transaction";
+                const type =
+                    transaction.type ||
+                    "Transaction";
 
-                    const plan =
-                        transaction.plan ||
-                        "—";
+                const plan =
+                    transaction.plan ||
+                    "—";
 
-                    const amount =
-                        Number(
-                            transaction.amount
-                        ) || 0;
+                const amount =
+                    Number(
+                        transaction.amount
+                    ) || 0;
 
-                    const status =
-                        transaction.status ||
-                        transaction.paymentStatus ||
-                        "Pending";
+                const status =
+                    transaction.status ||
+                    transaction.paymentStatus ||
+                    "Pending";
 
-                    const date =
-                        typeof window.formatDateTime ===
-                        "function"
-                            ? window.formatDateTime(
-                                transaction.createdAt
-                            )
-                            : "—";
+                const date =
+                    typeof window.formatDateTime ===
+                    "function"
+                        ? window.formatDateTime(
+                            transaction.createdAt
+                        )
+                        : "—";
 
-                    const formattedAmount =
-                        typeof window.money ===
-                        "function"
-                            ? window.money(
-                                amount
-                            )
-                            : "$" +
-                              amount.toFixed(2);
+                const formattedAmount =
+                    typeof window.money ===
+                    "function"
+                        ? window.money(amount)
+                        : "$" +
+                          amount.toFixed(2);
 
 
-                    let statusClass =
-                        "text-yellow-400";
+                // ------------------------------------------------
+                // STATUS COLOR
+                // ------------------------------------------------
 
-                    const normalizedStatus =
-                        String(
-                            status
-                        ).toLowerCase();
+                let statusClass =
+                    "text-yellow-400";
 
-                    if (
-                        normalizedStatus ===
-                            "successful" ||
-                        normalizedStatus ===
-                            "completed"
-                    ) {
-                        statusClass =
-                            "text-green-400";
-                    }
+                const normalizedStatus =
+                    String(status)
+                        .toLowerCase();
 
-                    if (
-                        normalizedStatus ===
-                            "failed" ||
-                        normalizedStatus ===
-                            "cancelled"
-                    ) {
-                        statusClass =
-                            "text-red-400";
-                    }
-
-
-                    return `
-                        <tr
-                            class="border-b
-                                   border-white/5
-                                   hover:bg-white/[0.02]"
-                        >
-
-                            <td
-                                class="px-5
-                                       py-4
-                                       text-sm
-                                       text-gray-200"
-                            >
-                                ${escapeHTML(
-                                    type
-                                )}
-                            </td>
-
-                            <td
-                                class="px-5
-                                       py-4
-                                       text-sm
-                                       text-gray-400"
-                            >
-                                ${escapeHTML(
-                                    plan
-                                )}
-                            </td>
-
-                            <td
-                                class="px-5
-                                       py-4
-                                       text-sm
-                                       font-medium
-                                       text-white"
-                            >
-                                ${escapeHTML(
-                                    formattedAmount
-                                )}
-                            </td>
-
-                            <td
-                                class="px-5
-                                       py-4
-                                       text-sm
-                                       ${statusClass}"
-                            >
-                                ${escapeHTML(
-                                    status
-                                )}
-                            </td>
-
-                            <td
-                                class="px-5
-                                       py-4
-                                       text-sm
-                                       text-gray-500"
-                            >
-                                ${escapeHTML(
-                                    date
-                                )}
-                            </td>
-
-                        </tr>
-                    `;
+                if (
+                    normalizedStatus === "successful" ||
+                    normalizedStatus === "completed"
+                ) {
+                    statusClass =
+                        "text-green-400";
                 }
-            )
+
+                if (
+                    normalizedStatus === "failed" ||
+                    normalizedStatus === "cancelled"
+                ) {
+                    statusClass =
+                        "text-red-400";
+                }
+
+
+                return `
+                    <tr
+                        class="border-b
+                               border-white/5
+                               hover:bg-white/[0.02]"
+                    >
+
+                        <td
+                            class="px-5
+                                   py-4
+                                   text-sm
+                                   text-gray-200"
+                        >
+                            ${escapeHTML(type)}
+                        </td>
+
+                        <td
+                            class="px-5
+                                   py-4
+                                   text-sm
+                                   text-gray-400"
+                        >
+                            ${escapeHTML(plan)}
+                        </td>
+
+                        <td
+                            class="px-5
+                                   py-4
+                                   text-sm
+                                   font-medium
+                                   text-white"
+                        >
+                            ${escapeHTML(
+                                formattedAmount
+                            )}
+                        </td>
+
+                        <td
+                            class="px-5
+                                   py-4
+                                   text-sm
+                                   ${statusClass}"
+                        >
+                            ${escapeHTML(status)}
+                        </td>
+
+                        <td
+                            class="px-5
+                                   py-4
+                                   text-sm
+                                   text-gray-500"
+                        >
+                            ${escapeHTML(date)}
+                        </td>
+
+                    </tr>
+                `;
+            })
             .join("");
 }
 
@@ -462,12 +520,17 @@ function applyFilters() {
 
         filtered =
             filtered.filter(
-                transaction =>
-                    String(
-                        transaction.status ||
-                        ""
-                    ).toLowerCase() ===
-                    selectedStatus
+                transaction => {
+
+                    const status =
+                        String(
+                            transaction.status ||
+                            transaction.paymentStatus ||
+                            ""
+                        ).toLowerCase();
+
+                    return status === selectedStatus;
+                }
             );
     }
 
@@ -523,14 +586,13 @@ function updateTransactionStats(
                 const status =
                     String(
                         transaction.status ||
+                        transaction.paymentStatus ||
                         ""
                     ).toLowerCase();
 
                 return (
-                    status ===
-                        "successful" ||
-                    status ===
-                        "completed"
+                    status === "successful" ||
+                    status === "completed"
                 );
             }
         ).length;
@@ -540,13 +602,14 @@ function updateTransactionStats(
         transactions.filter(
             transaction => {
 
-                return (
+                const status =
                     String(
                         transaction.status ||
+                        transaction.paymentStatus ||
                         ""
-                    ).toLowerCase() ===
-                    "pending"
-                );
+                    ).toLowerCase();
+
+                return status === "pending";
             }
         ).length;
 
@@ -558,14 +621,13 @@ function updateTransactionStats(
                 const status =
                     String(
                         transaction.status ||
+                        transaction.paymentStatus ||
                         ""
                     ).toLowerCase();
 
                 return (
-                    status ===
-                        "failed" ||
-                    status ===
-                        "cancelled"
+                    status === "failed" ||
+                    status === "cancelled"
                 );
             }
         ).length;
@@ -615,7 +677,7 @@ function updateTransactionStats(
 
 
 // ============================================================
-// EVENT LISTENERS
+// INITIALIZE
 // ============================================================
 
 window.addEventListener(
@@ -623,7 +685,13 @@ window.addEventListener(
     async () => {
 
         try {
-            await window.waitForAuth();
+
+            if (
+                typeof window.waitForAuth ===
+                "function"
+            ) {
+                await window.waitForAuth();
+            }
 
             await loadTransactions();
 
