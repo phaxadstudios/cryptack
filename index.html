@@ -6,6 +6,11 @@
 
     <title>Cryptacks — Smart Digital Investing</title>
 
+    <meta name="description"
+          content="Cryptacks — Smart digital investing through modern market and crypto strategies.">
+
+    <meta name="theme-color" content="#08070d">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -14,8 +19,13 @@
                 extend: {
                     colors: {
                         primary: '#7c3aed',
+                        primary2: '#8b5cf6',
                         dark: '#08070d',
                         card: '#111019'
+                    },
+                    boxShadow: {
+                        purple: '0 20px 80px rgba(124,58,237,.18)',
+                        purpleStrong: '0 20px 90px rgba(124,58,237,.28)'
                     }
                 }
             }
@@ -23,74 +33,1144 @@
     </script>
 
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            background: #08070d;
+            color: white;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                         BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        ::selection {
+            background: rgba(139,92,246,.4);
+            color: white;
+        }
+
+        /* =========================================================
+           BACKGROUND
+        ========================================================= */
+
+        .page-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -20;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% -15%,
+                rgba(124,58,237,.20),
+                transparent 32%),
+                radial-gradient(circle at 100% 40%,
+                rgba(109,40,217,.09),
+                transparent 25%),
+                #08070d;
+        }
+
+        .grid-bg {
+            position: absolute;
+            inset: 0;
+            opacity: .35;
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                );
+            background-size: 55px 55px;
+            mask-image: linear-gradient(
+                to bottom,
+                black 0%,
+                transparent 80%
+            );
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(90px);
+            pointer-events: none;
+        }
+
+        .orb-one {
+            width: 420px;
+            height: 420px;
+            top: -150px;
+            left: -140px;
+            background: rgba(124,58,237,.16);
+        }
+
+        .orb-two {
+            width: 360px;
+            height: 360px;
+            top: 30%;
+            right: -160px;
+            background: rgba(139,92,246,.10);
+        }
+
+        .orb-three {
+            width: 300px;
+            height: 300px;
+            bottom: 15%;
+            left: -160px;
+            background: rgba(109,40,217,.08);
+        }
+
+        /* =========================================================
+           GENERAL
+        ========================================================= */
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    90deg,
+                    #c4b5fd 0%,
+                    #8b5cf6 45%,
+                    #d8b4fe 100%
+                );
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-label {
+            color: #a78bfa;
+            font-size: .78rem;
+            font-weight: 800;
+            letter-spacing: .16em;
+        }
+
+        .glass {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.065),
+                    rgba(255,255,255,.018)
+                );
+            border: 1px solid rgba(255,255,255,.08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .glass-hover {
+            transition:
+                transform .35s ease,
+                border-color .35s ease,
+                box-shadow .35s ease,
+                background .35s ease;
+        }
+
+        .glass-hover:hover {
+            transform: translateY(-7px);
+            border-color: rgba(139,92,246,.35);
+            box-shadow: 0 25px 70px rgba(0,0,0,.35);
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.075),
+                    rgba(255,255,255,.025)
+                );
+        }
+
+        .soft-border {
+            border: 1px solid rgba(255,255,255,.08);
+        }
+
+        .purple-glow {
+            box-shadow:
+                0 0 70px rgba(124,58,237,.12);
+        }
+
+        /* =========================================================
+           NAV
+        ========================================================= */
+
+        .nav-link {
+            position: relative;
+            color: #9ca3af;
+            transition: color .25s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -9px;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: #8b5cf6;
+            transition: width .25s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.028) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.028) 1px,
+                    transparent 1px
+                );
+            background-size: 60px 60px;
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent 75%
+            );
+            pointer-events: none;
+        }
+
+        .hero-title {
+            font-size: clamp(
+                3.2rem,
+                7vw,
+                7.2rem
+            );
+            letter-spacing: -.055em;
+            line-height: .94;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            right: -250px;
+            top: -200px;
+            border-radius: 9999px;
+            background: radial-gradient(
+                circle,
+                rgba(124,58,237,.20),
+                transparent 65%
+            );
+            filter: blur(25px);
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           DASHBOARD PREVIEW
+        ========================================================= */
+
+        .dashboard-shell {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(19,17,29,.95),
+                    rgba(10,9,15,.98)
+                );
+            border: 1px solid rgba(255,255,255,.09);
+            box-shadow:
+                0 40px 120px rgba(0,0,0,.45),
+                0 0 80px rgba(124,58,237,.12);
+        }
+
+        .dashboard-top {
+            height: 50px;
+            padding: 0 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            background: rgba(255,255,255,.018);
+        }
+
+        .window-dots {
+            display: flex;
+            gap: 7px;
+        }
+
+        .window-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.20);
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: url(#chartLine);
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .chart-area {
+            fill: url(#chartFill);
+            opacity: .55;
+        }
+
+        /* =========================================================
+           STATS
+        ========================================================= */
+
+        .stat-number {
+            font-size: 2rem;
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: -.04em;
+        }
+
+        /* =========================================================
+           ICONS
+        ========================================================= */
+
+        .feature-icon {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 17px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(124,58,237,.18),
+                    rgba(124,58,237,.06)
+                );
+            border: 1px solid rgba(139,92,246,.19);
+            color: #c4b5fd;
+            font-size: 21px;
+        }
+
+        /* =========================================================
+           PLAN
+        ========================================================= */
+
+        .plan-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(
+                    circle at 100% 0%,
+                    rgba(124,58,237,.13),
+                    transparent 30%
+                );
+        }
+
+        .popular-ring {
+            position: absolute;
+            inset: -1px;
+            border-radius: 25px;
+            background:
+                linear-gradient(
+                    140deg,
+                    rgba(139,92,246,.65),
+                    transparent 35%,
+                    transparent 70%,
+                    rgba(124,58,237,.24)
+                );
+            z-index: -1;
+        }
+
+        /* =========================================================
+           TIMELINE
+        ========================================================= */
+
+        .step-number {
+            width: 62px;
+            height: 62px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 900;
+            font-size: 1.1rem;
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #5b21b6
+                );
+            box-shadow:
+                0 0 40px rgba(124,58,237,.27);
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 31px;
+            left: calc(16.66% + 31px);
+            right: calc(16.66% + 31px);
+            height: 1px;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(139,92,246,.35),
+                    rgba(139,92,246,.35),
+                    transparent
+                );
+        }
+
+        /* =========================================================
+           FAQ
+        ========================================================= */
+
+        .faq-item {
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 20px;
+            background: rgba(255,255,255,.025);
+            overflow: hidden;
+        }
+
+        .faq-button {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+            padding: 22px;
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .3s ease;
+        }
+
+        .faq-inner {
+            padding: 0 22px 22px;
+            color: #9ca3af;
+            line-height: 1.7;
+        }
+
+        .faq-icon {
+            transition: transform .25s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* =========================================================
+           ANIMATION
+        ========================================================= */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition:
+                opacity .7s ease,
+                transform .7s ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .pulse-ring {
+            animation: pulseRing 2.8s ease-out infinite;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                box-shadow: 0 0 0 0 rgba(139,92,246,.25);
+            }
+
+            70% {
+                box-shadow: 0 0 0 18px rgba(139,92,246,0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(139,92,246,0);
+            }
+        }
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 767px) {
+
+            .hero-glow {
+                width: 450px;
+                height: 450px;
+                right: -220px;
+                top: -80px;
+            }
+
+            .timeline-line {
+                display: none;
+            }
+
+        }
+
+    </style>
 </head>
 
-<body class="bg-dark text-white">
 
-<header class="border-b border-white/10">
-    <nav class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+<body>
 
-        <a href="index.html" class="text-2xl font-black">
-            Crypta<span class="text-violet-500">cks</span>
-        </a>
+<!-- =========================================================
+     BACKGROUND
+========================================================= -->
 
-        <div class="hidden md:flex gap-8 text-sm text-gray-400">
-            <a href="#features" class="hover:text-white">Features</a>
-            <a href="#plans" class="hover:text-white">Plans</a>
-            <a href="#how" class="hover:text-white">How it works</a>
-        </div>
+<div class="page-bg">
+    <div class="grid-bg"></div>
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="orb orb-three"></div>
+</div>
 
-        <div class="flex gap-3">
-            <a href="login.html"
-               class="px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/5">
-                Login
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="sticky top-0 z-[100]
+               border-b border-white/10
+               bg-[#08070d]/75
+               backdrop-blur-2xl">
+
+    <nav class="max-w-7xl mx-auto px-5 sm:px-6 py-4">
+
+        <div class="flex items-center justify-between">
+
+            <a href="index.html"
+               class="text-2xl sm:text-3xl font-black tracking-tight">
+                Crypta<span class="text-violet-500">cks</span>
             </a>
 
-            <a href="signup.html"
-               class="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500">
-                Get Started
-            </a>
+
+            <!-- Desktop -->
+
+            <div class="hidden md:flex items-center gap-9 text-sm">
+
+                <a href="#features" class="nav-link">
+                    Features
+                </a>
+
+                <a href="#plans" class="nav-link">
+                    Plans
+                </a>
+
+                <a href="#how" class="nav-link">
+                    How it works
+                </a>
+
+                <a href="#faq" class="nav-link">
+                    FAQ
+                </a>
+
+            </div>
+
+
+            <div class="hidden md:flex items-center gap-3">
+
+                <a href="login.html"
+                   class="px-5 py-2.5 rounded-xl
+                          border border-white/10
+                          hover:bg-white/5
+                          transition">
+                    Login
+                </a>
+
+                <a href="signup.html"
+                   class="px-5 py-2.5 rounded-xl
+                          bg-violet-600
+                          hover:bg-violet-500
+                          shadow-lg shadow-violet-900/20
+                          transition font-semibold">
+                    Get Started
+                </a>
+
+            </div>
+
+
+            <!-- Mobile -->
+
+            <button id="menuButton"
+                    class="md:hidden
+                           w-11 h-11
+                           rounded-xl
+                           border border-white/10
+                           bg-white/[.03]
+                           flex items-center justify-center">
+
+                <svg id="menuIcon"
+                     class="w-5 h-5"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.8"
+                     viewBox="0 0 24 24">
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4 6h16M4 12h16M4 18h16"/>
+
+                </svg>
+
+            </button>
+
         </div>
+
+
+        <div id="mobileMenu"
+             class="md:hidden max-h-0 opacity-0
+                    overflow-hidden
+                    transition-all duration-300">
+
+            <div class="pt-5 pb-2 space-y-2">
+
+                <a href="#features"
+                   class="mobile-link block px-4 py-3 rounded-xl
+                          text-gray-300 hover:bg-white/5">
+                    Features
+                </a>
+
+                <a href="#plans"
+                   class="mobile-link block px-4 py-3 rounded-xl
+                          text-gray-300 hover:bg-white/5">
+                    Plans
+                </a>
+
+                <a href="#how"
+                   class="mobile-link block px-4 py-3 rounded-xl
+                          text-gray-300 hover:bg-white/5">
+                    How it works
+                </a>
+
+                <a href="#faq"
+                   class="mobile-link block px-4 py-3 rounded-xl
+                          text-gray-300 hover:bg-white/5">
+                    FAQ
+                </a>
+
+                <div class="flex gap-3 pt-3">
+
+                    <a href="login.html"
+                       class="flex-1 text-center
+                              py-3 rounded-xl
+                              border border-white/10">
+                        Login
+                    </a>
+
+                    <a href="signup.html"
+                       class="flex-1 text-center
+                              py-3 rounded-xl
+                              bg-violet-600 font-semibold">
+                        Get Started
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </nav>
+
 </header>
+
 
 <main>
 
-<section class="max-w-7xl mx-auto px-6 pt-24 pb-28">
 
-    <div class="max-w-4xl">
+<!-- =========================================================
+     HERO
+========================================================= -->
 
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full
-                    bg-violet-500/10 border border-violet-500/20
-                    text-violet-300 text-sm mb-8">
+<section class="relative overflow-hidden">
 
-            <span class="w-2 h-2 rounded-full bg-green-400"></span>
-            a secured Investment Platform
-        </div>
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
 
-        <h1 class="text-5xl md:text-7xl font-black leading-tight">
-            Build your future
-            <span class="gradient-text">with smarter investing.</span>
-        </h1>
+    <div class="relative max-w-7xl mx-auto
+                px-5 sm:px-6
+                pt-20 sm:pt-28 lg:pt-36
+                pb-24 lg:pb-32">
 
-        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mt-7 leading-relaxed">
-            Cryptacks is a modern investment platform concept designed to generate profits through forex and crypto market 
-          and offer returns of profits every 24 hours.
-        </p>
+        <div class="grid lg:grid-cols-[1.05fr_.95fr]
+                    gap-16
+                    items-center">
 
-        <div class="flex flex-wrap gap-4 mt-9">
+            <!-- LEFT -->
 
-            <a href="signup.html"
-               class="px-7 py-4 rounded-2xl bg-violet-600
-                      hover:bg-violet-500 font-semibold">
-                Create Account
-            </a>
+            <div class="reveal show">
 
-            <a href="#how"
-               class="px-7 py-4 rounded-2xl border border-white/10
-                      hover:bg-white/5 font-semibold">
-                Learn More
-            </a>
+                <div class="inline-flex items-center gap-2
+                            px-4 py-2
+                            rounded-full
+                            border border-violet-500/20
+                            bg-violet-500/10
+                            text-violet-300
+                            text-xs sm:text-sm">
+
+                    <span class="relative flex w-2 h-2">
+                        <span class="absolute inset-0
+                                     rounded-full
+                                     bg-green-400
+                                     animate-ping
+                                     opacity-70"></span>
+
+                        <span class="relative
+                                     w-2 h-2
+                                     rounded-full
+                                     bg-green-400"></span>
+                    </span>
+
+                    A secured Investment Platform
+
+                </div>
+
+
+                <h1 class="hero-title font-black mt-7">
+
+                    Build your future
+
+                    <span class="block gradient-text mt-3">
+                        with smarter investing.
+                    </span>
+
+                </h1>
+
+
+                <p class="text-gray-400
+                          text-base sm:text-lg lg:text-xl
+                          max-w-2xl
+                          mt-8
+                          leading-relaxed">
+
+                    Cryptacks is a modern investment platform concept
+                    designed to generate profits through forex and
+                    crypto markets while delivering a simple,
+                    intuitive digital experience.
+
+                </p>
+
+
+                <div class="flex flex-col sm:flex-row
+                            gap-3 mt-9">
+
+                    <a href="signup.html"
+                       class="group px-7 py-4
+                              rounded-2xl
+                              bg-violet-600
+                              hover:bg-violet-500
+                              shadow-purpleStrong
+                              text-center
+                              font-semibold
+                              transition">
+
+                        Create Account
+
+                        <span class="inline-block ml-1
+                                     group-hover:translate-x-1
+                                     transition">
+                            →
+                        </span>
+
+                    </a>
+
+                    <a href="#how"
+                       class="px-7 py-4
+                              rounded-2xl
+                              border border-white/10
+                              bg-white/[.025]
+                              hover:bg-white/[.06]
+                              text-center
+                              font-semibold
+                              transition">
+
+                        Explore Platform
+
+                    </a>
+
+                </div>
+
+
+                <div class="flex flex-wrap
+                            items-center gap-6
+                            mt-10
+                            text-sm text-gray-500">
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-green-400">✓</span>
+                        Digital assets
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-green-400">✓</span>
+                        Secure dashboard
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-green-400">✓</span>
+                        24hr cycles
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT DASHBOARD -->
+
+            <div class="relative reveal show">
+
+                <div class="absolute
+                            -inset-8
+                            bg-violet-600/10
+                            blur-3xl
+                            rounded-full">
+                </div>
+
+                <div class="dashboard-shell
+                            floating">
+
+                    <!-- Browser bar -->
+
+                    <div class="dashboard-top">
+
+                        <div class="window-dots">
+                            <span class="window-dot"></span>
+                            <span class="window-dot"></span>
+                            <span class="window-dot"></span>
+                        </div>
+
+                        <div class="text-[10px]
+                                    text-gray-600
+                                    tracking-widest">
+                            CRYPTACKS
+                        </div>
+
+                        <div class="w-5"></div>
+
+                    </div>
+
+
+                    <div class="p-5 sm:p-6">
+
+                        <div class="flex items-start
+                                    justify-between">
+
+                            <div>
+
+                                <p class="text-xs text-gray-500">
+                                    Total Balance
+                                </p>
+
+                                <div class="text-3xl
+                                            sm:text-4xl
+                                            font-black mt-2">
+                                    $24,860.50
+                                </div>
+
+                                <div class="flex items-center
+                                            gap-2
+                                            mt-2
+                                            text-xs">
+
+                                    <span class="text-green-400">
+                                        +12.84%
+                                    </span>
+
+                                    <span class="text-gray-600">
+                                        This month
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="w-11 h-11
+                                        rounded-xl
+                                        bg-violet-500/10
+                                        border border-violet-500/20
+                                        flex items-center
+                                        justify-center
+                                        text-violet-300
+                                        pulse-ring">
+
+                                ↗
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CHART -->
+
+                        <div class="mt-8">
+
+                            <svg viewBox="0 0 700 240"
+                                 class="w-full"
+                                 preserveAspectRatio="none">
+
+                                <defs>
+
+                                    <linearGradient
+                                        id="chartLine"
+                                        x1="0"
+                                        x2="1">
+
+                                        <stop
+                                            offset="0%"
+                                            stop-color="#7c3aed"/>
+
+                                        <stop
+                                            offset="100%"
+                                            stop-color="#c084fc"/>
+
+                                    </linearGradient>
+
+                                    <linearGradient
+                                        id="chartFill"
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="1">
+
+                                        <stop
+                                            offset="0%"
+                                            stop-color="#7c3aed"
+                                            stop-opacity=".28"/>
+
+                                        <stop
+                                            offset="100%"
+                                            stop-color="#7c3aed"
+                                            stop-opacity="0"/>
+
+                                    </linearGradient>
+
+                                </defs>
+
+
+                                <path
+                                    class="chart-area"
+                                    d="
+                                    M0 220
+                                    C60 190 90 200 130 175
+                                    S200 155 240 170
+                                    S300 112 350 136
+                                    S415 105 455 118
+                                    S520 85 555 96
+                                    S620 48 700 45
+                                    L700 240
+                                    L0 240 Z"/>
+
+
+                                <path
+                                    class="chart-line"
+                                    d="
+                                    M0 220
+                                    C60 190 90 200 130 175
+                                    S200 155 240 170
+                                    S300 112 350 136
+                                    S415 105 455 118
+                                    S520 85 555 96
+                                    S620 48 700 45"/>
+
+                            </svg>
+
+                        </div>
+
+
+                        <!-- Cards -->
+
+                        <div class="grid grid-cols-2 gap-3 mt-3">
+
+                            <div class="rounded-2xl
+                                        border border-white/6
+                                        bg-white/[.025]
+                                        p-4">
+
+                                <div class="text-xs
+                                            text-gray-500">
+                                    Current Investment
+                                </div>
+
+                                <div class="font-bold mt-2">
+                                    $10,500
+                                </div>
+
+                                <div class="text-green-400
+                                            text-xs mt-1">
+                                    Active
+                                </div>
+
+                            </div>
+
+
+                            <div class="rounded-2xl
+                                        border border-white/6
+                                        bg-white/[.025]
+                                        p-4">
+
+                                <div class="text-xs
+                                            text-gray-500">
+                                    Pending
+                                </div>
+
+                                <div class="font-bold mt-2">
+                                    $2,430
+                                </div>
+
+                                <div class="text-yellow-400
+                                            text-xs mt-1">
+                                    Processing
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-4
+                                    rounded-2xl
+                                    border border-white/6
+                                    bg-gradient-to-r
+                                    from-violet-600/10
+                                    to-transparent
+                                    px-4 py-3">
+
+                            <div class="flex
+                                        items-center
+                                        justify-between">
+
+                                <div class="flex
+                                            items-center
+                                            gap-3">
+
+                                    <div class="w-8 h-8
+                                                rounded-lg
+                                                bg-violet-500/15
+                                                flex items-center
+                                                justify-center">
+                                        ₿
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-xs
+                                                  font-semibold">
+                                            Crypto Trading
+                                        </p>
+
+                                        <p class="text-[10px]
+                                                  text-gray-500">
+                                            Portfolio active
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <span class="text-xs
+                                             text-green-400">
+                                    Active
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Floating alert -->
+
+                <div class="absolute
+                            -left-5
+                            bottom-8
+                            hidden sm:block
+                            glass
+                            rounded-2xl
+                            px-4 py-3
+                            shadow-purple
+                            floating">
+
+                    <div class="flex
+                                items-center
+                                gap-3">
+
+                        <div class="w-9 h-9
+                                    rounded-xl
+                                    bg-green-500/10
+                                    border border-green-500/15
+                                    flex items-center
+                                    justify-center
+                                    text-green-400">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs
+                                      font-bold">
+                                Investment active
+                            </p>
+
+                            <p class="text-[10px]
+                                      text-gray-500 mt-1">
+                                Portfolio updated
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -98,171 +1178,1794 @@
 
 </section>
 
-<section id="features" class="max-w-7xl mx-auto px-6 py-20">
 
-    <div class="text-center mb-14">
-        <p class="text-violet-400 font-semibold">FEATURES</p>
+<!-- =========================================================
+     TICKER
+========================================================= -->
 
-        <h2 class="text-4xl font-bold mt-3">
-            Everything in one dashboard
-        </h2>
+<section class="border-y border-white/8
+                bg-white/[.015]">
+
+    <div class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-4">
+
+        <div class="flex flex-wrap
+                    justify-center
+                    lg:justify-between
+                    gap-5 lg:gap-8
+                    text-xs sm:text-sm">
+
+            <div class="flex items-center gap-3">
+                <span class="font-bold">BTC</span>
+                <span class="text-gray-500">$104,842</span>
+                <span class="text-green-400">+2.41%</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="font-bold">ETH</span>
+                <span class="text-gray-500">$3,844</span>
+                <span class="text-green-400">+1.87%</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="font-bold">SOL</span>
+                <span class="text-gray-500">$215.40</span>
+                <span class="text-green-400">+3.16%</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="font-bold">XRP</span>
+                <span class="text-gray-500">$2.81</span>
+                <span class="text-red-400">-0.48%</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="font-bold">USDT</span>
+                <span class="text-gray-500">$1.00</span>
+                <span class="text-green-400">+0.01%</span>
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
+</section>
 
-        <div class="glass-card p-7">
-            <div class="feature-icon">📊</div>
 
-            <h3 class="text-xl font-bold mt-6">
+<!-- =========================================================
+     TRUST / STATS
+========================================================= -->
+
+<section class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-20">
+
+    <div class="grid grid-cols-2
+                md:grid-cols-4
+                gap-px
+                rounded-3xl
+                overflow-hidden
+                border border-white/8
+                bg-white/8">
+
+        <div class="bg-[#0b0a10]
+                    p-6 sm:p-8
+                    text-center reveal">
+
+            <div class="stat-number">
+                24h
+            </div>
+
+            <p class="text-gray-500
+                      text-xs sm:text-sm
+                      mt-3">
+                Investment cycle
+            </p>
+
+        </div>
+
+        <div class="bg-[#0b0a10]
+                    p-6 sm:p-8
+                    text-center reveal">
+
+            <div class="stat-number">
+                3
+            </div>
+
+            <p class="text-gray-500
+                      text-xs sm:text-sm
+                      mt-3">
+                Investment plans
+            </p>
+
+        </div>
+
+        <div class="bg-[#0b0a10]
+                    p-6 sm:p-8
+                    text-center reveal">
+
+            <div class="stat-number">
+                24/7
+            </div>
+
+            <p class="text-gray-500
+                      text-xs sm:text-sm
+                      mt-3">
+                Dashboard access
+            </p>
+
+        </div>
+
+        <div class="bg-[#0b0a10]
+                    p-6 sm:p-8
+                    text-center reveal">
+
+            <div class="stat-number">
+                ₿
+            </div>
+
+            <p class="text-gray-500
+                      text-xs sm:text-sm
+                      mt-3">
+                Digital assets
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FEATURES
+========================================================= -->
+
+<section id="features"
+         class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-24">
+
+    <div class="max-w-3xl reveal">
+
+        <p class="section-label">
+            PLATFORM FEATURES
+        </p>
+
+        <h2 class="text-4xl sm:text-5xl
+                   lg:text-6xl
+                   font-black
+                   tracking-tight
+                   mt-4">
+
+            Everything you need.
+            <span class="text-gray-600">
+                In one place.
+            </span>
+
+        </h2>
+
+        <p class="text-gray-400
+                  text-base sm:text-lg
+                  leading-relaxed
+                  mt-6
+                  max-w-2xl">
+
+            Cryptacks brings investment management,
+            digital assets and portfolio tracking into
+            one streamlined platform.
+
+        </p>
+
+    </div>
+
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3
+                gap-5 mt-14">
+
+
+        <div class="glass glass-hover
+                    rounded-3xl p-7 sm:p-8 reveal">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3 class="text-xl
+                       font-bold
+                       mt-7">
                 Assure profits
             </h3>
 
-            <p class="text-gray-400 mt-3 leading-relaxed">
-                Cryptacks is legitly registered and has an assured profit rate of it 86.90% accuracy which means 
-              our users are certain to make profits from their capital
+            <p class="text-gray-400
+                      leading-relaxed
+                      mt-3">
+                Cryptacks is designed around market
+                strategies intended to help users
+                pursue investment opportunities.
             </p>
+
+            <div class="mt-6
+                        text-violet-400
+                        text-sm
+                        font-semibold">
+                Smart strategies →
+            </div>
+
         </div>
 
-        <div class="glass-card p-7">
-            <div class="feature-icon">₿</div>
 
-            <h3 class="text-xl font-bold mt-6">
+        <div class="glass glass-hover
+                    rounded-3xl p-7 sm:p-8 reveal">
+
+            <div class="feature-icon">
+                ₿
+            </div>
+
+            <h3 class="text-xl
+                       font-bold
+                       mt-7">
                 Digital Assets
             </h3>
 
-            <p class="text-gray-400 mt-3 leading-relaxed">
-                Cryptacks uses crypto to make trades and generate profits which enable users to deposit and withdraw using cryptocurrency.
+            <p class="text-gray-400
+                      leading-relaxed
+                      mt-3">
+                Interact with crypto assets through
+                a digital-first investment experience
+                and account dashboard.
             </p>
+
+            <div class="mt-6
+                        text-violet-400
+                        text-sm
+                        font-semibold">
+                Digital-first →
+            </div>
+
         </div>
 
-        <div class="glass-card p-7">
-            <div class="feature-icon">🔐</div>
 
-            <h3 class="text-xl font-bold mt-6">
-                Simple to withdraw
+        <div class="glass glass-hover
+                    rounded-3xl p-7 sm:p-8 reveal">
+
+            <div class="feature-icon">
+                🔐
+            </div>
+
+            <h3 class="text-xl
+                       font-bold
+                       mt-7">
+                Simple withdrawals
             </h3>
 
-            <p class="text-gray-400 mt-3 leading-relaxed">
-                After 24 hours of trade. your profits are ready for withdrawals inwhich you can withdraw immediately
+            <p class="text-gray-400
+                      leading-relaxed
+                      mt-3">
+                Manage your account and access
+                withdrawal features directly through
+                your personal dashboard.
             </p>
+
+            <div class="mt-6
+                        text-violet-400
+                        text-sm
+                        font-semibold">
+                Easy management →
+            </div>
+
+        </div>
+
+
+        <div class="glass glass-hover
+                    rounded-3xl p-7 sm:p-8 reveal">
+
+            <div class="feature-icon">
+                ⚡
+            </div>
+
+            <h3 class="text-xl
+                       font-bold
+                       mt-7">
+                Fast account access
+            </h3>
+
+            <p class="text-gray-400
+                      leading-relaxed
+                      mt-3">
+                Access your account, investment
+                information and portfolio overview
+                from a central dashboard.
+            </p>
+
+            <div class="mt-6
+                        text-violet-400
+                        text-sm
+                        font-semibold">
+                Centralized dashboard →
+            </div>
+
+        </div>
+
+
+        <div class="glass glass-hover
+                    rounded-3xl p-7 sm:p-8 reveal">
+
+            <div class="feature-icon">
+                📱
+            </div>
+
+            <h3 class="text-xl
+                       font-bold
+                       mt-7">
+                Built for mobile
+            </h3>
+
+            <p class="text-gray-400
+                      leading-relaxed
+                      mt-3">
+                A responsive interface designed to work
+                across phones, tablets and desktop devices.
+            </p>
+
+            <div class="mt-6
+                        text-violet-400
+                        text-sm
+                        font-semibold">
+                Anywhere access →
+            </div>
+
+        </div>
+
+
+        <div class="glass glass-hover
+                    rounded-3xl p-7 sm:p-8 reveal">
+
+            <div class="feature-icon">
+                🌐
+            </div>
+
+            <h3 class="text-xl
+                       font-bold
+                       mt-7">
+                Digital ecosystem
+            </h3>
+
+            <p class="text-gray-400
+                      leading-relaxed
+                      mt-3">
+                Built around a connected digital
+                investment experience with modern
+                technology at its core.
+            </p>
+
+            <div class="mt-6
+                        text-violet-400
+                        text-sm
+                        font-semibold">
+                Modern infrastructure →
+            </div>
+
         </div>
 
     </div>
 
 </section>
 
-<section id="plans" class="max-w-7xl mx-auto px-6 py-20">
 
-    <div class="text-center mb-14">
-        <p class="text-violet-400 font-semibold">INVESTMENT PLANS</p>
+<!-- =========================================================
+     BIG SHOWCASE
+========================================================= -->
 
-        <h2 class="text-4xl font-bold mt-3">
-            Choose a strategy
-        </h2>
+<section class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-20">
+
+    <div class="grid lg:grid-cols-2
+                gap-10
+                items-center">
+
+        <div class="reveal">
+
+            <p class="section-label">
+                SMARTER EXPERIENCE
+            </p>
+
+            <h2 class="text-4xl sm:text-5xl
+                       font-black
+                       tracking-tight
+                       mt-4">
+
+                Your investment.
+                <span class="gradient-text">
+                    Your dashboard.
+                </span>
+
+            </h2>
+
+            <p class="text-gray-400
+                      mt-6
+                      leading-relaxed
+                      text-lg">
+
+                Keep important information in one place.
+                Monitor your investment activity,
+                review balances and manage your account
+                without unnecessary complexity.
+
+            </p>
+
+
+            <div class="mt-8 space-y-4">
+
+                <div class="flex gap-4">
+
+                    <div class="w-10 h-10
+                                rounded-xl
+                                bg-violet-500/10
+                                border border-violet-500/15
+                                flex items-center
+                                justify-center
+                                text-violet-300
+                                shrink-0">
+                        01
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-bold">
+                            Clear portfolio overview
+                        </h3>
+
+                        <p class="text-gray-500
+                                  text-sm
+                                  mt-1">
+                            See your investment information
+                            without digging through menus.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex gap-4">
+
+                    <div class="w-10 h-10
+                                rounded-xl
+                                bg-violet-500/10
+                                border border-violet-500/15
+                                flex items-center
+                                justify-center
+                                text-violet-300
+                                shrink-0">
+                        02
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-bold">
+                            Simple activity tracking
+                        </h3>
+
+                        <p class="text-gray-500
+                                  text-sm
+                                  mt-1">
+                            Keep track of investment and
+                            account activity from one place.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex gap-4">
+
+                    <div class="w-10 h-10
+                                rounded-xl
+                                bg-violet-500/10
+                                border border-violet-500/15
+                                flex items-center
+                                justify-center
+                                text-violet-300
+                                shrink-0">
+                        03
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-bold">
+                            Built around simplicity
+                        </h3>
+
+                        <p class="text-gray-500
+                                  text-sm
+                                  mt-1">
+                            A straightforward experience
+                            from account creation to management.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="relative reveal">
+
+            <div class="glass
+                        rounded-[30px]
+                        p-5
+                        purple-glow">
+
+                <div class="rounded-2xl
+                            border border-white/7
+                            bg-[#09080d]
+                            overflow-hidden">
+
+                    <div class="p-5
+                                border-b border-white/7
+                                flex items-center
+                                justify-between">
+
+                        <div>
+
+                            <p class="text-xs text-gray-500">
+                                Overview
+                            </p>
+
+                            <p class="font-bold mt-1">
+                                Investment Summary
+                            </p>
+
+                        </div>
+
+                        <div class="w-9 h-9
+                                    rounded-xl
+                                    bg-violet-500/10
+                                    flex items-center
+                                    justify-center">
+                            ⋯
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-5">
+
+                        <div class="grid grid-cols-2 gap-3">
+
+                            <div class="rounded-2xl
+                                        bg-white/[.03]
+                                        border border-white/6
+                                        p-4">
+
+                                <p class="text-[10px]
+                                          text-gray-500">
+                                    Investment
+                                </p>
+
+                                <p class="text-xl
+                                          font-black mt-2">
+                                    $10,500
+                                </p>
+
+                            </div>
+
+
+                            <div class="rounded-2xl
+                                        bg-white/[.03]
+                                        border border-white/6
+                                        p-4">
+
+                                <p class="text-[10px]
+                                          text-gray-500">
+                                    Estimated
+                                </p>
+
+                                <p class="text-xl
+                                          font-black mt-2">
+                                    $14,850
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-4
+                                    rounded-2xl
+                                    border border-white/6
+                                    bg-white/[.02]
+                                    p-4">
+
+                            <div class="flex
+                                        justify-between
+                                        text-xs">
+
+                                <span class="text-gray-500">
+                                    Investment progress
+                                </span>
+
+                                <span class="text-violet-300">
+                                    72%
+                                </span>
+
+                            </div>
+
+                            <div class="h-2
+                                        bg-white/5
+                                        rounded-full
+                                        mt-3
+                                        overflow-hidden">
+
+                                <div class="h-full
+                                            w-[72%]
+                                            rounded-full
+                                            bg-gradient-to-r
+                                            from-violet-700
+                                            to-violet-400">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-4 space-y-3">
+
+                            <div class="flex
+                                        items-center
+                                        justify-between
+                                        rounded-xl
+                                        bg-white/[.025]
+                                        p-3">
+
+                                <div class="flex
+                                            items-center
+                                            gap-3">
+
+                                    <div class="w-8 h-8
+                                                rounded-lg
+                                                bg-violet-500/10
+                                                flex items-center
+                                                justify-center">
+                                        ₿
+                                    </div>
+
+                                    <span class="text-xs">
+                                        Crypto allocation
+                                    </span>
+
+                                </div>
+
+                                <span class="text-xs
+                                             text-gray-400">
+                                    58%
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex
+                                        items-center
+                                        justify-between
+                                        rounded-xl
+                                        bg-white/[.025]
+                                        p-3">
+
+                                <div class="flex
+                                            items-center
+                                            gap-3">
+
+                                    <div class="w-8 h-8
+                                                rounded-lg
+                                                bg-purple-500/10
+                                                flex items-center
+                                                justify-center">
+                                        $
+                                    </div>
+
+                                    <span class="text-xs">
+                                        Digital balance
+                                    </span>
+
+                                </div>
+
+                                <span class="text-xs
+                                             text-gray-400">
+                                    42%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
+</section>
 
-        <div class="glass-card p-7">
-            <p class="text-gray-400">Starter</p>
 
-            <h3 class="text-3xl font-bold mt-3">
-                $100 - $500
-            </h3>
+<!-- =========================================================
+     PLANS
+========================================================= -->
 
-            <p class="text-gray-400 mt-2">
+<section id="plans"
+         class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-24">
+
+    <div class="text-center
+                max-w-3xl
+                mx-auto
+                reveal">
+
+        <p class="section-label">
+            INVESTMENT PLANS
+        </p>
+
+        <h2 class="text-4xl sm:text-5xl
+                   lg:text-6xl
+                   font-black
+                   tracking-tight
+                   mt-4">
+
+            Choose your strategy.
+
+        </h2>
+
+        <p class="text-gray-400
+                  mt-5
+                  text-lg">
+            Select the investment range that works
+            for your preferred strategy.
+        </p>
+
+    </div>
+
+
+    <div class="grid lg:grid-cols-3
+                gap-6
+                mt-14">
+
+
+        <!-- STARTER -->
+
+        <div class="glass glass-hover
+                    plan-card
+                    rounded-3xl
+                    p-7 sm:p-8
+                    reveal">
+
+            <div class="flex
+                        items-center
+                        justify-between">
+
+                <div>
+
+                    <p class="text-gray-400">
+                        Starter
+                    </p>
+
+                    <h3 class="text-4xl
+                               font-black
+                               mt-4">
+                        $100
+                    </h3>
+
+                    <p class="text-gray-600
+                              text-sm mt-1">
+                        - $500
+                    </p>
+
+                </div>
+
+                <div class="w-12 h-12
+                            rounded-2xl
+                            bg-white/[.03]
+                            border border-white/8
+                            flex items-center
+                            justify-center
+                            text-gray-400">
+                    01
+                </div>
+
+            </div>
+
+
+            <p class="text-gray-400
+                      mt-5
+                      text-sm">
                 Generates $700 - $3,500 in 24hrs
             </p>
 
-            <div class="h-px bg-white/10 my-6"></div>
 
-            <p>✓ 24hrs duration</p>
-            <p class="mt-3">✓ 100% assurance</p>
-            <p class="mt-3">✓ Crypto trading</p>
-        </div>
+            <div class="h-px bg-white/8 my-7"></div>
 
-        <div class="glass-card p-7 border-violet-500/40">
-            <div class="flex justify-between">
-                <p class="text-gray-400">Prenium</p>
 
-                <span class="text-xs px-3 py-1 rounded-full bg-violet-500/20 text-violet-300">
-                    Popular
-                </span>
+            <div class="space-y-4 text-sm">
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    24hrs duration
+                </p>
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    100% assurance
+                </p>
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    Crypto trading
+                </p>
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    Account dashboard
+                </p>
+
             </div>
 
-            <h3 class="text-3xl font-bold mt-3">
-                $500 - $2,000
-            </h3>
 
-            <p class="text-gray-400 mt-2">
-                Generates $3,500 - $14,000 in 24hrs
-            </p>
+            <a href="signup.html"
+               class="block
+                      mt-8
+                      py-3.5
+                      rounded-xl
+                      border border-white/10
+                      hover:bg-white/5
+                      text-center
+                      font-semibold
+                      transition">
+                Choose Plan
+            </a>
 
-            <div class="h-px bg-white/10 my-6"></div>
-
-            <p>✓ 24hrs duration</p>
-            <p class="mt-3">✓ 100% assurance</p>
-            <p class="mt-3">✓ Crypto trading</p>
         </div>
 
-        <div class="glass-card p-7">
-            <p class="text-gray-400">Premium Plus</p>
 
-            <h3 class="text-3xl font-bold mt-3">
-                $2,000 -$10,000
-            </h3>
+        <!-- PREMIUM -->
 
-            <p class="text-gray-400 mt-2">
+        <div class="relative reveal">
+
+            <div class="popular-ring"></div>
+
+            <div class="relative
+                        glass
+                        rounded-3xl
+                        p-7 sm:p-8
+                        h-full
+                        border-violet-500/25">
+
+                <div class="flex
+                            items-center
+                            justify-between">
+
+                    <div>
+
+                        <p class="text-gray-300">
+                            Premium
+                        </p>
+
+                        <h3 class="text-4xl
+                                   font-black
+                                   mt-4">
+                            $500
+                        </h3>
+
+                        <p class="text-gray-600
+                                  text-sm mt-1">
+                            - $2,000
+                        </p>
+
+                    </div>
+
+                    <span class="px-3 py-1.5
+                                 rounded-full
+                                 bg-violet-500/15
+                                 border border-violet-500/20
+                                 text-violet-300
+                                 text-xs
+                                 font-semibold">
+                        Popular
+                    </span>
+
+                </div>
+
+
+                <p class="text-gray-400
+                          mt-5
+                          text-sm">
+                    Generates $3,500 - $14,000 in 24hrs
+                </p>
+
+
+                <div class="h-px bg-white/8 my-7"></div>
+
+
+                <div class="space-y-4 text-sm">
+
+                    <p class="flex gap-3">
+                        <span class="text-violet-400">✓</span>
+                        24hrs duration
+                    </p>
+
+                    <p class="flex gap-3">
+                        <span class="text-violet-400">✓</span>
+                        100% assurance
+                    </p>
+
+                    <p class="flex gap-3">
+                        <span class="text-violet-400">✓</span>
+                        Crypto trading
+                    </p>
+
+                    <p class="flex gap-3">
+                        <span class="text-violet-400">✓</span>
+                        Account dashboard
+                    </p>
+
+                </div>
+
+
+                <a href="signup.html"
+                   class="block
+                          mt-8
+                          py-3.5
+                          rounded-xl
+                          bg-violet-600
+                          hover:bg-violet-500
+                          shadow-purple
+                          text-center
+                          font-semibold
+                          transition">
+                    Choose Plan
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREMIUM PLUS -->
+
+        <div class="glass glass-hover
+                    plan-card
+                    rounded-3xl
+                    p-7 sm:p-8
+                    reveal">
+
+            <div class="flex
+                        items-center
+                        justify-between">
+
+                <div>
+
+                    <p class="text-gray-400">
+                        Premium Plus
+                    </p>
+
+                    <h3 class="text-4xl
+                               font-black
+                               mt-4">
+                        $2,000
+                    </h3>
+
+                    <p class="text-gray-600
+                              text-sm mt-1">
+                        - $10,000
+                    </p>
+
+                </div>
+
+                <div class="w-12 h-12
+                            rounded-2xl
+                            bg-white/[.03]
+                            border border-white/8
+                            flex items-center
+                            justify-center
+                            text-gray-400">
+                    03
+                </div>
+
+            </div>
+
+
+            <p class="text-gray-400
+                      mt-5
+                      text-sm">
                 Generates $14,000 - $70,000 in 24hrs
             </p>
 
-            <div class="h-px bg-white/10 my-6"></div>
 
-            <p>✓ 24hrs duration</p>
-            <p class="mt-3">✓ 100% assurance</p>
-            <p class="mt-3">✓ Crypto trading</p>
+            <div class="h-px bg-white/8 my-7"></div>
+
+
+            <div class="space-y-4 text-sm">
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    24hrs duration
+                </p>
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    100% assurance
+                </p>
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    Crypto trading
+                </p>
+
+                <p class="flex gap-3">
+                    <span class="text-violet-400">✓</span>
+                    Account dashboard
+                </p>
+
+            </div>
+
+
+            <a href="signup.html"
+               class="block
+                      mt-8
+                      py-3.5
+                      rounded-xl
+                      border border-white/10
+                      hover:bg-white/5
+                      text-center
+                      font-semibold
+                      transition">
+                Choose Plan
+            </a>
+
         </div>
 
     </div>
 
 </section>
 
-<section id="how" class="max-w-7xl mx-auto px-6 py-24">
 
-    <div class="text-center">
-        <p class="text-violet-400 font-semibold">
-            HOW IT WORKS
-        </p>
+<!-- =========================================================
+     HOW IT WORKS
+========================================================= -->
 
-        <h2 class="text-4xl font-bold mt-3">
-            Start in three simple steps
-        </h2>
+<section id="how"
+         class="border-y border-white/8
+                bg-white/[.012]">
+
+    <div class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-24">
+
+        <div class="text-center
+                    max-w-3xl
+                    mx-auto
+                    reveal">
+
+            <p class="section-label">
+                HOW IT WORKS
+            </p>
+
+            <h2 class="text-4xl sm:text-5xl
+                       font-black
+                       mt-4">
+                Start in three simple steps
+            </h2>
+
+            <p class="text-gray-400
+                      mt-5
+                      text-lg">
+                Getting started with Cryptacks
+                is designed to be simple.
+            </p>
+
+        </div>
+
+
+        <div class="relative
+                    grid md:grid-cols-3
+                    gap-12
+                    mt-16">
+
+            <div class="timeline-line"></div>
+
+
+            <!-- 1 -->
+
+            <div class="relative text-center reveal">
+
+                <div class="step-number mx-auto">
+                    1
+                </div>
+
+                <h3 class="text-xl
+                           font-bold
+                           mt-6">
+                    Create an account
+                </h3>
+
+                <p class="text-gray-400
+                          mt-3
+                          leading-relaxed
+                          max-w-sm
+                          mx-auto">
+                    Register your trading account
+                    and access your personal dashboard.
+                </p>
+
+            </div>
+
+
+            <!-- 2 -->
+
+            <div class="relative text-center reveal">
+
+                <div class="step-number mx-auto">
+                    2
+                </div>
+
+                <h3 class="text-xl
+                           font-bold
+                           mt-6">
+                    Choose a plan
+                </h3>
+
+                <p class="text-gray-400
+                          mt-3
+                          leading-relaxed
+                          max-w-sm
+                          mx-auto">
+                    Select the investment range
+                    that matches your strategy.
+                </p>
+
+            </div>
+
+
+            <!-- 3 -->
+
+            <div class="relative text-center reveal">
+
+                <div class="step-number mx-auto">
+                    3
+                </div>
+
+                <h3 class="text-xl
+                           font-bold
+                           mt-6">
+                    Manage your investment
+                </h3>
+
+                <p class="text-gray-400
+                          mt-3
+                          leading-relaxed
+                          max-w-sm
+                          mx-auto">
+                    Monitor your activity and
+                    manage your account through
+                    your dashboard.
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8 mt-14">
+</section>
 
-        <div class="text-center">
-            <div class="number-circle">1</div>
-            <h3 class="font-bold text-xl mt-5">Create an account</h3>
-            <p class="text-gray-400 mt-3">
-                Register your trading account and access your dashboard.
+
+<!-- =========================================================
+     SECURITY
+========================================================= -->
+
+<section class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-24">
+
+    <div class="grid lg:grid-cols-2
+                gap-10
+                items-center">
+
+        <div class="reveal">
+
+            <p class="section-label">
+                SECURITY FIRST
             </p>
+
+            <h2 class="text-4xl sm:text-5xl
+                       font-black
+                       mt-4
+                       tracking-tight">
+
+                Designed around
+                <span class="gradient-text">
+                    protection.
+                </span>
+
+            </h2>
+
+            <p class="text-gray-400
+                      text-lg
+                      mt-6
+                      leading-relaxed">
+
+                Cryptacks is designed with account security,
+                controlled access and a clear user experience
+                at the centre of the platform.
+
+            </p>
+
+
+            <div class="grid sm:grid-cols-2
+                        gap-4
+                        mt-8">
+
+                <div class="glass rounded-2xl p-5">
+
+                    <div class="text-violet-300 text-xl">
+                        🔐
+                    </div>
+
+                    <h3 class="font-bold mt-4">
+                        Secure access
+                    </h3>
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-2">
+                        Protected account access
+                        and authentication.
+                    </p>
+
+                </div>
+
+
+                <div class="glass rounded-2xl p-5">
+
+                    <div class="text-violet-300 text-xl">
+                        🛡
+                    </div>
+
+                    <h3 class="font-bold mt-4">
+                        Data protection
+                    </h3>
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-2">
+                        Designed with user
+                        information in mind.
+                    </p>
+
+                </div>
+
+
+                <div class="glass rounded-2xl p-5">
+
+                    <div class="text-violet-300 text-xl">
+                        👤
+                    </div>
+
+                    <h3 class="font-bold mt-4">
+                        Account control
+                    </h3>
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-2">
+                        Manage account activity
+                        from one dashboard.
+                    </p>
+
+                </div>
+
+
+                <div class="glass rounded-2xl p-5">
+
+                    <div class="text-violet-300 text-xl">
+                        ⚙
+                    </div>
+
+                    <h3 class="font-bold mt-4">
+                        Modern infrastructure
+                    </h3>
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-2">
+                        Built around a modern
+                        digital platform.
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="text-center">
-            <div class="number-circle">2</div>
-            <h3 class="font-bold text-xl mt-5">Choose a plan</h3>
-            <p class="text-gray-400 mt-3">
-                Select one of the simulated investment plans.
-            </p>
+
+        <div class="relative reveal">
+
+            <div class="absolute
+                        inset-10
+                        rounded-full
+                        bg-violet-600/15
+                        blur-3xl">
+            </div>
+
+            <div class="relative
+                        glass
+                        rounded-[35px]
+                        p-7 sm:p-10
+                        text-center
+                        purple-glow">
+
+                <div class="w-28 h-28
+                            mx-auto
+                            rounded-full
+                            border border-violet-500/25
+                            bg-violet-500/10
+                            flex items-center
+                            justify-center
+                            text-5xl
+                            pulse-ring">
+
+                    🔐
+
+                </div>
+
+                <h3 class="text-2xl
+                           font-black
+                           mt-8">
+                    Security at the core
+                </h3>
+
+                <p class="text-gray-500
+                          mt-4
+                          leading-relaxed">
+                    A cleaner digital experience
+                    starts with responsible
+                    platform architecture.
+                </p>
+
+
+                <div class="grid grid-cols-3
+                            gap-3
+                            mt-8">
+
+                    <div class="rounded-2xl
+                                bg-white/[.03]
+                                p-4">
+
+                        <div class="font-bold">
+                            24/7
+                        </div>
+
+                        <div class="text-[10px]
+                                    text-gray-600
+                                    mt-1">
+                            ACCESS
+                        </div>
+
+                    </div>
+
+
+                    <div class="rounded-2xl
+                                bg-white/[.03]
+                                p-4">
+
+                        <div class="font-bold">
+                            Secure
+                        </div>
+
+                        <div class="text-[10px]
+                                    text-gray-600
+                                    mt-1">
+                            DESIGN
+                        </div>
+
+                    </div>
+
+
+                    <div class="rounded-2xl
+                                bg-white/[.03]
+                                p-4">
+
+                        <div class="font-bold">
+                            Digital
+                        </div>
+
+                        <div class="text-[10px]
+                                    text-gray-600
+                                    mt-1">
+                            FIRST
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="text-center">
-            <div class="number-circle">3</div>
-            <h3 class="font-bold text-xl mt-5">Make profits</h3>
-            <p class="text-gray-400 mt-3">
-                Profit returns comes in every 24hours duration.
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FAQ
+========================================================= -->
+
+<section id="faq"
+         class="max-w-4xl mx-auto
+                px-5 sm:px-6
+                py-24">
+
+    <div class="text-center reveal">
+
+        <p class="section-label">
+            FAQ
+        </p>
+
+        <h2 class="text-4xl sm:text-5xl
+                   font-black
+                   mt-4">
+            Frequently asked questions
+        </h2>
+
+        <p class="text-gray-500
+                  mt-5">
+            Some common questions about Cryptacks.
+        </p>
+
+    </div>
+
+
+    <div class="space-y-4
+                mt-12">
+
+
+        <div class="faq-item reveal">
+
+            <button class="faq-button">
+
+                <span class="font-semibold">
+                    What is Cryptacks?
+                </span>
+
+                <span class="faq-icon
+                             text-xl
+                             text-violet-300">
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-content">
+
+                <div class="faq-inner">
+
+                    Cryptacks is a modern digital
+                    investment platform concept focused
+                    on crypto and market-based strategies.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item reveal">
+
+            <button class="faq-button">
+
+                <span class="font-semibold">
+                    How do the investment plans work?
+                </span>
+
+                <span class="faq-icon
+                             text-xl
+                             text-violet-300">
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-content">
+
+                <div class="faq-inner">
+
+                    Users can select from the available
+                    investment plans and manage their
+                    investment activity through their
+                    Cryptacks dashboard.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item reveal">
+
+            <button class="faq-button">
+
+                <span class="font-semibold">
+                    What assets does Cryptacks support?
+                </span>
+
+                <span class="faq-icon
+                             text-xl
+                             text-violet-300">
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-content">
+
+                <div class="faq-inner">
+
+                    Cryptacks is designed around digital
+                    assets and crypto-based investment
+                    activity. Supported assets may depend
+                    on the platform's implementation.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item reveal">
+
+            <button class="faq-button">
+
+                <span class="font-semibold">
+                    How can I access my account?
+                </span>
+
+                <span class="faq-icon
+                             text-xl
+                             text-violet-300">
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-content">
+
+                <div class="faq-inner">
+
+                    Once registered, users can sign in
+                    through the Cryptacks login page and
+                    access their personal dashboard.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item reveal">
+
+            <button class="faq-button">
+
+                <span class="font-semibold">
+                    Is there a mobile experience?
+                </span>
+
+                <span class="faq-icon
+                             text-xl
+                             text-violet-300">
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-content">
+
+                <div class="faq-inner">
+
+                    Yes. The website interface is designed
+                    responsively for smartphones, tablets
+                    and desktop devices.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-20">
+
+    <div class="relative
+                overflow-hidden
+                rounded-[35px]
+                border border-violet-500/20
+                bg-gradient-to-br
+                from-violet-600/20
+                via-violet-500/10
+                to-transparent
+                px-7 py-12
+                sm:px-12 sm:py-16
+                lg:px-16">
+
+        <div class="absolute
+                    w-96 h-96
+                    rounded-full
+                    bg-violet-600/15
+                    blur-3xl
+                    -right-40
+                    -top-40">
+        </div>
+
+        <div class="absolute
+                    w-72 h-72
+                    rounded-full
+                    bg-purple-500/10
+                    blur-3xl
+                    -left-40
+                    -bottom-40">
+        </div>
+
+
+        <div class="relative
+                    max-w-3xl
+                    reveal">
+
+            <p class="section-label">
+                GET STARTED
             </p>
+
+            <h2 class="text-4xl sm:text-5xl
+                       lg:text-6xl
+                       font-black
+                       tracking-tight
+                       mt-4">
+
+                Ready to explore
+                <span class="gradient-text">
+                    Cryptacks?
+                </span>
+
+            </h2>
+
+            <p class="text-gray-400
+                      text-base sm:text-lg
+                      mt-6
+                      leading-relaxed">
+
+                Create your account and experience
+                a modern digital investment platform
+                designed around simplicity.
+
+            </p>
+
+
+            <div class="flex flex-col
+                        sm:flex-row
+                        gap-3
+                        mt-9">
+
+                <a href="signup.html"
+                   class="px-7 py-4
+                          rounded-2xl
+                          bg-violet-600
+                          hover:bg-violet-500
+                          text-center
+                          font-semibold
+                          shadow-purpleStrong
+                          transition">
+
+                    Create Account
+
+                </a>
+
+                <a href="#plans"
+                   class="px-7 py-4
+                          rounded-2xl
+                          border border-white/10
+                          bg-white/[.03]
+                          hover:bg-white/[.07]
+                          text-center
+                          font-semibold
+                          transition">
+
+                    View Plans
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     INFORMATION
+========================================================= -->
+
+<section class="max-w-5xl mx-auto
+                px-5 sm:px-6
+                pb-20">
+
+    <div class="rounded-2xl
+                border border-white/8
+                bg-white/[.02]
+                p-5 sm:p-6">
+
+        <div class="flex gap-4">
+
+            <div class="shrink-0
+                        w-10 h-10
+                        rounded-xl
+                        bg-white/[.04]
+                        border border-white/7
+                        flex items-center
+                        justify-center
+                        text-gray-400">
+                !
+            </div>
+
+            <div>
+
+                <h3 class="font-semibold">
+                    Important information
+                </h3>
+
+                <p class="text-sm
+                          text-gray-500
+                          mt-2
+                          leading-relaxed">
+
+                    Investment markets involve risk and
+                    returns are not guaranteed. Information
+                    displayed on this page may represent
+                    the platform's intended model or
+                    illustrative investment plans and
+                    should not be interpreted as a promise
+                    of financial returns.
+
+                </p>
+
+            </div>
+
         </div>
 
     </div>
@@ -271,13 +2974,411 @@
 
 </main>
 
-<footer class="border-t border-white/10 py-8">
 
-    <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm">
-        © 2026 Cryptacks.
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="border-t border-white/8">
+
+    <div class="max-w-7xl mx-auto
+                px-5 sm:px-6
+                py-14">
+
+        <div class="grid
+                    sm:grid-cols-2
+                    lg:grid-cols-4
+                    gap-10">
+
+
+            <!-- Brand -->
+
+            <div class="lg:col-span-2">
+
+                <a href="index.html"
+                   class="text-2xl sm:text-3xl
+                          font-black">
+                    Crypta<span class="text-violet-500">cks</span>
+                </a>
+
+                <p class="text-gray-500
+                          max-w-md
+                          mt-4
+                          leading-relaxed">
+
+                    A modern digital investment platform
+                    experience designed around crypto,
+                    markets and simplicity.
+
+                </p>
+
+
+                <div class="flex items-center
+                            gap-3
+                            mt-6">
+
+                    <a href="#"
+                       class="w-10 h-10
+                              rounded-xl
+                              border border-white/8
+                              bg-white/[.02]
+                              flex items-center
+                              justify-center
+                              text-gray-500
+                              hover:text-white
+                              hover:border-violet-500/30
+                              transition">
+                        X
+                    </a>
+
+                    <a href="#"
+                       class="w-10 h-10
+                              rounded-xl
+                              border border-white/8
+                              bg-white/[.02]
+                              flex items-center
+                              justify-center
+                              text-gray-500
+                              hover:text-white
+                              hover:border-violet-500/30
+                              transition">
+                        ◎
+                    </a>
+
+                    <a href="#"
+                       class="w-10 h-10
+                              rounded-xl
+                              border border-white/8
+                              bg-white/[.02]
+                              flex items-center
+                              justify-center
+                              text-gray-500
+                              hover:text-white
+                              hover:border-violet-500/30
+                              transition">
+                        in
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Platform -->
+
+            <div>
+
+                <h3 class="font-semibold">
+                    Platform
+                </h3>
+
+                <div class="space-y-3
+                            mt-5
+                            text-sm
+                            text-gray-500">
+
+                    <a href="#features"
+                       class="block hover:text-white">
+                        Features
+                    </a>
+
+                    <a href="#plans"
+                       class="block hover:text-white">
+                        Investment Plans
+                    </a>
+
+                    <a href="#how"
+                       class="block hover:text-white">
+                        How it works
+                    </a>
+
+                    <a href="#faq"
+                       class="block hover:text-white">
+                        FAQ
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Account -->
+
+            <div>
+
+                <h3 class="font-semibold">
+                    Account
+                </h3>
+
+                <div class="space-y-3
+                            mt-5
+                            text-sm
+                            text-gray-500">
+
+                    <a href="login.html"
+                       class="block hover:text-white">
+                        Login
+                    </a>
+
+                    <a href="signup.html"
+                       class="block hover:text-white">
+                        Create Account
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="h-px
+                    bg-white/8
+                    my-10">
+        </div>
+
+
+        <div class="flex flex-col
+                    md:flex-row
+                    items-center
+                    justify-between
+                    gap-4
+                    text-xs
+                    text-gray-600">
+
+            <p>
+                © 2026 Cryptacks. All rights reserved.
+            </p>
+
+            <div class="flex items-center gap-5">
+
+                <a href="#"
+                   class="hover:text-gray-300">
+                    Privacy
+                </a>
+
+                <a href="#"
+                   class="hover:text-gray-300">
+                    Terms
+                </a>
+
+                <a href="#"
+                   class="hover:text-gray-300">
+                    Risk Disclosure
+                </a>
+
+            </div>
+
+        </div>
+
     </div>
 
 </footer>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    /* =========================================================
+       MOBILE MENU
+    ========================================================= */
+
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIcon = document.getElementById('menuIcon');
+
+    let menuOpen = false;
+
+    menuButton.addEventListener('click', () => {
+
+        menuOpen = !menuOpen;
+
+        if (menuOpen) {
+
+            mobileMenu.style.maxHeight = '600px';
+            mobileMenu.style.opacity = '1';
+
+            menuIcon.innerHTML = `
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 6l12 12M18 6L6 18"/>
+            `;
+
+        } else {
+
+            mobileMenu.style.maxHeight = '0';
+            mobileMenu.style.opacity = '0';
+
+            menuIcon.innerHTML = `
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"/>
+            `;
+
+        }
+
+    });
+
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+
+        link.addEventListener('click', () => {
+
+            menuOpen = false;
+
+            mobileMenu.style.maxHeight = '0';
+            mobileMenu.style.opacity = '0';
+
+            menuIcon.innerHTML = `
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"/>
+            `;
+
+        });
+
+    });
+
+
+    /* =========================================================
+       FAQ
+    ========================================================= */
+
+    document.querySelectorAll('.faq-button').forEach(button => {
+
+        button.addEventListener('click', () => {
+
+            const item = button.closest('.faq-item');
+            const content = item.querySelector('.faq-content');
+
+            document.querySelectorAll('.faq-item')
+                .forEach(otherItem => {
+
+                    if (otherItem !== item) {
+
+                        otherItem.classList.remove('active');
+
+                        const otherContent =
+                            otherItem.querySelector('.faq-content');
+
+                        otherContent.style.maxHeight = null;
+
+                    }
+
+                });
+
+
+            item.classList.toggle('active');
+
+
+            if (item.classList.contains('active')) {
+
+                content.style.maxHeight =
+                    content.scrollHeight + 'px';
+
+            } else {
+
+                content.style.maxHeight = null;
+
+            }
+
+        });
+
+    });
+
+
+    /* =========================================================
+       SCROLL REVEAL
+    ========================================================= */
+
+    const revealElements =
+        document.querySelectorAll('.reveal');
+
+
+    const observer =
+        new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add('show');
+
+                        observer.unobserve(entry.target);
+
+                    }
+
+                });
+
+            },
+
+            {
+                threshold: 0.12
+            }
+
+        );
+
+
+    revealElements.forEach(element => {
+
+        if (!element.classList.contains('show')) {
+            observer.observe(element);
+        }
+
+    });
+
+
+    /* =========================================================
+       NAV ACTIVE STATE ON SCROLL
+    ========================================================= */
+
+    const sections =
+        document.querySelectorAll('section[id]');
+
+    const navLinks =
+        document.querySelectorAll('.nav-link');
+
+
+    window.addEventListener('scroll', () => {
+
+        let current = '';
+
+        sections.forEach(section => {
+
+            const sectionTop =
+                section.offsetTop - 150;
+
+            if (window.scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+
+        });
+
+
+        navLinks.forEach(link => {
+
+            link.classList.remove('text-white');
+
+            if (
+                current &&
+                link.getAttribute('href') === '#' + current
+            ) {
+                link.classList.add('text-white');
+            }
+
+        });
+
+    });
+
+</script>
 
 </body>
 </html>
