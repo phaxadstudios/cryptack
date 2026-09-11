@@ -1,17 +1,14 @@
 
-// ============================================================
-// CRYPTACKS - FIREBASE APP
-// ============================================================
+// assets/js/app.js
+// Cryptacks application logic
+// Firebase SDK: 12.18.0
 
-import {
-    auth,
-    db
-} from "./firebase.js";
+import { auth, db } from "./firebase.js";
 
 import {
     onAuthStateChanged,
     signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
     collection,
@@ -23,11 +20,11 @@ import {
     query,
     where,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 // ============================================================
-// GLOBAL AUTH STATE
+// GLOBAL STATE
 // ============================================================
 
 let currentUser = null;
@@ -36,91 +33,65 @@ let currentUserProfile = null;
 let authReady = false;
 let authResolve;
 
-const authReadyPromise =
-    new Promise(resolve => {
-        authResolve = resolve;
-    });
+const authReadyPromise = new Promise((resolve) => {
+    authResolve = resolve;
+});
 
 
 // ============================================================
-// AUTH STATE LISTENER
+// AUTH STATE
 // ============================================================
 
-onAuthStateChanged(
-    auth,
-    async user => {
+onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
 
-        currentUser = user || null;
+    if (user) {
+        try {
+            const profileRef = doc(db, "users", user.uid);
+            const profileSnap = await getDoc(profileRef);
 
-        if (user) {
-
-            try {
-
-                const profileRef =
-                    doc(
-                        db,
-                        "users",
-                        user.uid
-                    );
-
-                const profileSnap =
-                    await getDoc(
-                        profileRef
-                    );
-
-                if (profileSnap.exists()) {
-
-                    currentUserProfile = {
-                        id: user.uid,
-                        ...profileSnap.data()
-                    };
-
-                } else {
-
-                    currentUserProfile = {
-                        id: user.uid,
-                        uid: user.uid,
-                        email: user.email || "",
-                        name:
-                            user.displayName ||
-                            "User"
-                    };
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Profile loading error:",
-                    error
-                );
-
+            if (profileSnap.exists()) {
+                currentUserProfile = {
+                    id: profileSnap.id,
+                    ...profileSnap.data()
+                };
+            } else {
                 currentUserProfile = {
                     id: user.uid,
                     uid: user.uid,
                     email: user.email || "",
-                    name:
-                        user.displayName ||
-                        "User"
+                    balance: 0
                 };
             }
+        } catch (error) {
+            console.error("Unable to load user profile:", error);
 
-        } else {
-
-            currentUserProfile = null;
+            currentUserProfile = {
+                id: user.uid,
+                uid: user.uid,
+                email: user.email || "",
+                balance: 0
+            };
         }
+    } else {
+        currentUserProfile = null;
+    }
 
+    authReady = true;
 
-        if (!authReady) {
+    if (authResolve) {
+        authResolve(user);
+    }
 
-            authReady = true;
-
-            authResolve(
-                currentUser
-            );
+    // Process investments whenever authentication is ready.
+    if (user) {
+        try {
+            await checkInvestments();
+        } catch (error) {
+            console.error("Automatic investment processing error:", error);
         }
     }
-);
+});
 
 
 // ============================================================
@@ -128,1338 +99,762 @@ onAuthStateChanged(
 // ============================================================
 
 function getFirebaseUser() {
-
-    return currentUser;
+    return currentUser || auth.currentUser || null;
 }
 
-
 async function waitForAuth() {
-
     if (authReady) {
-        return currentUser;
+        return getFirebaseUser();
     }
 
     return await authReadyPromise;
 }
 
-
 function getCurrentUser() {
-
-    return currentUserProfile;
+    return getFirebaseUser();
 }
 
-
-function setCurrentUser(profile) {
-
-    currentUserProfile =
-        profile || null;
+function setCurrentUser(user) {
+    currentUser = user;
 }
-
 
 async function refreshCurrentUser() {
-
-    const user =
-        await waitForAuth();
+    const user = getFirebaseUser();
 
     if (!user) {
+        currentUserProfile = null;
         return null;
     }
 
     try {
-
-        const profileRef =
-            doc(
-                db,
-                "users",
-                user.uid
-            );
-
-        const profileSnap =
-            await getDoc(
-                profileRef
-            );
+        const profileRef = doc(db, "users", user.uid);
+        const profileSnap = await getDoc(profileRef);
 
         if (profileSnap.exists()) {
-
             currentUserProfile = {
-                id: user.uid,
+                id: profileSnap.id,
                 ...profileSnap.data()
             };
-
+        } else {
+            currentUserProfile = {
+                id: user.uid,
+                uid: user.uid,
+                email: user.email || "",
+                balance: 0
+            };
         }
 
+        return currentUserProfile;
     } catch (error) {
-
-        console.error(
-            "Refresh profile error:",
-            error
-        );
+        console.error("refreshCurrentUser error:", error);
+        return currentUserProfile;
     }
-
-    return currentUserProfile;
 }
 
-
 async function requireAuth() {
-
-    const user =
-        await waitForAuth();
+    const user = await waitForAuth();
 
     if (!user) {
-
-        window.location.href =
-            "login.html";
-
+        window.location.href = "login.html";
         return null;
     }
 
     return user;
 }
 
-
 async function logout() {
-
     try {
-
         await signOut(auth);
+        currentUser = null;
+        currentUserProfile = null;
 
-        window.location.href =
-            "login.html";
-
+        window.location.href = "login.html";
     } catch (error) {
-
-        console.error(
-            "Logout error:",
-            error
-        );
+        console.error("Logout error:", error);
+        showToast("Unable to log out. Please try again.");
     }
 }
 
 
 // ============================================================
-// FORMATTERS
+// FORMATTING HELPERS
 // ============================================================
 
 function money(value) {
+    const number = Number(value || 0);
 
-    const amount =
-        Number(value) || 0;
-
-    return new Intl.NumberFormat(
-        "en-US",
-        {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }
-    ).format(amount);
+    return "₦" + number.toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
-
 
 function numberFormat(value) {
+    const number = Number(value || 0);
 
-    return new Intl.NumberFormat(
-        "en-US"
-    ).format(
-        Number(value) || 0
-    );
+    return number.toLocaleString("en-NG");
 }
 
+function showToast(message, type = "info") {
+    const existing = document.getElementById("appToast");
 
-function convertDate(value) {
-
-    if (!value) {
-        return new Date(0);
+    if (existing) {
+        existing.remove();
     }
 
+    const toast = document.createElement("div");
 
-    // Firestore Timestamp
+    toast.id = "appToast";
 
-    if (
-        value &&
-        typeof value.toDate ===
-            "function"
-    ) {
+    let background = "bg-gray-900";
+    let border = "border-white/10";
 
+    if (type === "success") {
+        background = "bg-green-950";
+        border = "border-green-500/30";
+    }
+
+    if (type === "error") {
+        background = "bg-red-950";
+        border = "border-red-500/30";
+    }
+
+    toast.className = `
+        fixed
+        top-5
+        right-5
+        z-[9999]
+        max-w-sm
+        px-5
+        py-4
+        rounded-xl
+        border
+        ${background}
+        ${border}
+        text-white
+        shadow-2xl
+        transition-all
+        duration-300
+    `;
+
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-10px)";
+
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3500);
+}
+
+function convertDate(value) {
+    if (!value) {
+        return null;
+    }
+
+    if (value instanceof Date) {
+        return value;
+    }
+
+    if (typeof value === "object" && value.seconds !== undefined) {
+        return new Date(value.seconds * 1000);
+    }
+
+    if (typeof value === "object" && typeof value.toDate === "function") {
         return value.toDate();
     }
 
+    const date = new Date(value);
 
-    // Firestore timestamp object
-
-    if (
-        value &&
-        typeof value.seconds ===
-            "number"
-    ) {
-
-        return new Date(
-            value.seconds * 1000
-        );
-    }
-
-
-    const date =
-        new Date(value);
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return new Date(0);
+    if (Number.isNaN(date.getTime())) {
+        return null;
     }
 
     return date;
 }
 
-
 function formatDate(value) {
+    const date = convertDate(value);
 
-    const date =
-        convertDate(value);
-
-    if (
-        date.getTime() === 0
-    ) {
-
+    if (!date) {
         return "—";
     }
 
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
-        }
-    );
+    return date.toLocaleDateString("en-NG", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    });
 }
-
 
 function formatDateTime(value) {
+    const date = convertDate(value);
 
-    const date =
-        convertDate(value);
-
-    if (
-        date.getTime() === 0
-    ) {
-
+    if (!date) {
         return "—";
     }
 
-    return date.toLocaleString(
-        "en-US",
-        {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    );
+    return date.toLocaleString("en-NG", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+    });
 }
 
 
 // ============================================================
-// TOAST
+// USER PROFILE
 // ============================================================
 
-function showToast(message) {
+async function updateUserProfile(data) {
+    const user = await requireAuth();
 
-    let toast =
-        document.getElementById(
-            "cryptacksToast"
-        );
-
-
-    if (!toast) {
-
-        toast =
-            document.createElement(
-                "div"
-            );
-
-        toast.id =
-            "cryptacksToast";
-
-        toast.className =
-            "fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] " +
-            "px-5 py-3 rounded-xl bg-gray-900 " +
-            "border border-white/10 shadow-2xl " +
-            "text-sm text-white transition-all";
-
-        document.body.appendChild(
-            toast
-        );
+    if (!user) {
+        return false;
     }
 
+    try {
+        const userRef = doc(db, "users", user.uid);
 
-    toast.textContent =
-        message;
+        await updateDoc(userRef, data);
 
-    toast.classList.remove(
-        "opacity-0"
-    );
+        await refreshCurrentUser();
 
-    toast.classList.add(
-        "opacity-100"
-    );
-
-
-    clearTimeout(
-        toast._timeout
-    );
-
-
-    toast._timeout =
-        setTimeout(
-            () => {
-
-                toast.classList.remove(
-                    "opacity-100"
-                );
-
-                toast.classList.add(
-                    "opacity-0"
-                );
-
-            },
-            3500
-        );
+        return true;
+    } catch (error) {
+        console.error("updateUserProfile error:", error);
+        throw error;
+    }
 }
 
 
 // ============================================================
-// INVESTMENTS - GET
+// INVESTMENTS
 // ============================================================
 
 async function getInvestments() {
-
-    const user =
-        await requireAuth();
+    const user = await requireAuth();
 
     if (!user) {
         return [];
     }
 
-
     try {
+        const investmentsRef = collection(db, "investments");
 
-        const q =
-            query(
-                collection(
-                    db,
-                    "investments"
-                ),
-                where(
-                    "userId",
-                    "==",
-                    user.uid
-                )
-            );
-
-
-        const snapshot =
-            await getDocs(q);
-
-
-        const investments =
-            snapshot.docs.map(
-                docSnap => ({
-                    id: docSnap.id,
-                    ...docSnap.data()
-                })
-            );
-
-
-        // Sort locally.
-        // This avoids a Firestore
-        // composite index requirement.
-
-        investments.sort(
-            (a, b) => {
-
-                return (
-                    convertDate(
-                        b.createdAt
-                    ).getTime() -
-                    convertDate(
-                        a.createdAt
-                    ).getTime()
-                );
-            }
+        const investmentsQuery = query(
+            investmentsRef,
+            where("userId", "==", user.uid)
         );
 
+        const snapshot = await getDocs(investmentsQuery);
 
-        console.log(
-            "Investments loaded:",
-            investments
-        );
+        const investments = snapshot.docs.map((item) => ({
+            id: item.id,
+            ...item.data()
+        }));
 
+        // Sort on the client so Firestore does not require
+        // a composite index.
+        investments.sort((a, b) => {
+            const dateA = convertDate(a.createdAt)?.getTime() || 0;
+            const dateB = convertDate(b.createdAt)?.getTime() || 0;
+
+            return dateB - dateA;
+        });
 
         return investments;
-
     } catch (error) {
-
-        console.error(
-            "GET INVESTMENTS ERROR:",
-            error
-        );
-
+        console.error("getInvestments error:", error);
         throw error;
     }
 }
 
 
-// ============================================================
-// INVESTMENTS - ADD
-// ============================================================
-
-async function addInvestment(
-    investment
-) {
-
-    const user =
-        await requireAuth();
-
-    if (!user) {
-
-        throw new Error(
-            "User is not authenticated."
-        );
-    }
-
-
-    try {
-
-        const data = {
-
-            ...investment,
-
-            userId:
-                user.uid,
-
-            createdAt:
-                investment.createdAt ||
-                serverTimestamp()
-        };
-
-
-        console.log(
-            "Creating investment:",
-            data
-        );
-
-
-        const docRef =
-            await addDoc(
-                collection(
-                    db,
-                    "investments"
-                ),
-                data
-            );
-
-
-        console.log(
-            "Investment created:",
-            docRef.id
-        );
-
-
-        return docRef.id;
-
-    } catch (error) {
-
-        console.error(
-            "ADD INVESTMENT ERROR:",
-            error
-        );
-
-        throw error;
-    }
-}
-
-
-// ============================================================
-// INVESTMENT - GET ONE
-// ============================================================
-
-async function getInvestment(
-    investmentId
-) {
-
-    const user =
-        await requireAuth();
+async function addInvestment(investment) {
+    const user = await requireAuth();
 
     if (!user) {
         return null;
     }
 
+    try {
+        const investmentsRef = collection(db, "investments");
+
+        const investmentData = {
+            ...investment,
+            userId: user.uid,
+            createdAt: investment.createdAt || serverTimestamp()
+        };
+
+        const docRef = await addDoc(
+            investmentsRef,
+            investmentData
+        );
+
+        console.log("Investment created:", docRef.id);
+
+        return docRef.id;
+    } catch (error) {
+        console.error("addInvestment error:", error);
+        throw error;
+    }
+}
+
+
+async function getInvestment(id) {
+    const user = await requireAuth();
+
+    if (!user || !id) {
+        return null;
+    }
 
     try {
-
-        const investmentRef =
-            doc(
-                db,
-                "investments",
-                investmentId
-            );
-
-
-        const snapshot =
-            await getDoc(
-                investmentRef
-            );
-
+        const investmentRef = doc(db, "investments", id);
+        const snapshot = await getDoc(investmentRef);
 
         if (!snapshot.exists()) {
             return null;
         }
 
-
-        const data =
-            snapshot.data();
-
-
-        if (
-            data.userId !==
-            user.uid
-        ) {
-
-            throw new Error(
-                "You do not own this investment."
-            );
-        }
-
-
-        return {
+        const investment = {
             id: snapshot.id,
-            ...data
+            ...snapshot.data()
         };
 
+        // Security check.
+        if (investment.userId !== user.uid) {
+            console.error("Unauthorized investment access.");
+            return null;
+        }
+
+        return investment;
     } catch (error) {
-
-        console.error(
-            "GET INVESTMENT ERROR:",
-            error
-        );
-
+        console.error("getInvestment error:", error);
         throw error;
     }
 }
 
 
-// ============================================================
-// INVESTMENT - UPDATE
-// ============================================================
+async function updateInvestment(id, data) {
+    const user = await requireAuth();
 
-async function updateInvestment(
-    investmentId,
-    data
-) {
-
-    const user =
-        await requireAuth();
-
-    if (!user) {
-
-        throw new Error(
-            "User is not authenticated."
-        );
+    if (!user || !id) {
+        return false;
     }
-
 
     try {
-
-        const investmentRef =
-            doc(
-                db,
-                "investments",
-                investmentId
-            );
-
-
-        const snapshot =
-            await getDoc(
-                investmentRef
-            );
-
+        const investmentRef = doc(db, "investments", id);
+        const snapshot = await getDoc(investmentRef);
 
         if (!snapshot.exists()) {
-
-            throw new Error(
-                "Investment does not exist."
-            );
+            throw new Error("Investment does not exist.");
         }
 
+        const investment = snapshot.data();
 
-        const investment =
-            snapshot.data();
-
-
-        if (
-            investment.userId !==
-            user.uid
-        ) {
-
-            throw new Error(
-                "You do not own this investment."
-            );
+        if (investment.userId !== user.uid) {
+            throw new Error("Unauthorized investment update.");
         }
 
-
-        await updateDoc(
-            investmentRef,
-            data
-        );
-
+        await updateDoc(investmentRef, data);
 
         return true;
-
     } catch (error) {
-
-        console.error(
-            "UPDATE INVESTMENT ERROR:",
-            error
-        );
-
+        console.error("updateInvestment error:", error);
         throw error;
     }
 }
 
 
 // ============================================================
-// TRANSACTIONS - GET
+// TRANSACTIONS
 // ============================================================
 
 async function getTransactions() {
-
-    const user =
-        await requireAuth();
+    const user = await requireAuth();
 
     if (!user) {
         return [];
     }
 
-
     try {
+        const transactionsRef = collection(db, "transactions");
 
-        // IMPORTANT:
-        // Do NOT use orderBy here.
-        //
-        // The old query used:
-        // where(userId) + orderBy(createdAt)
-        //
-        // which can require a Firestore
-        // composite index.
-        //
-        // We sort locally instead.
-
-        const q =
-            query(
-                collection(
-                    db,
-                    "transactions"
-                ),
-                where(
-                    "userId",
-                    "==",
-                    user.uid
-                )
-            );
-
-
-        const snapshot =
-            await getDocs(q);
-
-
-        const transactions =
-            snapshot.docs.map(
-                docSnap => ({
-                    id: docSnap.id,
-                    ...docSnap.data()
-                })
-            );
-
-
-        transactions.sort(
-            (a, b) => {
-
-                return (
-                    convertDate(
-                        b.createdAt
-                    ).getTime() -
-                    convertDate(
-                        a.createdAt
-                    ).getTime()
-                );
-            }
+        const transactionsQuery = query(
+            transactionsRef,
+            where("userId", "==", user.uid)
         );
 
+        const snapshot = await getDocs(transactionsQuery);
 
-        console.log(
-            "Transactions loaded:",
-            transactions
-        );
+        const transactions = snapshot.docs.map((item) => ({
+            id: item.id,
+            ...item.data()
+        }));
 
+        // Client-side sorting avoids requiring a composite
+        // Firestore index for userId + createdAt.
+        transactions.sort((a, b) => {
+            const dateA =
+                convertDate(a.createdAt || a.date)?.getTime() || 0;
+
+            const dateB =
+                convertDate(b.createdAt || b.date)?.getTime() || 0;
+
+            return dateB - dateA;
+        });
+
+        console.log("Transactions loaded:", transactions);
 
         return transactions;
-
     } catch (error) {
-
-        console.error(
-            "GET TRANSACTIONS ERROR:",
-            error
-        );
-
+        console.error("getTransactions error:", error);
         throw error;
     }
 }
 
 
-// ============================================================
-// TRANSACTIONS - ADD
-// ============================================================
-
-async function addTransaction(
-    transaction
-) {
-
-    const user =
-        await requireAuth();
+async function addTransaction(transaction) {
+    const user = await requireAuth();
 
     if (!user) {
-
-        throw new Error(
-            "User is not authenticated."
-        );
+        return null;
     }
 
-
     try {
+        const transactionsRef = collection(db, "transactions");
 
-        const data = {
-
+        const transactionData = {
             ...transaction,
-
-            userId:
-                user.uid,
-
-            createdAt:
-                transaction.createdAt ||
-                serverTimestamp()
+            userId: user.uid,
+            createdAt: transaction.createdAt || serverTimestamp()
         };
 
-
-        console.log(
-            "Creating transaction:",
-            data
+        const docRef = await addDoc(
+            transactionsRef,
+            transactionData
         );
 
-
-        const docRef =
-            await addDoc(
-                collection(
-                    db,
-                    "transactions"
-                ),
-                data
-            );
-
-
-        console.log(
-            "Transaction created:",
-            docRef.id
-        );
-
+        console.log("Transaction created:", docRef.id);
 
         return docRef.id;
-
     } catch (error) {
-
-        console.error(
-            "ADD TRANSACTION ERROR:",
-            error
-        );
-
+        console.error("addTransaction error:", error);
         throw error;
     }
 }
 
 
-// ============================================================
-// TRANSACTION - UPDATE
-// ============================================================
+async function updateTransaction(id, data) {
+    const user = await requireAuth();
 
-async function updateTransaction(
-    transactionId,
-    data
-) {
-
-    const user =
-        await requireAuth();
-
-    if (!user) {
-
-        throw new Error(
-            "User is not authenticated."
-        );
+    if (!user || !id) {
+        return false;
     }
 
-
     try {
-
-        const transactionRef =
-            doc(
-                db,
-                "transactions",
-                transactionId
-            );
-
-
-        const snapshot =
-            await getDoc(
-                transactionRef
-            );
-
+        const transactionRef = doc(db, "transactions", id);
+        const snapshot = await getDoc(transactionRef);
 
         if (!snapshot.exists()) {
-
-            throw new Error(
-                "Transaction does not exist."
-            );
+            throw new Error("Transaction does not exist.");
         }
 
+        const transaction = snapshot.data();
 
-        const transaction =
-            snapshot.data();
-
-
-        if (
-            transaction.userId !==
-            user.uid
-        ) {
-
-            throw new Error(
-                "You do not own this transaction."
-            );
+        if (transaction.userId !== user.uid) {
+            throw new Error("Unauthorized transaction update.");
         }
 
-
-        await updateDoc(
-            transactionRef,
-            data
-        );
-
+        await updateDoc(transactionRef, data);
 
         return true;
-
     } catch (error) {
-
-        console.error(
-            "UPDATE TRANSACTION ERROR:",
-            error
-        );
-
+        console.error("updateTransaction error:", error);
         throw error;
     }
 }
 
 
 // ============================================================
-// USER PROFILE UPDATE
+// INVESTMENT PROCESSING
 // ============================================================
 
-async function updateUserProfile(
-    data
-) {
+async function processInvestment(investment) {
+    if (!investment || !investment.id) {
+        return false;
+    }
 
-    const user =
-        await requireAuth();
+    const user = getFirebaseUser();
 
     if (!user) {
-
-        throw new Error(
-            "User is not authenticated."
-        );
+        return false;
     }
 
+    // Only process the user's own investment.
+    if (investment.userId !== user.uid) {
+        return false;
+    }
+
+    const now = new Date();
 
     try {
+        // ----------------------------------------------------
+        // PENDING → SUCCESSFUL
+        // ----------------------------------------------------
 
-        const userRef =
-            doc(
-                db,
-                "users",
-                user.uid
+        if (
+            investment.status === "Pending" &&
+            investment.completesAt
+        ) {
+            const completesAt = convertDate(
+                investment.completesAt
             );
 
+            if (
+                completesAt &&
+                now.getTime() >= completesAt.getTime()
+            ) {
+                await updateInvestment(
+                    investment.id,
+                    {
+                        status: "Successful",
+                        completedAt: serverTimestamp(),
+                        paymentStatus: "Successful",
+                        withdrawalStatus: "Locked",
+                        withdrawable: false
+                    }
+                );
 
-        await updateDoc(
-            userRef,
-            data
-        );
+                // Create completion transaction.
+                await addTransaction({
+                    type: "Investment completed",
+                    plan: investment.plan || "",
+                    amount: Number(investment.amount || 0),
+                    generatedAmount: Number(
+                        investment.generatedAmount || 0
+                    ),
+                    profit: Number(investment.profit || 0),
+                    status: "Successful",
+                    paymentMethod: investment.paymentMethod || "",
+                    paymentStatus: "Successful",
+                    withdrawalStatus: "Locked",
+                    withdrawableAt:
+                        investment.withdrawableAt || null,
+                    investmentId: investment.id
+                });
 
+                return true;
+            }
+        }
 
-        await refreshCurrentUser();
+        // ----------------------------------------------------
+        // SUCCESSFUL → WITHDRAWABLE
+        // ----------------------------------------------------
 
+        if (
+            investment.status === "Successful" &&
+            investment.withdrawableAt
+        ) {
+            const withdrawableAt = convertDate(
+                investment.withdrawableAt
+            );
 
-        return true;
+            if (
+                withdrawableAt &&
+                now.getTime() >= withdrawableAt.getTime()
+            ) {
+                await updateInvestment(
+                    investment.id,
+                    {
+                        status: "Withdrawable",
+                        withdrawalStatus: "Available",
+                        withdrawable: true
+                    }
+                );
 
+                return true;
+            }
+        }
+
+        return false;
     } catch (error) {
-
         console.error(
-            "UPDATE USER PROFILE ERROR:",
+            "processInvestment error:",
+            investment.id,
             error
         );
 
-        throw error;
+        return false;
     }
 }
 
-
-// ============================================================
-// PROCESS INVESTMENT
-// ============================================================
-
-async function processInvestment(
-    investment
-) {
-
-    if (!investment) {
-        return;
-    }
-
-
-    // --------------------------------------------------------
-    // PENDING -> SUCCESSFUL
-    // --------------------------------------------------------
-
-    if (
-        investment.status ===
-            "Pending" &&
-        investment.completesAt &&
-        Date.now() >=
-            convertDate(
-                investment.completesAt
-            ).getTime()
-    ) {
-
-        const completedAt =
-            new Date();
-
-
-        await updateInvestment(
-            investment.id,
-            {
-                status:
-                    "Successful",
-
-                paymentStatus:
-                    "Successful",
-
-                completedAt:
-                    completedAt.toISOString(),
-
-                withdrawalStatus:
-                    "Locked",
-
-                withdrawable:
-                    false
-            }
-        );
-
-
-        // Create completion transaction
-
-        await addTransaction({
-
-            type:
-                "Investment completed",
-
-            plan:
-                investment.plan,
-
-            amount:
-                investment.amount,
-
-            generatedAmount:
-                investment.generatedAmount,
-
-            profit:
-                investment.profit,
-
-            status:
-                "Successful",
-
-            paymentMethod:
-                investment.paymentMethod,
-
-            paymentStatus:
-                "Successful",
-
-            withdrawalStatus:
-                "Locked",
-
-            investmentId:
-                investment.id
-        });
-
-
-        return;
-    }
-
-
-    // --------------------------------------------------------
-    // SUCCESSFUL -> WITHDRAWABLE
-    // --------------------------------------------------------
-
-    if (
-        investment.status ===
-            "Successful" &&
-        investment.withdrawableAt &&
-        Date.now() >=
-            convertDate(
-                investment.withdrawableAt
-            ).getTime() &&
-        investment.withdrawable !== true
-    ) {
-
-        await updateInvestment(
-            investment.id,
-            {
-                status:
-                    "Withdrawable",
-
-                withdrawalStatus:
-                    "Available",
-
-                withdrawable:
-                    true
-            }
-        );
-    }
-}
-
-
-// ============================================================
-// CHECK ALL INVESTMENTS
-// ============================================================
 
 async function checkInvestments() {
-
-    const user =
-        await getFirebaseUser();
+    const user = getFirebaseUser();
 
     if (!user) {
-        return;
+        return [];
     }
 
-
     try {
+        const investments = await getInvestments();
 
-        const investments =
-            await getInvestments();
-
-
-        for (
-            const investment
-            of investments
-        ) {
-
-            await processInvestment(
-                investment
-            );
+        for (const investment of investments) {
+            await processInvestment(investment);
         }
 
+        return investments;
     } catch (error) {
-
-        console.error(
-            "CHECK INVESTMENTS ERROR:",
-            error
-        );
-
+        console.error("checkInvestments error:", error);
         throw error;
     }
 }
 
 
-// ============================================================
-// WITHDRAW INVESTMENT
-// ============================================================
-
-async function withdrawInvestment(
-    investmentId
-) {
-
-    const user =
-        await requireAuth();
-
-    if (!user) {
-
-        throw new Error(
-            "User is not authenticated."
-        );
-    }
-
-
-    try {
-
-        const investment =
-            await getInvestment(
-                investmentId
-            );
-
-
-        if (!investment) {
-
-            throw new Error(
-                "Investment not found."
-            );
-        }
-
-
-        if (
-            investment.withdrawable !==
-            true
-        ) {
-
-            throw new Error(
-                "This investment is not withdrawable yet."
-            );
-        }
-
-
-        await updateInvestment(
-            investmentId,
-            {
-                status:
-                    "Withdrawn",
-
-                withdrawalStatus:
-                    "Completed",
-
-                withdrawable:
-                    false
-            }
-        );
-
-
-        await addTransaction({
-
-            type:
-                "Withdrawal",
-
-            plan:
-                investment.plan,
-
-            amount:
-                investment.generatedAmount,
-
-            generatedAmount:
-                investment.generatedAmount,
-
-            profit:
-                investment.profit,
-
-            status:
-                "Successful",
-
-            paymentMethod:
-                investment.paymentMethod,
-
-            paymentStatus:
-                "Successful",
-
-            withdrawalStatus:
-                "Completed",
-
-            investmentId:
-                investmentId
-        });
-
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "WITHDRAW INVESTMENT ERROR:",
-            error
-        );
-
-        throw error;
-    }
-}
-
-
-// ============================================================
-// COMPATIBILITY WRAPPERS
-// ============================================================
-
-async function checkPendingInvestments() {
-
-    try {
-
-        await checkInvestments();
-
-    } catch (error) {
-
-        console.error(
-            "Pending investment check error:",
-            error
-        );
-    }
-}
-
-
+// Compatibility wrapper.
 async function processInvestments() {
+    return await checkInvestments();
+}
 
+
+// Compatibility wrapper.
+async function refreshInvestments() {
     return await checkInvestments();
 }
 
 
 // ============================================================
-// EXPORT TO WINDOW
+// WITHDRAWAL
 // ============================================================
 
-window.getFirebaseUser =
-    getFirebaseUser;
+async function withdrawInvestment(investmentId) {
+    const user = await requireAuth();
 
-window.waitForAuth =
-    waitForAuth;
+    if (!user || !investmentId) {
+        return false;
+    }
 
-window.getCurrentUser =
-    getCurrentUser;
+    try {
+        const investment = await getInvestment(investmentId);
 
-window.setCurrentUser =
-    setCurrentUser;
-
-window.refreshCurrentUser =
-    refreshCurrentUser;
-
-window.requireAuth =
-    requireAuth;
-
-window.logout =
-    logout;
-
-window.money =
-    money;
-
-window.numberFormat =
-    numberFormat;
-
-window.convertDate =
-    convertDate;
-
-window.formatDate =
-    formatDate;
-
-window.formatDateTime =
-    formatDateTime;
-
-window.showToast =
-    showToast;
-
-
-window.getInvestments =
-    getInvestments;
-
-window.addInvestment =
-    addInvestment;
-
-window.getInvestment =
-    getInvestment;
-
-window.updateInvestment =
-    updateInvestment;
-
-
-window.getTransactions =
-    getTransactions;
-
-window.addTransaction =
-    addTransaction;
-
-window.updateTransaction =
-    updateTransaction;
-
-
-window.updateUserProfile =
-    updateUserProfile;
-
-
-window.processInvestment =
-    processInvestment;
-
-window.checkInvestments =
-    checkInvestments;
-
-window.checkPendingInvestments =
-    checkPendingInvestments;
-
-window.processInvestments =
-    processInvestments;
-
-window.withdrawInvestment =
-    withdrawInvestment;
-
-
-// ============================================================
-// AUTOMATIC INVESTMENT PROCESSING
-// ============================================================
-
-waitForAuth()
-    .then(
-        async user => {
-
-            if (!user) {
-                return;
-            }
-
-            try {
-
-                await checkInvestments();
-
-            } catch (error) {
-
-                console.error(
-                    "Initial investment processing error:",
-                    error
-                );
-            }
+        if (!investment) {
+            throw new Error("Investment not found.");
         }
-    );
 
+        if (investment.userId !== user.uid) {
+            throw new Error("Unauthorized withdrawal.");
+        }
 
-// Check every minute
-
-setInterval(
-    async () => {
-
-        try {
-
-            if (
-                getFirebaseUser()
-            ) {
-
-                await checkInvestments();
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Automatic investment processing error:",
-                error
+        if (
+            investment.status !== "Withdrawable" &&
+            investment.withdrawable !== true
+        ) {
+            throw new Error(
+                "This investment is not available for withdrawal."
             );
         }
 
-    },
-    60 * 1000
-);
+        const withdrawalAmount = Number(
+            investment.generatedAmount ||
+            investment.amount ||
+            0
+        );
+
+        // Mark investment as withdrawn.
+        await updateInvestment(
+            investmentId,
+            {
+                status: "Withdrawn",
+                withdrawalStatus: "Completed",
+                withdrawable: false,
+                withdrawnAt: serverTimestamp()
+            }
+        );
+
+        // Create withdrawal transaction.
+        await addTransaction({
+            type: "Withdrawal",
+            plan: investment.plan || "",
+            amount: withdrawalAmount,
+            generatedAmount: withdrawalAmount,
+            profit: Number(investment.profit || 0),
+            status: "Completed",
+            paymentMethod: investment.paymentMethod || "",
+            paymentStatus: "Successful",
+            withdrawalStatus: "Completed",
+            investmentId: investmentId
+        });
+
+        return true;
+    } catch (error) {
+        console.error("withdrawInvestment error:", error);
+        throw error;
+    }
+}
+
+
+// ============================================================
+// WINDOW EXPORTS
+// ============================================================
+
+window.getFirebaseUser = getFirebaseUser;
+window.waitForAuth = waitForAuth;
+window.getCurrentUser = getCurrentUser;
+window.setCurrentUser = setCurrentUser;
+window.refreshCurrentUser = refreshCurrentUser;
+window.requireAuth = requireAuth;
+window.logout = logout;
+
+window.money = money;
+window.numberFormat = numberFormat;
+window.showToast = showToast;
+window.convertDate = convertDate;
+window.formatDate = formatDate;
+window.formatDateTime = formatDateTime;
+
+window.getInvestments = getInvestments;
+window.addInvestment = addInvestment;
+window.getInvestment = getInvestment;
+window.updateInvestment = updateInvestment;
+
+window.getTransactions = getTransactions;
+window.addTransaction = addTransaction;
+window.updateTransaction = updateTransaction;
+
+window.processInvestment = processInvestment;
+window.processInvestments = processInvestments;
+window.checkInvestments = checkInvestments;
+window.refreshInvestments = refreshInvestments;
+
+window.withdrawInvestment = withdrawInvestment;
+window.updateUserProfile = updateUserProfile;
+
+
+// ============================================================
+// AUTOMATIC INVESTMENT CHECK
+// ============================================================
+
+setInterval(async () => {
+    const user = getFirebaseUser();
+
+    if (!user) {
+        return;
+    }
+
+    try {
+        await checkInvestments();
+    } catch (error) {
+        console.error(
+            "Automatic investment check failed:",
+            error
+        );
+    }
+}, 60 * 1000);
