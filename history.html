@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -19,38 +18,148 @@
         href="assets/css/style.css"
     >
 
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    circle at 85% 0%,
+                    rgba(16, 185, 129, 0.12),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 10% 40%,
+                    rgba(16, 185, 129, 0.04),
+                    transparent 28%
+                ),
+                #030712;
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.68);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.18);
+        }
+
+        .nav-link {
+            transition: 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #34d399;
+        }
+
+        .activity-item {
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .activity-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(16, 185, 129, 0.18);
+            background: rgba(17, 24, 39, 0.82);
+        }
+
+        .activity-icon {
+            width: 46px;
+            height: 46px;
+            min-width: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            display: inline-block;
+        }
+
+        @media (max-width: 640px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .activity-item {
+                padding: 16px !important;
+            }
+        }
+    </style>
+
 </head>
 
 
-<body class="bg-[#07070b] text-white min-h-screen">
+<body class="text-white min-h-screen">
 
 
-<header class="border-b border-white/10">
+<!-- HEADER -->
+<header
+    class="sticky top-0 z-50 border-b border-white/10 bg-gray-950/75 backdrop-blur-xl"
+>
 
-    <div
-        class="max-w-7xl mx-auto px-6 py-5"
-    >
+    <div class="max-w-7xl mx-auto px-5 sm:px-6">
 
         <div
-            class="flex items-center justify-between"
+            class="h-20 flex items-center justify-between"
         >
 
+            <!-- LOGO -->
             <a
                 href="dashboard.html"
-                class="text-2xl font-bold"
+                class="text-2xl font-bold tracking-tight"
             >
-                Crypto<span class="text-violet-500">
-                    cks
-                </span>
+                Crypto<span class="text-emerald-400">cks</span>
             </a>
 
 
-            <a
-                href="dashboard.html"
-                class="text-gray-400 hover:text-white"
-            >
-                Dashboard
-            </a>
+            <!-- NAV -->
+            <nav class="flex items-center gap-3 sm:gap-6">
+
+                <a
+                    href="dashboard.html"
+                    class="nav-link text-sm text-gray-400"
+                >
+                    Dashboard
+                </a>
+
+                <a
+                    href="investment.html"
+                    class="nav-link hidden sm:block text-sm text-gray-400"
+                >
+                    Investments
+                </a>
+
+                <a
+                    href="transactions.html"
+                    class="nav-link hidden sm:block text-sm text-gray-400"
+                >
+                    Transactions
+                </a>
+
+                <a
+                    href="history.html"
+                    class="text-sm text-emerald-400 font-medium"
+                >
+                    Activity
+                </a>
+
+            </nav>
 
         </div>
 
@@ -60,32 +169,138 @@
 
 
 
-<main class="max-w-4xl mx-auto px-6 py-12">
+<!-- MAIN -->
+<main class="max-w-5xl mx-auto px-5 sm:px-6 py-10 sm:py-14">
 
 
-    <p
-        class="text-violet-400 text-sm uppercase font-semibold"
+    <!-- PAGE INTRO -->
+    <section class="mb-10">
+
+        <div
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/5 text-emerald-400 text-xs font-semibold tracking-wider uppercase"
+        >
+
+            <span
+                class="status-dot bg-emerald-400"
+            ></span>
+
+            Account Activity
+
+        </div>
+
+
+        <h1
+            class="page-title text-4xl sm:text-5xl font-bold tracking-tight mt-5"
+        >
+            Activity
+        </h1>
+
+
+        <p
+            class="text-gray-400 mt-3 max-w-2xl"
+        >
+            View your recent account activity, investment updates,
+            and other important events.
+        </p>
+
+    </section>
+
+
+
+    <!-- ACTIVITY CARD -->
+    <section
+        class="glass-card rounded-3xl overflow-hidden shadow-2xl"
     >
-        Account
-    </p>
+
+        <!-- CARD HEADER -->
+        <div
+            class="px-5 sm:px-7 py-5 border-b border-white/10 flex items-center justify-between gap-4"
+        >
+
+            <div>
+
+                <h2
+                    class="font-semibold text-lg"
+                >
+                    Recent Activity
+                </h2>
+
+                <p
+                    class="text-sm text-gray-500 mt-1"
+                >
+                    Your latest account events
+                </p>
+
+            </div>
 
 
-    <h1 class="text-4xl font-bold mt-2 mb-10">
-        Activity
-    </h1>
+            <div
+                class="hidden sm:flex items-center gap-2 text-xs text-gray-500"
+            >
+
+                <span
+                    class="status-dot bg-emerald-400"
+                ></span>
+
+                Live
+
+            </div>
+
+        </div>
 
 
+
+        <!-- ACTIVITY LIST -->
+        <div
+            id="activity"
+            class="p-4 sm:p-6 space-y-3"
+        >
+
+            <!-- Loading state -->
+            <div
+                class="rounded-2xl border border-white/5 bg-white/[0.02] p-8 text-center"
+            >
+
+                <div
+                    class="w-8 h-8 mx-auto mb-4 rounded-full border-2 border-gray-700 border-t-emerald-400 animate-spin"
+                ></div>
+
+                <p class="text-gray-400 text-sm">
+                    Loading activity...
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FOOTER NOTE -->
     <div
-        id="activity"
-        class="space-y-4"
-    ></div>
+        class="mt-6 text-center text-xs text-gray-600"
+    >
+        Your account activity is private to your account.
+    </div>
 
 
 </main>
 
 
-<script type="module" src="assets/js/app.js"></script>
-<script type="module" src="assets/js/history.js"></script>
+
+<!-- FIREBASE / APP -->
+<script
+    type="module"
+    src="assets/js/app.js"
+></script>
+
+<script
+    type="module"
+    src="assets/js/history.js"
+></script>
+
 
 </body>
+
 </html>
