@@ -1,10 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -18,121 +17,629 @@
         rel="stylesheet"
         href="assets/css/style.css"
     >
-
 </head>
 
 
-<body class="bg-[#07070b] text-white min-h-screen">
+<body class="dashboard-bg text-white min-h-screen">
 
 
-<header class="border-b border-white/10">
+<div class="flex min-h-screen">
 
-    <div
-        class="max-w-7xl mx-auto px-6 py-5"
+
+    <!-- =====================================================
+         DESKTOP SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar w-64 border-r border-white/10 p-6 hidden md:flex flex-col"
     >
 
-        <div
-            class="flex items-center justify-between"
+        <!-- LOGO -->
+
+        <a
+            href="dashboard.html"
+            class="text-2xl font-bold tracking-tight mb-10"
         >
+            Crypta<span class="text-violet-500">cks</span>
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="space-y-2">
 
             <a
                 href="dashboard.html"
-                class="text-2xl font-bold"
-            >
-                Crypto<span class="text-violet-500">
-                    cks
-                </span>
-            </a>
-
-
-            <a
-                href="dashboard.html"
-                class="text-gray-400 hover:text-white"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition"
             >
                 Dashboard
             </a>
 
-        </div>
+            <a
+                href="investments.html"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition"
+            >
+                Investments
+            </a>
 
-    </div>
+            <a
+                href="transactions.html"
+                class="block px-4 py-3 rounded-xl bg-violet-600/20 text-violet-400 font-medium"
+            >
+                Transactions
+            </a>
 
-</header>
+            <a
+                href="history.html"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition"
+            >
+                Activity
+            </a>
+
+            <a
+                href="profile.html"
+                class="block px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition"
+            >
+                Profile
+            </a>
+
+        </nav>
 
 
+        <!-- LOGOUT -->
 
-<main class="max-w-7xl mx-auto px-6 py-12">
-
-
-    <div class="mb-8">
-
-        <p
-            class="text-violet-400 text-sm uppercase font-semibold"
+        <button
+            onclick="logout()"
+            class="mt-auto text-left text-gray-400 hover:text-red-400 transition px-1"
         >
-            Account
-        </p>
+            Logout
+        </button>
 
-        <h1 class="text-4xl font-bold mt-2">
-            Transactions
-        </h1>
-
-    </div>
+    </aside>
 
 
 
-    <div
-        class="glass-card overflow-hidden"
-    >
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
 
-        <div class="overflow-x-auto">
+    <main class="flex-1 min-w-0">
 
-            <table class="w-full">
 
-                <thead
-                    class="border-b border-white/10"
+        <!-- =================================================
+             MOBILE HEADER
+        ================================================== -->
+
+        <header
+            class="md:hidden border-b border-white/10 px-5 py-5 flex items-center justify-between"
+        >
+
+            <a
+                href="dashboard.html"
+                class="text-xl font-bold"
+            >
+                Crypta<span class="text-violet-500">cks</span>
+            </a>
+
+            <a
+                href="dashboard.html"
+                class="text-sm text-gray-400 hover:text-white"
+            >
+                Dashboard
+            </a>
+
+        </header>
+
+
+
+        <!-- =================================================
+             PAGE WRAPPER
+        ================================================== -->
+
+        <div class="p-5 sm:p-7 md:p-10 max-w-7xl mx-auto">
+
+
+            <!-- =================================================
+                 PAGE HEADER
+            ================================================== -->
+
+            <div
+                class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-8"
+            >
+
+                <div>
+
+                    <p
+                        class="text-violet-400 text-xs sm:text-sm uppercase tracking-wider font-semibold"
+                    >
+                        Account
+                    </p>
+
+                    <h1
+                        class="text-3xl sm:text-4xl font-bold mt-2"
+                    >
+                        Transactions
+                    </h1>
+
+                    <p
+                        class="text-gray-500 text-sm mt-2"
+                    >
+                        Track your investments, payments and account activity.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="investments.html"
+                    class="inline-flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 px-5 py-3 rounded-xl font-semibold transition"
+                >
+                    <span>+</span>
+                    New Investment
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SUMMARY CARDS
+            ================================================== -->
+
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
+            >
+
+                <!-- TOTAL -->
+
+                <div
+                    class="glass-card rounded-2xl p-5 border border-white/5"
                 >
 
-                    <tr class="text-left text-gray-400 text-sm">
+                    <div class="flex items-center justify-between">
 
-                        <th class="p-5">
-                            Type
-                        </th>
+                        <div>
 
-                        <th class="p-5">
-                            Plan
-                        </th>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide">
+                                Total Transactions
+                            </p>
 
-                        <th class="p-5">
-                            Amount
-                        </th>
+                            <h2
+                                id="totalTransactions"
+                                class="text-2xl font-bold mt-2"
+                            >
+                                —
+                            </h2>
 
-                        <th class="p-5">
-                            Status
-                        </th>
+                        </div>
 
-                        <th class="p-5">
-                            Date
-                        </th>
+                        <div
+                            class="w-11 h-11 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400"
+                        >
+                            ↔
+                        </div>
 
-                    </tr>
+                    </div>
 
-                </thead>
+                </div>
 
 
-                <tbody
-                    id="transactions"
-                ></tbody>
 
-            </table>
+                <!-- PENDING -->
+
+                <div
+                    class="glass-card rounded-2xl p-5 border border-white/5"
+                >
+
+                    <div class="flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-gray-500 text-xs uppercase tracking-wide">
+                                Pending
+                            </p>
+
+                            <h2
+                                id="pendingTransactions"
+                                class="text-2xl font-bold mt-2 text-yellow-400"
+                            >
+                                —
+                            </h2>
+
+                        </div>
+
+                        <div
+                            class="w-11 h-11 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-400"
+                        >
+                            ⏳
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SUCCESSFUL -->
+
+                <div
+                    class="glass-card rounded-2xl p-5 border border-white/5"
+                >
+
+                    <div class="flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-gray-500 text-xs uppercase tracking-wide">
+                                Successful
+                            </p>
+
+                            <h2
+                                id="successfulTransactions"
+                                class="text-2xl font-bold mt-2 text-emerald-400"
+                            >
+                                —
+                            </h2>
+
+                        </div>
+
+                        <div
+                            class="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400"
+                        >
+                            ✓
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TRANSACTIONS CARD
+            ================================================== -->
+
+            <div
+                class="glass-card rounded-2xl border border-white/5 overflow-hidden"
+            >
+
+
+                <!-- CARD HEADER -->
+
+                <div
+                    class="px-5 sm:px-6 py-5 border-b border-white/10"
+                >
+
+                    <div
+                        class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                    >
+
+                        <div>
+
+                            <h2 class="font-semibold text-lg">
+                                Transaction History
+                            </h2>
+
+                            <p class="text-gray-500 text-sm mt-1">
+                                Your latest account transactions
+                            </p>
+
+                        </div>
+
+
+                        <!-- CONTROLS -->
+
+                        <div
+                            class="flex flex-col sm:flex-row gap-2"
+                        >
+
+                            <div class="relative">
+
+                                <input
+                                    id="transactionSearch"
+                                    type="text"
+                                    placeholder="Search transactions..."
+                                    class="w-full sm:w-56 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-violet-500/50 transition"
+                                >
+
+                            </div>
+
+
+                            <select
+                                id="transactionFilter"
+                                class="bg-[#101017] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-gray-300 outline-none focus:border-violet-500/50"
+                            >
+
+                                <option value="all">
+                                    All transactions
+                                </option>
+
+                                <option value="Investment">
+                                    Investments
+                                </option>
+
+                                <option value="Pending">
+                                    Pending
+                                </option>
+
+                                <option value="Successful">
+                                    Successful
+                                </option>
+
+                                <option value="Failed">
+                                    Failed
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TABLE
+                ================================================== -->
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full min-w-[700px]">
+
+                        <thead
+                            class="border-b border-white/10 bg-white/[0.015]"
+                        >
+
+                            <tr
+                                class="text-left text-gray-500 text-xs uppercase tracking-wide"
+                            >
+
+                                <th class="px-5 sm:px-6 py-4 font-medium">
+                                    Transaction
+                                </th>
+
+                                <th class="px-5 sm:px-6 py-4 font-medium">
+                                    Plan
+                                </th>
+
+                                <th class="px-5 sm:px-6 py-4 font-medium">
+                                    Amount
+                                </th>
+
+                                <th class="px-5 sm:px-6 py-4 font-medium">
+                                    Status
+                                </th>
+
+                                <th class="px-5 sm:px-6 py-4 font-medium">
+                                    Date
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <!-- IMPORTANT:
+                             transactions.js uses this ID.
+                        -->
+
+                        <tbody
+                            id="transactions"
+                            class="divide-y divide-white/5"
+                        >
+
+                            <!-- Loading state -->
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="px-6 py-14 text-center"
+                                >
+
+                                    <div
+                                        class="flex flex-col items-center justify-center"
+                                    >
+
+                                        <div
+                                            class="w-8 h-8 border-2 border-violet-500/20 border-t-violet-500 rounded-full animate-spin mb-4"
+                                        ></div>
+
+                                        <p class="text-gray-400 text-sm">
+                                            Loading transactions...
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FOOTER
+                ================================================== -->
+
+                <div
+                    class="px-5 sm:px-6 py-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                >
+
+                    <p
+                        class="text-xs text-gray-600"
+                    >
+                        Transactions are updated automatically.
+                    </p>
+
+                    <a
+                        href="dashboard.html"
+                        class="text-xs text-violet-400 hover:text-violet-300 transition"
+                    >
+                        Back to Dashboard
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SECURITY NOTE
+            ================================================== -->
+
+            <div
+                class="mt-5 flex items-start gap-3 px-1"
+            >
+
+                <div
+                    class="text-emerald-400 text-sm mt-0.5"
+                >
+                    ✓
+                </div>
+
+                <p class="text-xs text-gray-600 leading-relaxed">
+                    Transaction information is linked to your Cryptacks account
+                    and reflects the current status of your investments.
+                </p>
+
+            </div>
+
 
         </div>
 
-    </div>
+    </main>
 
-</main>
+</div>
 
 
-<script type="module" src="assets/js/app.js"></script>
-<script type="module" src="assets/js/transactions.js"></script>
+
+<!-- =====================================================
+     FIREBASE / APP
+====================================================== -->
+
+<script
+    type="module"
+    src="assets/js/app.js"
+></script>
+
+
+<!-- =====================================================
+     TRANSACTIONS LOGIC
+====================================================== -->
+
+<script
+    type="module"
+    src="assets/js/transactions.js"
+></script>
+
+
+<!-- =====================================================
+     UI HELPERS
+====================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const search =
+        document.getElementById("transactionSearch");
+
+    const filter =
+        document.getElementById("transactionFilter");
+
+    /*
+     * These controls are intentionally lightweight.
+     * The actual transaction data continues to come
+     * from transactions.js.
+     */
+
+    function filterRows() {
+
+        const searchValue =
+            (search?.value || "").toLowerCase().trim();
+
+        const filterValue =
+            filter?.value || "all";
+
+        const rows =
+            document.querySelectorAll(
+                "#transactions tr"
+            );
+
+        rows.forEach(row => {
+
+            const text =
+                row.textContent.toLowerCase();
+
+            const matchesSearch =
+                !searchValue ||
+                text.includes(searchValue);
+
+            const matchesFilter =
+                filterValue === "all" ||
+                text.includes(filterValue.toLowerCase());
+
+            row.style.display =
+                matchesSearch && matchesFilter
+                    ? ""
+                    : "none";
+
+        });
+
+    }
+
+    search?.addEventListener(
+        "input",
+        filterRows
+    );
+
+    filter?.addEventListener(
+        "change",
+        filterRows
+    );
+
+
+    /*
+     * Small observer so the search/filter still works
+     * when transactions.js dynamically renders rows.
+     */
+
+    const transactionContainer =
+        document.getElementById("transactions");
+
+    if (transactionContainer) {
+
+        const observer =
+            new MutationObserver(() => {
+                filterRows();
+            });
+
+        observer.observe(
+            transactionContainer,
+            {
+                childList: true,
+                subtree: true
+            }
+        );
+
+    }
+
+});
+
+</script>
+
 
 </body>
+
 </html>
