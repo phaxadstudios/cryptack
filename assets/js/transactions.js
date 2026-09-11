@@ -1,39 +1,424 @@
+import { auth } from "./firebase.js";
 
-// assets/js/transactions.js
+const table =
+document.getElementById("transactionsTable");
 
-async function renderTransactions() {
-    const table = document.getElementById("transactions");
+const searchInput =
+document.getElementById("transactionSearch");
 
-    if (!table) {
+const filterSelect =
+document.getElementById("transactionFilter");
+
+function escapeTransactionHTML(value) {
+
+return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+
+}
+
+function getTransactionDate(transaction) {
+
+
+return (
+    window.convertDate(
+        transaction.createdAt
+    ) || new Date(0)
+);
+
+
+}
+
+function renderTransactions(
+transactions
+) {
+
+
+if (!table) {
+    return;
+}
+
+if (!transactions.length) {
+
+    table.innerHTML = `
+        <tr>
+            <td
+                colspan="5"
+                class="p-10 text-center text-gray-500"
+            >
+                No transactions found.
+            </td>
+        </tr>
+    `;
+
+    updateTransactionStats([]);
+
+    return;
+}
+
+
+table.innerHTML =
+    transactions
+        .map((transaction) => {
+
+            const status =
+                transaction.status ||
+                "Pending";
+
+            const statusClass =
+                status === "Successful"
+                    ? "text-emerald-400"
+                    : status === "Failed"
+                        ? "text-red-400"
+                        : "text-yellow-400";
+
+            const amount =
+                Number(
+                    transaction.amount
+                ) || 0;
+
+            const type =
+                transaction.type ||
+                "Investment";
+
+            return `
+                <tr
+                    class="border-b border-white/5"
+                >
+
+                    <td class="px-5 py-5">
+                        <div class="font-medium">
+                            ${escapeTransactionHTML(type)}
+                        </div>
+
+                        <div class="text-xs text-gray-500 mt-1">
+                            ${escapeTransactionHTML(
+                                transaction.plan ||
+                                transaction.paymentMethod ||
+                                "Transaction"
+                            )}
+                        </div>
+                    </td>
+
+                    <td class="px-5 py-5">
+                        ${window.money(amount)}
+                    </td>
+
+                    <td class="px-5 py-5">
+                        <span
+                            class="${statusClass} font-semibold"
+                        >
+                            ${escapeTransactionHTML(status)}
+                        </span>
+                    </td>
+
+                    <td class="px-5 py-5">
+                        ${escapeTransactionHTML(
+                            transaction.paymentMethod ||
+                            "—"
+                        )}
+                    </td>
+
+                    <td class="px-5 py-5 text-gray-400">
+                        ${escapeTransactionHTML(
+                            window.formatDateTime(
+                                transaction.createdAt
+                            )
+                        )}
+                    </td>
+
+                </tr>
+            `;
+        })
+        .join("");
+
+updateTransactionStats(
+    transactions
+);
+
+
+}
+
+function updateTransactionStats(
+transactions
+) {
+
+
+const total =
+    transactions.reduce(
+        (sum, transaction) =>
+            sum +
+            (Number(
+                transaction.amount
+            ) || 0),
+        0
+    );
+
+const successful =
+    transactions.filter(
+        (transaction) =>
+            transaction.status ===
+            "Successful"
+    ).length;
+
+const pending =
+    transactions.filter(
+        (transaction) =>
+            transaction.status ===
+            "Pending"
+    ).length;
+
+
+const totalElement =
+    document.getElementById(
+        "totalTransactions"
+    );
+
+const amountElement =
+    document.getElementById(
+        "totalAmount"
+    );
+
+const successfulElement =
+    document.getElementById(
+        "successfulTransactions"
+    );
+
+const pendingElement =
+    document.getElementById(
+        "pendingTransactions"
+    );
+
+
+if (totalElement) {
+    totalElement.textContent =
+        transactions.length;
+}
+
+if (amountElement) {
+    amountElement.textContent =
+        window.money(total);
+}
+
+if (successfulElement) {
+    successfulElement.textContent =
+        successful;
+}
+
+if (pendingElement) {
+    pendingElement.textContent =
+        pending;
+}
+
+
+}
+
+async function loadTransactions() {
+
+
+if (!table) {
+    return;
+}
+
+table.innerHTML = `
+    <tr>
+        <td
+            colspan="5"
+            class="p-10 text-center text-gray-500"
+        >
+            Loading transactions...
+        </td>
+    </tr>
+`;
+
+
+try {
+
+    const user =
+        await window.requireAuth();
+
+    if (!user) {
         return;
     }
 
-    try {
-        table.innerHTML = `
-            <tr>
-                <td colspan="5" class="p-10 text-center text-gray-500">
-                    Loading transactions...
-                </td>
-            </tr>
-        `;
 
-        const transactions = await window.getTransactions();
+    const transactions =
+        await window.getTransactions();
 
-        console.log("TRANSACTIONS LOADED:", transactions);
 
-        if (!Array.isArray(transactions) || transactions.length === 0) {
-            table.innerHTML = `
-                <tr>
-                    <td colspan="5" class="p-10 text-center text-gray-500">
-                        No transactions yet.
-                    </td>
-                </tr>
-            `;
-            updateTransactionStats([]);
-            return;
+    window.__transactions =
+        transactions;
+
+
+    applyFilters();
+
+
+} catch (error) {
+
+    console.error(
+        "TRANSACTION PAGE ERROR:",
+        error
+    );
+
+    console.error(
+        "Firebase error code:",
+        error?.code
+    );
+
+    console.error(
+        "Firebase error message:",
+        error?.message
+    );
+
+
+    table.innerHTML = `
+        <tr>
+            <td
+                colspan="5"
+                class="p-10 text-center"
+            >
+
+                <div
+                    class="text-red-400 font-semibold"
+                >
+                    Unable to load transactions.
+                </div>
+
+                <div
+                    class="text-gray-500 text-sm mt-2"
+                >
+                    ${escapeTransactionHTML(
+                        error?.message ||
+                        "Unknown error."
+                    )}
+                </div>
+
+            </td>
+        </tr>
+    `;
+
+    updateTransactionStats([]);
+}
+
+
+}
+
+function applyFilters() {
+
+
+const transactions =
+    window.__transactions ||
+    [];
+
+
+const search =
+    (
+        searchInput?.value ||
+        ""
+    )
+        .trim()
+        .toLowerCase();
+
+
+const filter =
+    filterSelect?.value ||
+    "all";
+
+
+const filtered =
+    transactions.filter(
+        (transaction) => {
+
+            const matchesSearch =
+                !search ||
+                String(
+                    transaction.type ||
+                    ""
+                )
+                    .toLowerCase()
+                    .includes(search) ||
+
+                String(
+                    transaction.plan ||
+                    ""
+                )
+                    .toLowerCase()
+                    .includes(search) ||
+
+                String(
+                    transaction.paymentMethod ||
+                    ""
+                )
+                    .toLowerCase()
+                    .includes(search);
+
+
+            const status =
+                String(
+                    transaction.status ||
+                    "Pending"
+                );
+
+
+            const matchesFilter =
+                filter === "all" ||
+                status === filter;
+
+
+            return (
+                matchesSearch &&
+                matchesFilter
+            );
         }
+    );
 
-        table.innerHTML = transactions.map(transaction => {
+
+renderTransactions(
+    filtered
+);
+
+
+}
+
+if (searchInput) {
+
+searchInput.addEventListener(
+    "input",
+    applyFilters
+
+
+}
+
+if (filterSelect) {
+
+
+filterSelect.addEventListener(
+    "change",
+    applyFilters
+);
+
+
+}
+
+window.addEventListener(
+"load",
+() => {
+
+
+    loadTransactions();
+
+    setInterval(
+        loadTransactions,
+        60 * 1000
+    );
+}
+
+
+);
 
             let statusClass = "text-yellow-400";
 
